@@ -1,0 +1,39 @@
+.titleHeader {
+  background-color: #0d6efd;
+  color: white;
+  font-size: 22px;
+  font-weight: 700;
+  border-radius: 10px;
+  box-shadow: 1px 1px 3px gray;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  text-align: center;
+}
+.linksContainer {
+  padding: 10px;
+}
+.linkItem {
+  box-shadow: gray 0px 1px 7px;
+  max-width: 24rem;
+  width: 23rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: black;
+  border-radius: 10px;
+  
+}
+.linkItem:hover{
+    .arrow{
+        margin-right: 5px;
+    }
+}
+.linkItem a {
+  text-decoration: none;
+  color: black;
+  font-size: 18px;
+}
+
+.arrow{
+    transition: all 2s;
+}
