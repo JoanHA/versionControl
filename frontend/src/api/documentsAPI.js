@@ -13,3 +13,6 @@ export const getAuxiliars = ()=>axios.get(URI+"auxiliars")
 
 //obtener los procesos y las tipologias
 export const getProcessTypologies = ()=>axios.get(URI+"auxiliars/pyt")
+
+//Obtener la disposicion final
+export const getLastMove = ()=>axios.get(URI+ "auxiliars/lastMove")

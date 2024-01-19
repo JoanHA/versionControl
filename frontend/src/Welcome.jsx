@@ -20,7 +20,7 @@ function Welcome() {
         <div className="linksContainer mt-5">
           <div className="linkItem bg-light py-2 px-4 mb-4">
             <IoFileTrayFullOutline size={size} />
-            <Link className="link" to={"documents"}>Maestro de documentos</Link>
+            <Link className="link" to={"/"}>Maestro de documentos</Link>
             <FaArrowRight className="arrow" size={arrowSize} />
           </div>
           <div className="linkItem  bg-light py-2 px-4 mb-4">

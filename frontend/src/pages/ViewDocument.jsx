@@ -3,9 +3,10 @@ import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { getOneDocument } from "../api/documentsAPI";
 import { Link } from "react-router-dom";
+
+import HistoricTable from "../components/HistoricTable";
 function ViewDocument() {
   const params = useParams();
-  const { register, reset, handleSubmit } = useForm();
   const [isRegister,setIsRegister] = useState(false)
   const [data, setData] = useState({});
   const getData = async () => {
@@ -20,6 +21,29 @@ function ViewDocument() {
   useEffect(() => {
     getData();
   }, []);
+  const columns = [
+    {
+      header: "Justificación",
+      accessorKey:"reason"
+    },
+    {
+      header: "Solicitante",
+      accessorKey:"claimant"
+    },
+    {
+      header: "Nueva version",
+      accessorKey:"new_version"
+    },
+    {
+      header: "Aprobado por",
+      accessorKey:"aproved_by"
+    },
+    {
+      header: "Detalles",
+      accessorKey:"details"
+    },
+  
+  ]
 
   return (
     <div>
@@ -57,13 +81,12 @@ function ViewDocument() {
           <label className="inputLabel">{data.comments}</label>
         </div>
         <div>
-        <Link className="btn btn-sm btn-primary mt-2 mx-1">Agregar cambio</Link>
         <Link className="btn btn-sm btn-warning mt-2 mx-1">Editar archivo</Link>
-        <Link className="btn btn-sm btn-success mt-2 mx-1">Agregar registro</Link>
+        <Link className="btn btn-sm btn-success mt-2 mx-1">Ver donde se archiva</Link>
       </div>
       </div>
       <div className="titleHeader text-center py-1 mt-3"> Historico de cambios del {data.code}</div>
-      <div className="container mx-auto row gap-2">
+      {/* <div className="container mx-auto row gap-2">
         <div className="col-12 col-md-5">
           <label className="titleLabel">Justificación:</label>
           <label className="inputLabel">...</label>
@@ -86,7 +109,14 @@ function ViewDocument() {
           <label className="titleLabel">Detalle de la modificación:</label>
           <label className="inputLabel">...</label>
         </div>
+      </div> */}
+      <div className="px-5">
+      <Link className="btn btn-sm btn-primary mb-2 ">Agregar cambio</Link>
+      <HistoricTable className="px-4" columns={columns} data={{}}></HistoricTable>
+
       </div>
+
+      
 
     </div>
   );

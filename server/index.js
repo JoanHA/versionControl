@@ -8,6 +8,7 @@ const cors = require("cors");
 
 const documentRoute = require("./routes/controlRoutes/documents.js")
 const auxiliarRoute = require("./routes/controlRoutes/auxiliars.js")
+const changesRoute = require("./routes/controlRoutes/changes.js")
 
 //------------------------------API v2 -------------------------
 
@@ -20,7 +21,7 @@ app.set("port", process.env.PORT);
 //middlewares
 
 app.use(cors());
-// app.use(morgan("dev"));
+app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -30,6 +31,7 @@ app.use(express.urlencoded({ extended: true }));
 //Routes for documents
 app.use("/api/v2/documents",documentRoute)
 app.use("/api/v2/auxiliars",auxiliarRoute)
+app.use("/api/v2/changes",changesRoute)
 
 //Control API v2-------------------------------
 

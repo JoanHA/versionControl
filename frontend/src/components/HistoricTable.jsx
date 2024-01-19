@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { GrNext, GrPrevious } from "react-icons/gr";
 import { BiLastPage, BiFirstPage } from "react-icons/bi";
-import DownloadButton from "./DownloadButton";
 
 import {
   useReactTable,
@@ -13,7 +12,7 @@ import {
   getFilteredRowModel,
 } from "@tanstack/react-table";
 
-function Table({ data, columns,  }) {
+function HistoricTable({ data, columns }) {
   const [sorting, setSorting] = useState([]);
   const [filtering, setFilteting] = useState("");
   const [pageSize, setPageSize] = useState(window.innerWidth);
@@ -60,9 +59,7 @@ function Table({ data, columns,  }) {
             }}
           />
         </div>
-        <div>
-          {/* <DownloadButton filter={filtering} data={data} /> */}
-        </div>
+        <div>{/* <DownloadButton filter={filtering} data={data} /> */}</div>
 
         <div className="d-flex justify-content-center align-items-center text-center">
           <select
@@ -126,7 +123,7 @@ function Table({ data, columns,  }) {
       </div>
 
       <div>
-        <table className="table  table-striped table-hover py-3 px-4 mt-1">
+        <table className="table  table-striped table-hover py-3 px-5 mt-1">
           <thead className="table-light">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
@@ -153,8 +150,6 @@ function Table({ data, columns,  }) {
                     </th>
                   </>
                 ))}
-
-                <th colSpan={1}>Opciones</th>
               </tr>
             ))}
           </thead>
@@ -171,23 +166,6 @@ function Table({ data, columns,  }) {
                     </td>
                   </>
                 ))}
-
-                <td className="" colSpan={2}>
-                  <div>
-                    <Link
-                      to={`/document/${row.original.id}`} // this has to have the id of the row
-                      className="btn btn-primary btn-sm mx-1 "
-                    >
-                      Ver
-                    </Link>
-                    <Link
-                      to={`/edit/${row.original.id}`} // this has to have the id of the row
-                      className="btn btn-primary btn-sm mx-1 "
-                    >
-                      Editar
-                    </Link>
-                  </div>
-                </td>
               </tr>
             ))}
           </tbody>
@@ -200,4 +178,4 @@ function Table({ data, columns,  }) {
   );
 }
 
-export default Table;
+export default HistoricTable;
