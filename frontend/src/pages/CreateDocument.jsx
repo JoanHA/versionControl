@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from "react";
 import "./../assets/CSS/document.css";
 import { useForm } from "react-hook-form";
-import { createDocument, getAuxiliars } from "../api/documentsAPI";
+import Select from "react-select";
+import {
+  createDocument,
+  getAuxiliars,
+  getOneDocument,
+} from "../api/documentsAPI";
 import SelectInput from "../components/Select";
 import { getProcessTypologies } from "../api/documentsAPI";
+import { useParams } from "react-router-dom";
 
 function CreateDocument() {
   const {
@@ -19,10 +25,14 @@ function CreateDocument() {
   const [processes, setProcesses] = useState([]);
   const [typeValue, setTypeValue] = useState(null);
   const [proValue, setProValue] = useState(null);
+  const [doc, setDoc] = useState({});
+  const [def,setDef] = useState({})
+  const params = useParams();
 
   const fillSelects = async () => {
     const res = await getAuxiliars();
-    const pyt = await getProcessTypologies();
+    const  pyt= await getProcessTypologies();
+    console.log(pyt.data)
     const letter = [];
     const types = [];
 
@@ -71,12 +81,11 @@ function CreateDocument() {
     };
     try {
       const response = await createDocument(data);
-
       if (response.status === 200) {
         swal.fire(response.data, "", "success").then(() => {
           reset();
-          setProValue(null);
-          setTypeValue(null);
+          handleProcessChange();
+          handleTypoChange();
         });
       }
     } catch (error) {
@@ -90,16 +99,51 @@ function CreateDocument() {
       setProValue(event.value);
       return;
     }
+
+    setProValue(null);
   };
   const handleTypoChange = (event) => {
     if (event) {
       setTypeValue(event.value);
       return;
     }
+    setTypeValue(null);
   };
+
+  //Edit document
+  const getAllData = async () => {
+    if (params.id) {
+      try {
+        const res = await getOneDocument(params.id);
+        console.log(res.data);
+        setDoc(res.data[0]);
+        setDef({
+          value: res.data[0].process,
+          label: res.data[0].process_name
+        });
+        reset({
+          code:res.data[0].code,
+          name:res.data[0].name,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
   useEffect(() => {
     fillSelects();
+    getAllData();
+    console.log(doc)
+    
   }, []);
+
+  useEffect(()=>{
+    setDef({
+      value: doc.process,
+      label: doc.process_name
+    });
+  },[doc])
   return (
     <div>
       <div className="titleHeader text-center py-1">Registro de documentos</div>
@@ -114,36 +158,48 @@ function CreateDocument() {
                 <label htmlFor="">Codigo de registro</label>
               </div>
               <div className="col-8 d-flex">
-                <select
-                  {...register("codeLetter", { required: true })}
-                  style={{ width: "70px" }}
-                  className="form-select medium-rounded-left  "
-                >
-                  {letterCode &&
-                    letterCode.map((letter) => (
-                      <option key={letter.id} value={letter.name}>
-                        {letter.name}
-                      </option>
-                    ))}
-                </select>
-                <select
-                  style={{ width: "70px" }}
-                  {...register("processInitials", { required: true })}
-                  className="form-select  "
-                >
-                  {docType &&
-                    docType.map((type) => (
-                      <option key={type.id} value={type.name}>
-                        {type.name}
-                      </option>
-                    ))}
-                </select>
-                <input
-                  {...register("versionNumber", { required: true })}
-                  type="text"
-                  placeholder="00..."
-                  className="form-control medium-rounded-right  "
-                />
+                {params.id ? (
+                        <input
+                        {...register("code", { required: true })}
+                        type="text"
+                        placeholder="R-..."
+                        className="form-control rounded  "
+                      />
+                ) : (
+                  <>
+                    {" "}
+                    <select
+                      {...register("codeLetter", { required: true })}
+                      style={{ width: "70px" }}
+                      className="form-select medium-rounded-left  "
+                    >
+                      {letterCode &&
+                        letterCode.map((letter) => (
+                          <option key={letter.id} value={letter.name}>
+                            {letter.name}
+                          </option>
+                        ))}
+                    </select>
+                    <select
+                      style={{ width: "70px" }}
+                      {...register("processInitials", { required: true })}
+                      className="form-select  "
+                    >
+                      {docType &&
+                        docType.map((type) => (
+                          <option key={type.id} value={type.name}>
+                            {type.name}
+                          </option>
+                        ))}
+                    </select>
+                    <input
+                      {...register("versionNumber", { required: true })}
+                      type="text"
+                      placeholder="00..."
+                      className="form-control medium-rounded-right  "
+                    />
+                  </>
+                )}
               </div>
             </div>
             <div className="row mb-2 ">
@@ -164,7 +220,10 @@ function CreateDocument() {
                 <label className="">Proceso</label>
               </div>
               <div className="col-8">
+
+                <Select defaultValue={{label:`${def.label? def.label:doc.process_name}`,value:33}} options={processes}></Select>
                 <SelectInput
+                defaultVal={def}
                   onChange={handleProcessChange}
                   data={processes}
                 ></SelectInput>
@@ -177,6 +236,7 @@ function CreateDocument() {
               <div className="col-8">
                 <SelectInput
                   data={typologies}
+                  defaultVal={""}
                   onChange={handleTypoChange}
                 ></SelectInput>
               </div>

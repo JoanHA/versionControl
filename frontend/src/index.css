@@ -1,4 +1,7 @@
-
+a{
+  text-decoration: none;
+  color: #454;
+}
 body{
     box-sizing: border-box;
     margin: 0;
@@ -61,4 +64,3 @@ body{
   /* Show the dropdown menu on hover */
   .dropdown:hover .dropdown-content {display: block;}
   
-  /* Change the background color of the dropdown button wh

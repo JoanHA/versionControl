@@ -173,16 +173,16 @@ function Table({ data, columns,  }) {
                 ))}
 
                 <td className="" colSpan={2}>
-                  <div>
+                  <div className="d-flex flex-wrap gap-1">
                     <Link
                       to={`/document/${row.original.id}`} // this has to have the id of the row
-                      className="btn btn-primary btn-sm mx-1 "
+                      className="btn btn-primary btn-sm   "
                     >
                       Ver
                     </Link>
                     <Link
                       to={`/edit/${row.original.id}`} // this has to have the id of the row
-                      className="btn btn-primary btn-sm mx-1 "
+                      className="btn btn-primary btn-sm "
                     >
                       Editar
                     </Link>

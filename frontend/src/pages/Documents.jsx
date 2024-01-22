@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import Table from "../components/Table";
 import { getAllDocuments } from "../api/documentsAPI";
 import { convertNumber } from "../lib/helper";
+import { useAuth } from "../context/AuthContext";
 function Documents() {
   const [data, setData] = useState([]);
-
+  const { isLoggedIn } = useAuth();
   useEffect(() => {
     const getdata = async () => {
       const res = await getAllDocuments();
@@ -43,9 +44,7 @@ function Documents() {
   ];
   return (
     <div>
-      <div className="titleHeader text-center py-2">
-        Registro de archivos
-      </div>
+      <div className="titleHeader text-center py-2">Registro de archivos</div>
       <div>
         <Table columns={columns} data={data}></Table>
       </div>

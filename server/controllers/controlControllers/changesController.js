@@ -11,14 +11,29 @@ const createChange = async (req, res) => {
     details,
   } = req.body);
   data.status = 1;
-  const last_revision = new Date();
+  const last_revision = new Date().toISOString();
+  
 
-  console.log(data)
 try {
+   //Get last version of the document 
+   const getLastVersion = await db.query(`SELECT version FROM documents WHERE code ='${data.code}'`) 
+   if (getLastVersion.length <=0) {
+    data.new_version = 2
+   }else{
+    data.new_version = getLastVersion[0].version +1;
+    console.log(data.new_version);
+   }
+
+   
+ 
+
+
+  //Save change
     const response = await db.query("INSERT INTO changes SET ?",[data])
-    console.log(response)
-    const respuesta = await db.query(`UPDATE documents SET version =${data.new_version},last_revision='${last_revision}' WHERE code = '${data.code}' `)
-    console.log(respuesta)
+
+
+//Update the last version of the doc
+  const respuesta = await db.query(`UPDATE documents SET version =${data.new_version},last_revision='${last_revision}' WHERE code = '${data.code}' `)
     res.send("Datos Ingresados correctamente")
 } catch (error) {
  console.log(error)
@@ -27,6 +42,43 @@ try {
  
 };
 
+const getChangesFromOne = async(req,res)=>{
+  const code = req.params.code
+  try {
+    const sql = `SELECT * FROM changes WHERE code='${code}'`;
+    const response = await db.query(sql);
+    console.log(response)
+    res.send(response)
+  } catch (error) {
+    console.log(error)
+    res.status(404).send("NO PUDIMOS REALIZAR ESA ACCION")
+  }
+}
+
+const getArchivedInfo = async (req,res)=>{
+  const code = req.params.code;
+  const sql = `SELECT storages.*,
+  (SELECT name FROM params WHERE params.id = storages.last_move) AS last_move_name
+  FROM storages
+  WHERE code ='${code}'`;
+
+  try {
+    const response = await db.query(sql);
+    console.log(response)
+    if (response.length <=0) {
+      res.send({status:404,data:"Este documento no tiene datos"})
+      return;
+    }
+    res.send(response)
+  } catch (error) {
+    console.log(error)
+    
+  }
+
+
+}
 module.exports = {
   createChange,
+  getChangesFromOne,
+  getArchivedInfo
 };

@@ -6,7 +6,7 @@ export const getAllDocuments = ()=> axios.get(URI + "documents/")
 
 export const getOneDocument = (id)=>axios.get(URI+ `documents/${id}`)
 //Crear documento 
-export const createDocument = (data) =>axios.post(URI+"documents/",data)
+export const createDocument = (data) =>axios.post(URI+"documents/doc",data)
 
 //Obtener las Letras de codigo e iniciales de proceso
 export const getAuxiliars = ()=>axios.get(URI+"auxiliars")
@@ -16,3 +16,7 @@ export const getProcessTypologies = ()=>axios.get(URI+"auxiliars/pyt")
 
 //Obtener la disposicion final
 export const getLastMove = ()=>axios.get(URI+ "auxiliars/lastMove")
+
+
+//Crear el control de archivo
+export const createControl = (data) =>axios.post(URI +"documents/control",data)

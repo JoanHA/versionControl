@@ -9,6 +9,8 @@ const cors = require("cors");
 const documentRoute = require("./routes/controlRoutes/documents.js")
 const auxiliarRoute = require("./routes/controlRoutes/auxiliars.js")
 const changesRoute = require("./routes/controlRoutes/changes.js")
+const authRoute = require("./routes/controlRoutes/auth.js")
+const recoverRoute = require("./routes/controlRoutes/recover.js")
 
 //------------------------------API v2 -------------------------
 
@@ -29,9 +31,12 @@ app.use(express.urlencoded({ extended: true }));
 //Control API v2-------------------------------
 
 //Routes for documents
+
 app.use("/api/v2/documents",documentRoute)
 app.use("/api/v2/auxiliars",auxiliarRoute)
 app.use("/api/v2/changes",changesRoute)
+app.use("/api/v2/auth",authRoute);
+app.use("/api/v2/recover",recoverRoute);
 
 //Control API v2-------------------------------
 

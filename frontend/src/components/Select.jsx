@@ -3,20 +3,17 @@ import { useEffect } from "react";
 
 import Select from "react-select";
 import AddButton from "./AddButton";
-const Checkbox = ({ children, ...props }) => (
-  <label style={{ marginRight: "1em" }}>
-    <input type="checkbox" {...props} />
-    {children}
-  </label>
-);
-function SelectInput({ data,param, onChange}) {
+
+function SelectInput({ data,param, onChange,defaultVal}) {
   const [isClearable, setIsClearable] = useState(true);
   const [isSearchable, setIsSearchable] = useState(true);
   const [isDisabled, setIsDisabled] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [options, setOptions] = useState(data);
+  const [d,setd] = useState(defaultVal)
 
   useEffect(() => {
+    setd(defaultVal)
     if (options) {
       setIsLoading(false);
       return;
@@ -36,6 +33,7 @@ function SelectInput({ data,param, onChange}) {
         isLoading={isLoading}
         isClearable={isClearable}
         isSearchable={isSearchable}
+        defaultValue={d}
         name="color"
         options={data}
       />

@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt")
-  const helper ={}
+const jwt = require("jsonwebtoken");
+const helper ={}
 
 helper.encypt = async (password)=>{
     const salt = await bcrypt.genSalt(10)
@@ -37,5 +38,20 @@ helper.convertDate = (Stringdate)=>{
   const fecha = (`${año}-${mes}-${dia}`)
   return fecha
 }
+
+
+helper.createToken = (payload)=>{
+  return new Promise((resolve, reject) => {
+    jwt.sign(payload, 
+        process.env.JWT_SECRET,{
+            expiresIn: "1d"
+        }, (err, token) => {
+            if (err) reject(err);
+            resolve(token);
+        });
+  });
+};
+
+
 
 module.exports = helper

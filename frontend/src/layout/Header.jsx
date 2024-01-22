@@ -1,9 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Sidebar from "../components/Sidebar";
 const Header = ({ children }) => {
   return (
     <div className="d-flex flex-column ">
-      <header className="">
+      <header className=""  id="navHeader">
         <nav className="navbar navbar-expand-lg  bg-body-tertiary">
           <div className="container-fluid">
             <a className="navbar-brand" href="#">
@@ -25,23 +26,6 @@ const Header = ({ children }) => {
                 id="ul"
                 className="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll "
               >
-                {/* <ul className="dropdown nav-item nav-link p-1 "> */}
-                  {/* <li className="dropbtn nav-link liClicked">Listado maestro</li>
-                  <div className="dropdown-content">
-                    <a href="#">Registrar documento</a>
-                    <a href="#"> Ver documentos</a>
-                  </div>
-                </ul>
-
-                <li className="nav-item nav-link p-1 ">
-                  <a className="nav-link liClicked">Control de cambios</a>
-                </li>
-                <li className="nav-item nav-link  p-1">
-                  <a className="nav-link  liClicked">
-                    Retención documental
-                  </a>
-                </li> */}
-
                 <li className="nav-item nav-link p-1">
                   <a href="#" className="nav-link">
                     Iniciar sesion
@@ -53,8 +37,9 @@ const Header = ({ children }) => {
         </nav>
       </header>
 
-      <div className="px-2 py-2">
-        {children}
+      <div className="px-2 py-2  d-flex flex-row">
+        <Sidebar></Sidebar>
+        <div style={{width:"90%"}}>{children}</div>
       </div>
     </div>
   );

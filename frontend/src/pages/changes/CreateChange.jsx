@@ -11,30 +11,32 @@ function CreateChange() {
   const [data, setData] = useState([]);
   const [id, setId] = useState(null);
   const [selectedDoc, setSelectedDoc] = useState({});
+  const [defaultInput,setDefaultInput] = useState({})
   const params = useParams();
-  const onSubmit = async (values) => {
-    values.code = selectedDoc.code;
-    values.new_version = selectedDoc.version+1
-    delete values.name
-   try {
-    const res = await createChange(values)
-    console.log(res)
-    if(res.status ===200){
-      swal.fire("Cambio agregado con éxito","","success").then(()=>{
-        reset();
-      })
-    }
-   } catch (error) {
-    console.log(error)
-    swal.fire(error.response.data,"","error")
-   }
-  };
   const {
     register,
     reset,
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  const onSubmit = async (values) => {
+    values.code = selectedDoc.code;
+    values.new_version = selectedDoc.version + 1;
+    delete values.name;
+    try {
+      const res = await createChange(values);
+      if (res.status === 200) {
+        swal.fire("Cambio agregado con éxito", "", "success").then(() => {
+          reset();
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      swal.fire(error.response.data, "", "error");
+    }
+  };
+
   const handleChange = (e) => {
     setId(e.value);
     const selectedValue = data.filter((element) => element.id === e.value);
@@ -56,6 +58,8 @@ function CreateChange() {
         });
       });
       SetCodigos(codes);
+    getDefaultValue(codes)
+
     } catch (error) {
       console.log(error);
     }
@@ -81,6 +85,7 @@ function CreateChange() {
                   options={codigos}
                   required
                   onChange={handleChange}
+        
                 ></Select>
               </div>
             </div>
@@ -177,6 +182,7 @@ function CreateChange() {
             <button className="btn btn-success shadow rounded">
               Registrar cambio
             </button>
+            <button className="mx-1 btn btn-secondary rounded" onClick={()=>window.history.back()}>Volver</button>
           </div>
         </div>
       </form>

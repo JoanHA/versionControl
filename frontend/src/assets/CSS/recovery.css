@@ -1,0 +1,35 @@
+.emailForm{
+    height: 20rem;
+    padding:60px;
+    background-color: white !important;
+    box-shadow: 0px 1px 3px gray;
+}
+.otpInput{
+    width:60px;
+    height:50px;
+    border-radius:8px
+
+}
+
+.verficationForm{
+    height: 20rem;
+    padding:60px;
+    max-width: 30rem;
+    background-color: white !important;
+    box-shadow: 0px 1px 3px gray;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+.verifyPassword{
+    height: 20rem;
+    padding:30px;
+    max-width: 30rem;
+    background-color: white !important;
+    box-shadow: 0px 1px 3px gray;
+    
+   
+}
