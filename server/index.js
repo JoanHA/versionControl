@@ -11,6 +11,7 @@ const auxiliarRoute = require("./routes/controlRoutes/auxiliars.js")
 const changesRoute = require("./routes/controlRoutes/changes.js")
 const authRoute = require("./routes/controlRoutes/auth.js")
 const recoverRoute = require("./routes/controlRoutes/recover.js")
+const paramRoute = require("./routes/controlRoutes/parameters.js")
 
 //------------------------------API v2 -------------------------
 
@@ -37,6 +38,7 @@ app.use("/api/v2/auxiliars",auxiliarRoute)
 app.use("/api/v2/changes",changesRoute)
 app.use("/api/v2/auth",authRoute);
 app.use("/api/v2/recover",recoverRoute);
+app.use("/api/v2/parameters",paramRoute);
 
 //Control API v2-------------------------------
 

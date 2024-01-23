@@ -32,9 +32,11 @@ export const formatDate = (Stringdate)=>{
     if (Stringdate == null || Stringdate =="") {
       return null;
     }
+    //Recibe YYYY/MM/DD
+    
     const año = Stringdate.toString().substring(0,4)
-    const mes = Stringdate.toString().substring(4,6)
-    const dia = Stringdate.toString().substring(6,8)
+    const mes = Stringdate.toString().substring(5,7)
+    const dia = Stringdate.toString().substring(8,10)
     const fecha = (`${año}-${mes}-${dia}`)
     return fecha
   }

@@ -88,7 +88,20 @@ const getOneDocument = async (req, res) => {
     console.log(error);
   }
 };
-const editDocument = (req, res) => {};
+const editDocument = async (req, res) => {
+  const code = req.body.code;
+  const datos = req.body;
+  delete datos.code;
+  const sql = `UPDATE documents SET ? WHERE code='${code}'`;
+  try {
+    const result = await db.query(sql,[datos]);
+    console.log(result)
+    res.send("Actualizado con exito!")
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Tuvimos un error, intenta mas tarde")
+  }
+};
 const deleteDocument = (req, res) => {};
 
 const makeDocument = async (req, res) => {
@@ -100,8 +113,8 @@ const makeDocument = async (req, res) => {
   const sql = `INSERT INTO documents SET ?`;
   try {
     const response = await db.query(sql, data);
-    res.send("Documento registrado correctamente!")
-    console.log(response)
+    res.send("Documento registrado correctamente!");
+    console.log(response);
   } catch (error) {
     console.log(error);
     if (error.code === "ER_DUP_ENTRY") {

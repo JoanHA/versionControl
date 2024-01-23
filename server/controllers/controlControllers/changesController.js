@@ -77,8 +77,30 @@ const getArchivedInfo = async (req,res)=>{
 
 
 }
+const  getChanges = async (req,res)=>{
+  const sql ="SELECT changes.*, (SELECT name FROM documents WHERE documents.code = changes.code) AS name FROM changes"
+  try {
+    const response = await db.query(sql);
+    res.send(response)
+    
+  } catch (error) {
+    console.log(error)
+  }
+}
+const getArchived = async (req,res)=>{
+  
+  const sql ="SELECT storages.*, (SELECT name FROM documents WHERE documents.code = storages.code) AS name, (SELECT name from params WHERE params.id = storages.last_move) AS last_move_name FROM storages";
+  try {
+    const response = await db.query(sql);
+    res.json(response)
+  } catch (error) {
+    console.log(error);
+  }
+}
 module.exports = {
   createChange,
   getChangesFromOne,
-  getArchivedInfo
+  getArchivedInfo,
+  getChanges,
+  getArchived,
 };

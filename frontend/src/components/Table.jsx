@@ -12,11 +12,13 @@ import {
   getSortedRowModel,
   getFilteredRowModel,
 } from "@tanstack/react-table";
+import Archived from "../pages/control/Archived";
 
-function Table({ data, columns,  }) {
+function Table({ data, columns, options = true, btnDetails }) {
   const [sorting, setSorting] = useState([]);
   const [filtering, setFilteting] = useState("");
   const [pageSize, setPageSize] = useState(window.innerWidth);
+
   const table = useReactTable({
     data,
     columns,
@@ -60,9 +62,7 @@ function Table({ data, columns,  }) {
             }}
           />
         </div>
-        <div>
-          {/* <DownloadButton filter={filtering} data={data} /> */}
-        </div>
+        <div>{/* <DownloadButton filter={filtering} data={data} /> */}</div>
 
         <div className="d-flex justify-content-center align-items-center text-center">
           <select
@@ -153,8 +153,8 @@ function Table({ data, columns,  }) {
                     </th>
                   </>
                 ))}
-
-                <th colSpan={1}>Opciones</th>
+                {options && <th colSpan={1}>Opciones</th>}
+                {btnDetails && <th colSpan={1}>Detalles</th>}
               </tr>
             ))}
           </thead>
@@ -171,23 +171,32 @@ function Table({ data, columns,  }) {
                     </td>
                   </>
                 ))}
-
-                <td className="" colSpan={2}>
-                  <div className="d-flex flex-wrap gap-1">
-                    <Link
-                      to={`/document/${row.original.id}`} // this has to have the id of the row
-                      className="btn btn-primary btn-sm   "
-                    >
-                      Ver
-                    </Link>
-                    <Link
-                      to={`/edit/${row.original.id}`} // this has to have the id of the row
-                      className="btn btn-primary btn-sm "
-                    >
-                      Editar
-                    </Link>
-                  </div>
-                </td>
+                {options && (
+                  <>
+                    <td className="" colSpan={2}>
+                      <div className="d-flex flex-wrap gap-1">
+                        <Link
+                          to={`/document/${row.original.id}`} // this has to have the id of the row
+                          className="btn btn-primary btn-sm   "
+                        >
+                          Ver
+                        </Link>
+                        <Link
+                          to={`/edit/${row.original.id}`} // this has to have the id of the row
+                          className="btn btn-primary btn-sm "
+                        >
+                          Editar
+                        </Link>
+                      </div>
+                    </td>
+                  </>
+                )}
+                {btnDetails && (
+                  <>
+                    <td>
+                      <Archived doc={btnDetails.doc[row.id]} text={btnDetails.text}></Archived></td>
+                  </>
+                )}
               </tr>
             ))}
           </tbody>

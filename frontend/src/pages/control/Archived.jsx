@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { getInformation } from "../../api/changes";
 
-function Archived({ doc }) {
+function Archived({ doc, text }) {
   const [info, setInfo] = useState({});
   const [isEmpty, setIsEmpty] = useState(false);
   const getInfo = async () => {
     try {
       const res = await getInformation(doc.code);
-      console.log(res)
-      setInfo(res.data[0])
+      setInfo(res.data[0]);
       if (res.data.status === 404) {
-       return setIsEmpty(true);
+        return setIsEmpty(true);
       }
     } catch (error) {
       console.log(error);
@@ -19,6 +18,14 @@ function Archived({ doc }) {
   useEffect(() => {
     getInfo();
   }, []);
+  const onClick = ()=>{
+   
+    //Cerrar modal
+      document.getElementById(doc.code).classList.add("d-none");
+      document.getElementById(doc.code).style.display = "none";
+      document.getElementById(doc.code).style.opacity = 0;
+  
+  }
   return (
     <>
       <button
@@ -26,13 +33,18 @@ function Archived({ doc }) {
         className="btn btn-primary btn-sm mt-2"
         data-bs-toggle="modal"
         data-bs-target="#exampleModal"
+        onClick={() => {
+          document.getElementById(doc.code).classList.remove("d-none");
+          document.getElementById(doc.code).style.display = "block";
+          document.getElementById(doc.code).style.opacity = 1;
+        }}
       >
-        Ver donde se archiva
+        {text ? text : "Ver donde se archiva"}
       </button>
 
       <div
-        className="modal fade "
-        id="exampleModal"
+        className="modal  d-none fade modalBack  d-flex align-items-center justify-content-center" //modal fade
+        id={doc.code} //exampleModal
         tabIndex="-1"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
@@ -41,20 +53,25 @@ function Archived({ doc }) {
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="exampleModalLabel">
-               
-              <strong>Documento {doc.code}</strong>  
+                <strong>Documento {doc.code}</strong>
               </h1>
               <button
                 type="button"
                 className="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
+                onClick={onClick}
               ></button>
             </div>
             <div className="modal-body">
               {isEmpty ? (
                 <div>
-                  <h2> <strong>Este documento aun no tiene lugar de archivo</strong></h2>
+                  <h2>
+                    {" "}
+                    <strong>
+                      Este documento aun no tiene lugar de archivo
+                    </strong>
+                  </h2>
                 </div>
               ) : (
                 <div className="row">
@@ -87,21 +104,21 @@ function Archived({ doc }) {
                       <strong>Tiempo de retención</strong>
                     </label>
                     <div>
-                      <div className="d-flex flex-row gap-2
-                      ">
-                      <label htmlFor="">
-                        <strong>Activo: </strong>
-                      </label>
-                      <label htmlFor="">{info.actived_saved}</label>
+                      <div
+                        className="d-flex flex-row gap-2
+                      "
+                      >
+                        <label htmlFor="">
+                          <strong>Activo: </strong>
+                        </label>
+                        <label htmlFor="">{info.actived_saved}</label>
                       </div>
                       <div className="d-flex flex-row gap-2">
-                      <label htmlFor="">
-                        <strong>Inactivo: </strong>
-                      </label>
+                        <label htmlFor="">
+                          <strong>Inactivo: </strong>
+                        </label>
                         <label htmlFor="">{info.inactived_saved}</label>
                       </div>
-                     
-                     
                     </div>
                   </div>
                   <div className="col-6 d-flex flex-column">
@@ -118,6 +135,7 @@ function Archived({ doc }) {
                 type="button"
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
+                onClick={onClick}
               >
                 Cerrar
               </button>

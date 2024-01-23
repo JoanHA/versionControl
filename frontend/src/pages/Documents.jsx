@@ -44,7 +44,7 @@ function Documents() {
   ];
   return (
     <div>
-      <div className="titleHeader text-center py-2">Registro de archivos</div>
+      <div className="titleHeader text-center py-2">Control de registros</div>
       <div>
         <Table columns={columns} data={data}></Table>
       </div>

@@ -7,5 +7,6 @@ router.post("/",createDocuments2);
 router.get("/:id",getOneDocument);
 router.post("/control",createControl);
 router.post("/doc",makeDocument)
+router.put("/",editDocument)
 
 module.exports = router

@@ -204,7 +204,7 @@ function CreateControl() {
                     }}
                     className="w-75"
                   ></Select>
-                  <AddButton></AddButton>
+                  <AddButton param={{name:"Disposición final",value:1}}></AddButton>
                 </div>
               </div>
             </div>

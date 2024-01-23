@@ -14,10 +14,21 @@ function ViewDocument() {
   const [data, setData] = useState({});
   const [changes, setChanges] = useState([]);
   const getData = async () => {
-    const res = await getOneDocument(params.id);
-    const changeResponse = await getChangesFromOne(res.data[0].code);
-    setChanges(changeResponse.data);
+
+    const res = await getOneDocument(params.id); //Informacion del documento 
+    const changeResponse = await getChangesFromOne(res.data[0].code); // Cambios que tiene el equipo
+
+    //Agregarle el 0 a la version del equipo
+    const datos = changeResponse.data.map((element) => {
+      const e = { ...element };
+      e.new_version = e.new_version < 10 ? `0${e.new_version}` : e.new_version;
+      return e;
+    });
+  
+    //Guardar los datos
+    setChanges(datos);
     setData(res.data[0]);
+
     const code = res.data[0].code;
     if (code.substring(0, 1).toUpperCase() === "R") {
       setIsRegister(true);
@@ -26,6 +37,7 @@ function ViewDocument() {
   useEffect(() => {
     getData();
   }, []);
+
   const columns = [
     {
       header: "Justificación",
@@ -51,10 +63,20 @@ function ViewDocument() {
 
   return (
     <div>
-      <div className="w-100 d-flex justify-content-end"> <button type="button" onClick={()=>{history.back()}} className="btn btn-dark mb-2 rounded btn-sm">Volver</button>
+      <div className="w-100 d-flex justify-content-end">
+        {" "}
+        <button
+          type="button"
+          onClick={() => {
+            history.back();
+          }}
+          className="btn btn-dark mb-2 rounded btn-sm"
+        >
+          Volver
+        </button>
       </div>
       <div className="titleHeader text-center py-1">
-        Información del archivo {data.code}
+        Información del documento {data.code}
       </div>
 
       <div className="container mx-auto row gap-2">
@@ -81,22 +103,27 @@ function ViewDocument() {
           </label>
         </div>
         <div className="col-12 col-md-5">
-          <label className="titleLabel">Ultima revisión:</label>
+          <label className="titleLabel">Fecha de emisión / Ultima revisión:</label>
           <label className="inputLabel">{data.last_revision}</label>
         </div>
         <div className="col-12 col-md-10">
-          <label className="titleLabel">Detalle:</label>
+          <label className="titleLabel">Observaciones:</label>
           <label className="inputLabel">{data.comments}</label>
         </div>
         <div>
-          <Link className="btn btn-sm btn-warning mt-2 mx-1">
+          <Link to={ "/edit/" + data.id} className="btn btn-sm btn-warning mt-2 mx-1">
             Editar archivo
           </Link>
 
           {isRegister && (
             <>
               <Archived doc={data.code ? data : null} />
-              <Link to={"/createControl/"+data.code} className="btn btn-success mx-1  btn-sm mt-2">Agregar control de archivo</Link>
+              <Link
+                to={"/createControl/" + data.code}
+                className="btn btn-success mx-1  btn-sm mt-2"
+              >
+                Agregar control de archivo
+              </Link>
             </>
           )}
         </div>
@@ -106,15 +133,11 @@ function ViewDocument() {
         Historico de cambios del {data.code}
       </div>
 
-      <div className="px-5">
+      <div className="px-3">
         <Link className="btn btn-sm btn-primary mb-2 " to={"/createChange"}>
           Agregar cambio
         </Link>
-        <HistoricTable
-          className="px-4"
-          columns={columns}
-          data={changes}
-        ></HistoricTable>
+        <HistoricTable columns={columns} data={changes}></HistoricTable>
       </div>
     </div>
   );
