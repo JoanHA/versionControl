@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import Select from "react-select";
 import AddButton from "./AddButton";
 
-function SelectInput({ data,param, onChange,defaultVal}) {
+function SelectInput({ data,param, onChange,defaultVal ,cb}) {
   const [isClearable, setIsClearable] = useState(true);
   const [isSearchable, setIsSearchable] = useState(true);
   const [isDisabled, setIsDisabled] = useState(false);
@@ -26,7 +26,6 @@ function SelectInput({ data,param, onChange,defaultVal}) {
     <div className="d-flex flex-row">
     <Select
       onChange={(e)=>{onChange(e)}}
-        required={true}
         className="basic-single w-100 "
         classNamePrefix="select"
         isDisabled={isDisabled}
@@ -38,7 +37,7 @@ function SelectInput({ data,param, onChange,defaultVal}) {
         options={data}
       />
 
-     <AddButton param={param}></AddButton>
+     <AddButton param={param} cb={cb}></AddButton>
     </div>
      
     </>

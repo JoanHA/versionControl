@@ -1,223 +1,136 @@
 import React, { useEffect, useState } from "react";
 import { FaDownload } from "react-icons/fa";
 import * as XLSX from "xlsx/xlsx.mjs";
-import autoTable from "jspdf-autotable"
+import autoTable from "jspdf-autotable";
 import jsPDF from "jspdf";
 
-
-function DownloadButton({ data = [], filter }) {
-  const [filtering, setFiltering] = useState([]);
-  const [pathname, SetPathname] = useState("");
- 
-  useEffect(() => {
-    const path = window.location.pathname;
-    SetPathname(path);
-  }, []);
-
-  //Guardar datos
-  const handleExcel = () => {
-    Swal.fire({
-      title: "Espera!",
-      text: "Recuerda que si estan filtrando los datos, mientras mas especifico seas, mejor 😉",
-      icon: "question",
-      showCancelButton: true,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const datos = getData();
-        if (datos.length > 0) {
-          const data = [];
-          datos.forEach((element) => {
-  
-            if (pathname == "/equipments" ) {
-              const equipo = {
-                Nombre: element.name,
-                Oficina: element.office,
-                Serial: element.serial,
-                Usuario: element.user_name,
-                Ram: element.ram,
-                Disco_duro: element.hard_disk,
-                Sistema_operativo: element.system,
-                Estado: element.statusName,
-                Marca: element.paramName,
-                Celular:element.phone,
-                Ubicacion: element.location,
-                Creado: element.bought_at.split("T")[0],
-              }
-              data.push(equipo);
-            }else{
-              const usuario = {
-                Id: element.id,
-                Identificacion: element.dni,
-                Nombre: element.name,
-                Email: element.email,
-                Area: element.area,
-                Sede: element.branch,
-                Estado: element.status_name,
-                Fecha_ingreso: element.created_at.split("T")[0],
-              }
-              data.push(usuario);
-            }
-            
-         
-          });
-          const worksheet = XLSX.utils.json_to_sheet(data);
-          const workbook = XLSX.utils.book_new();
-          XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-          XLSX.writeFile(workbook, `Reporte de ${pathname=="/equipments"? "Equipos":"Colaboradores"} filtrados.xlsx`);
-        }
-      }
-      
-    });
-  };
-
+function DownloadButton({ data = [], filter, info }) {
   const handlePDF = () => {
-    
     Swal.fire({
       title: "Espera!",
-      text: "Recuerda que si estan filtrando los datos, mientras mas especifico seas, mejor 😉",
+      text: "Seguro que quieres descargar en PDF estos datos?",
       icon: "question",
       showCancelButton: true,
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
-        const datos = getData();
-        if (datos.length > 0) {
-          const data = [];
-          datos.forEach((element) => {
-            if (pathname == "/equipments")  {
-              data.push( {
-              Nombre: element.name,
-              Oficina: element.office,
-              Serial: element.serial,
-              Usuario: element.user_name,
-              Ram: element.ram,
-              Disco_duro: element.hard_disk, 
-              Sistema_operativo: element.system,
-              Estado: element.statusName,
-              Marca: element.paramName,
-              Celular:element.phone,
-              Ubicacion: element.location,
-              Creado: element.bought_at.split("T")[0],
-              });
-            }else{
-              data.push({
-                Id: element.id,
-                Identificacion: element.dni,
-                Nombre: element.name,
-                Email: element.email,
-                Area: element.area,
-                Sede: element.branch,
-                Estado: element.status_name,
-                Fecha_ingreso: element.created_at.split("T")[0],
-              });
-            } 
-          });
-          const doc = new jsPDF("l", "pt", "letter");
+        try {
+          const datosFiltrados = getData();
+          const doc = new jsPDF();
+          var x = 10;
+          var y = 130;
           var body = [];
-          data.forEach((e, index) => {
-            if (pathname == "/equipments" ) {
-              body.push([
-                e.Nombre,
-                e.Oficina,
-                e.Serial,
-                e.Usuario,
-                e.Ram,
-                e.Disco_duro,
-                e.Sistema_operativo,
-                e.Estado,
-                e.Marca,
-                e.Celular,
-                e.Ubicacion,
-                e.Creado,
-              ]);
-            }else{
-              body.push([
-                e.Identificacion,
-                e.Nombre,
-                e.Email,
-                e.Area,
-                e.Sede,
-                e.Estado,
-                e.Fecha_ingreso,
-              ]);
-            }
+
+          //Cabeceras de la tabla
+          const headers = [
+            "Codigo",
+            "Solicitante",
+            "Aprobado por",
+            "Versión",
+            "detalles",
+          ];
+
+          //Llenado de datos de los cambios
+          datosFiltrados?.forEach((e) => {
+            const cambio = [
+              e.code,
+              e.claimant,
+              e.aproved_by,
+              e.new_version,
+              e.details,
+            ];
+            body.push(cambio);
           });
-          var headers = [];
-    if (pathname == "/equipments" ) {
-      headers = [
-        "Nombre",
-        "Oficina",
-        "Serial",
-        "Nombre del responsable",
-        "Ram",
-        "Disco Duro",
-        "Sistema Operativo",
-        "Estado",
-        "Marca",
-        "Celular",
-        "Ubicación",
-        "Fecha de compra",
-      ]
-    }else{
-      headers =[
-        "Identificacion",
-        "Nombre",
-        "Email",
-        "Area",
-        "Sede",
-        "Estado ",
-        "Fecha ingreso"
-      ]
-    }
-          var y = 20;
-          doc.setLineWidth(1);
-          // doc.text(240, y - 10, `Reporte de ${pathname=="/equipments"? "Equipos":"Colaboradores"} filtrados`);
+
+          // Imprimir info del equipo
+
+          doc.text(`Documento ${info?.code}`, 70, 10);
+
+          doc.text(`Nombre del documento: ${info?.name}`, 10, x + 20);
+          doc.text(`Tipologia: ${info?.typology_name}`, 10, x + 30);
+          doc.text(`Proceso: ${info?.process_name}`, 10, x + 40);
+          doc.text(
+            `Version: ${
+              info?.version < 10 ? `0${info.version}` : info.version
+            }`,
+            120,
+            x + 30
+          );
+          doc.text(
+            `Fecha de emision / ultima revisión: ${info?.last_revision}`,
+            10,
+            x + 50
+          );
+          const Options = { maxWidth: 180 };
+          const observacionHeight = doc.getTextDimensions(
+            info?.comments,
+            Options
+            ).h;
+            doc.text(`Observaciones: ${info?.comments}`, 10, x + 60, Options);
+
+          // Ajustar posición del siguiente bloque de texto
+          const nextTextY = x + 60 + observacionHeight + 5;
+
+          doc.text(
+            `Link de sharepoint: ${info?.link ? info?.link : ""}`,
+            10,
+            nextTextY +10 ,
+            { maxWidth: 180 }
+          );
+
+          doc.text("Cambios realizados a este documento", 50, 120);
+
+          //Imprimir tabla de eventos
+
           doc.autoTable({
             body: body,
             startY: y,
             head: [headers],
             theme: "striped",
             headStyles: {
-              lineWidth: 0,
-              fillColor: [223, 222,222],
+              fillColor: [240, 248, 255],
               textColor: [0, 0, 0],
-            
             },
           });
-
-          doc.save(`Reporte de ${pathname=="/equipments"? "Equipos":"Colaboradores"} filtrados.pdf`);
+          //Guardar documento
+          doc.save(`Cambios del documento ${info?.code}.pdf`);
+        } catch (error) {
+          swal.fire(
+            "No tenemos datos para descargar",
+            "Por favor intenta mas tarde",
+            "info"
+          );
+          console.log(error);
         }
       }
     });
   };
-  //Funcion para filtrar los datos
+
+  // Funcion para filtrar los datos
   const mapear = (map) => {
     var retorno = false;
-   
-   
+
     map.map((element) => {
       const datas = element.toString().toLowerCase();
       if (datas.match(filter.toLowerCase())) {
         retorno = true;
       }
     });
-      return retorno
+    return retorno;
   };
-  //obtener los datos Filtrados
+  // //obtener los datos Filtrados
   const getData = () => {
-   
     if (filter) {
-      
       if (data != null) {
-       
+        //esta funcion toma todos los datos del objeto y los convierte en un string en un array
+        //ejemplo {name:"jhon", lastName: "done"} lo convierte en ["jhon","done"]
+        //despues de desestructurarlos se compara si algun valor de ese array coincide con el filtro
         const FilteredData = data.filter((equip) => {
           const map = Object.values(equip).filter(Boolean);
           if (mapear(map)) {
             return true;
           }
         });
-        
-        setFiltering(FilteredData);
-        if (FilteredData.length == 0) {
+        if (FilteredData.length === 0) {
           return swal.fire(
             "No se encontraron datos para descargar",
             "",
@@ -236,22 +149,8 @@ function DownloadButton({ data = [], filter }) {
     }
   };
   return (
-    <div
-      className={
-        pathname == "/equipments" || pathname == "/Workers"
-          ? "d-block"
-          : "d-none"
-      }
-    >
+    <div>
       <div className="btn-group" role="group" aria-label="Basic  example">
-        <button
-          type="button"
-          className="btn btn-primary no-radius "
-          onClick={handleExcel}
-        >
-          Descargar Excel
-          <FaDownload className="mx-1" />
-        </button>
         <button
           type="button"
           className="btn btn-secondary no-radius"

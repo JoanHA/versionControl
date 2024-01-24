@@ -10,11 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emailjs/browser": "^3.11.0",
     "@popperjs/core": "^2.11.8",
     "@tanstack/react-table": "^8.11.6",
     "axios": "^1.6.5",
     "bootstrap": "^5.3.2",
-    "@emailjs/browser": "^3.11.0",
     "file-saver": "^2.0.5",
     "install": "^0.13.0",
     "js-cookie": "^3.0.5",
@@ -29,6 +29,7 @@
     "react-icons": "^4.11.0",
     "react-router-dom": "^6.17.0",
     "react-select": "^5.8.0",
+    "uniqid": "^5.4.0",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.19.3/xlsx-0.19.3.tgz"
   },
   "devDependencies": {

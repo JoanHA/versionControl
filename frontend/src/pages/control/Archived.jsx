@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { getInformation } from "../../api/changes";
-
+import uniqid from "uniqid";
 function Archived({ doc, text }) {
   const [info, setInfo] = useState({});
   const [isEmpty, setIsEmpty] = useState(false);
+  const [id, setId] = useState("");
   const getInfo = async () => {
     try {
       const res = await getInformation(doc.code);
@@ -17,15 +18,14 @@ function Archived({ doc, text }) {
   };
   useEffect(() => {
     getInfo();
+    setId(uniqid());
   }, []);
-  const onClick = ()=>{
-   
+  const onClick = () => {
     //Cerrar modal
-      document.getElementById(doc.code).classList.add("d-none");
-      document.getElementById(doc.code).style.display = "none";
-      document.getElementById(doc.code).style.opacity = 0;
-  
-  }
+    document.getElementById(id).classList.add("d-none");
+    document.getElementById(id).style.display = "none";
+    document.getElementById(id).style.opacity = 0;
+  };
   return (
     <>
       <button
@@ -34,9 +34,9 @@ function Archived({ doc, text }) {
         data-bs-toggle="modal"
         data-bs-target="#exampleModal"
         onClick={() => {
-          document.getElementById(doc.code).classList.remove("d-none");
-          document.getElementById(doc.code).style.display = "block";
-          document.getElementById(doc.code).style.opacity = 1;
+          document.getElementById(id).classList.remove("d-none");
+          document.getElementById(id).style.display = "block";
+          document.getElementById(id).style.opacity = 1;
         }}
       >
         {text ? text : "Ver donde se archiva"}
@@ -44,7 +44,7 @@ function Archived({ doc, text }) {
 
       <div
         className="modal  d-none fade modalBack  d-flex align-items-center justify-content-center" //modal fade
-        id={doc.code} //exampleModal
+        id={id} //exampleModal
         tabIndex="-1"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"

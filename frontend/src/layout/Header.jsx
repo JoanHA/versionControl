@@ -35,6 +35,69 @@ const Header = ({ children }) => {
                     Iniciar sesion
                   </Link>
                 </li>
+                <li class="nav-item dropdown">
+                  <button
+                    className="headerLinks dropdown-toggle"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    Maestro documental
+                  </button>
+                  <ul className="dropdown-menu ">
+                    <li>
+                      <Link to={"/"} className="dropdown-item">
+                        Ver listado
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to={"/newDoc"} className="dropdown-item">
+                        Agregar documento
+                      </Link>
+                    </li>
+                  </ul>
+                </li>
+                <li class="nav-item dropdown">
+                  <button
+                    className="headerLinks dropdown-toggle"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    Control de cambios
+                  </button>
+                  <ul className="dropdown-menu ">
+                    <li>
+                      <Link to={"/changes"} className="dropdown-item">
+                        Ver cambios
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to={"/createChange"} className="dropdown-item">
+                        Agregar cambio a documento
+                      </Link>
+                    </li>
+                  </ul>
+                </li>{" "}
+                <li class="nav-item dropdown">
+                  <button
+                    className="headerLinks dropdown-toggle"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    Retención documental
+                  </button>
+                  <ul className="dropdown-menu ">
+                    <li>
+                      <Link to={"/control"} className="dropdown-item">
+                        Retención documental
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to={"/createControl"} className="dropdown-item">
+                        Crear control documental
+                      </Link>
+                    </li>
+                  </ul>
+                </li>
               </ul>
             </div>
           </div>

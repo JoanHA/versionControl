@@ -33,6 +33,7 @@ function ViewChanges() {
   useEffect(() => {
     const getData = async () => {
       const res = await getChanges();
+      console.log(res.data);
       //Agregarle el 0 a la version del equipo
       const datos = res.data.map((element) => {
         const e = { ...element };
@@ -47,7 +48,13 @@ function ViewChanges() {
   }, []);
   return (
     <div>
-      <Table columns={columns} data={data} options={false}></Table>
+      <div className="titleHeader py-1">Cambios realizados</div>
+      <Table 
+        columns={columns}
+        data={data} 
+        options={false} 
+        details={true}
+        ></Table>
     </div>
   );
 }

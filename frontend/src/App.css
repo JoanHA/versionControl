@@ -40,7 +40,7 @@ z-index: 999;
 }
 /* Sidebar */
 #sidebar {
-  border-right: 1px solid lightgray;
+  /* border-right: 1px solid lightgray; */
   height: 150px;
   margin-right: 10px;
   padding-left: 5px;

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { GrNext, GrPrevious } from "react-icons/gr";
 import { BiLastPage, BiFirstPage } from "react-icons/bi";
-
+import DownloadButton from "./DownloadButton";
 import {
   useReactTable,
   getCoreRowModel,
@@ -12,10 +11,12 @@ import {
   getFilteredRowModel,
 } from "@tanstack/react-table";
 
-function HistoricTable({ data, columns }) {
+function HistoricTable({ data, columns,info }) {
   const [sorting, setSorting] = useState([]);
   const [filtering, setFilteting] = useState("");
   const [pageSize, setPageSize] = useState(window.innerWidth);
+
+
   const table = useReactTable({
     data,
     columns,
@@ -39,9 +40,14 @@ function HistoricTable({ data, columns }) {
     if (window.innerWidth < 1148) {
       table.setPageSize(Number(5));
     } else {
-      table.setPageSize(Number(10));
+      table.setPageSize(Number(10)); 
     }
   }, [pageSize]);
+  useEffect(()=>{
+    console.log(info)
+    console.log(data)
+
+  },[])
   return (
     <div>
       <div
@@ -59,7 +65,7 @@ function HistoricTable({ data, columns }) {
             }}
           />
         </div>
-        <div>{/* <DownloadButton filter={filtering} data={data} /> */}</div>
+        <div><DownloadButton filter={filtering} data={data} info={info}/> </div>
 
         <div className="d-flex justify-content-center align-items-center text-center">
           <select

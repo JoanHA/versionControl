@@ -23,6 +23,24 @@ body {
   text-decoration: underline;
   margin: 0;
 }
+.headerLinks{
+  display: none;
+  align-self: center;
+  margin: 0px 3px;
+  margin-top: 11px;
+  border: none;
+  background-color: transparent;
+  color: #555;
+}
+@media (max-width:980px) {
+  #sidebar{
+    display: none;
+  }
+  .headerLinks{
+    display: flex !important;
+  }
+  
+}
 
 .liClicked {
   cursor: pointer;

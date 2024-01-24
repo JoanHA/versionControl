@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import SelectInput from "../../components/Select";
 import Select from "react-select";
 import { useForm } from "react-hook-form";
-import { createControl, getAllDocuments } from "../../api/documentsAPI";
+import {
+  createControl,
+  getAllDocuments,
+  getAuxiliars,
+} from "../../api/documentsAPI";
 import { getLastMove } from "../../api/documentsAPI";
 import AddButton from "../../components/AddButton";
 import { useParams } from "react-router-dom";
@@ -11,41 +15,69 @@ function CreateControl() {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
   } = useForm();
-  const [codigos, SetCodigos] = useState([]);
+  // const [codigos, SetCodigos] = useState([]);
   const [data, setData] = useState([]);
-  const [code, setCode] = useState(null);
+  // const [code, setCode] = useState(null);
   const [lastMove, setLastMove] = useState([]);
   const [selectedMove, setSelectedMove] = useState(null);
-  const params = useParams();
-  const [defaultValue, setDefaultV] = useState({});
+
+  // const params = useParams();
+  // const [defaultValue, setDefaultV] = useState({});
+
+  const [letterCode, setLetterCode] = useState([]);
+  const [docType, setDoctype] = useState([]);
 
   //Funciones
   const onSubmit = async (values) => {
     values.last_move = selectedMove;
-    values.code = code;
+    values.code = `${values.codeLetter}${values.processInitials}${values.versionNumber}`;
     delete values.documentName;
+    delete values.versionNumber;
+    delete values.processInitials;
+    delete values.codeLetter;
+
     try {
-      const res = await createControl(values);
-      swal.fire(res.data, "", "success").then(() => {
-        reset();
-      });
+      // const res = await createControl(values);
+      // swal.fire(res.data, "", "success").then(() => {
+      //   reset();
+      // });
     } catch (error) {
       console.log(error);
       swal.fire(error.response.data, "", "error");
     }
   };
-  const handleChange = (e) => {
-    if (e.value) {
-      setCode(e.label);
-      const selectedValue = data.filter((element) => element.id === e.value);
-      reset({
-        documentName: selectedValue[0].name,
-      });
+  const handleChange = () => {
+    console.log(watch("processInitials"))
+    const code = `${watch("codeLetter")}${watch("processInitials")}${watch(
+      "versionNumber"
+    )}`;
+    if (data) {
+      const selected = data.find((e) => e.code == code);
+    
+
+      if (selected) {
+        reset({
+          documentName: selected.name,
+        });
+      }
+     
     }
   };
 
+  const fillSelects = async () => {
+    const res = await getAuxiliars();
+    const letter = [];
+    const types = [];
+    res.data.forEach((e) => {
+      e.paramtype_id === 4 ? letter.push(e) : types.push(e);
+    });
+
+    setLetterCode(letter);
+    setDoctype(types);
+  };
   const getLastMoves = async () => {
     try {
       const res = await getLastMove();
@@ -63,36 +95,68 @@ function CreateControl() {
     try {
       const res = await getAllDocuments();
       setData(res.data);
-
-      const codes = [];
-      res.data.map((e) => {
-        if (e.code.substring(0, 1) === "R") {
-          return codes.push({
-            value: e.id,
-            label: e.code,
-          });
-        }
-      });
-      const selected = codes.find((e) => e.code == params.code);
-      setDefaultV(selected);
-      SetCodigos(codes);
     } catch (error) {
       console.log(error);
     }
   };
   //end funciones
   useEffect(() => {
+    fillSelects();
     getCodes();
     getLastMoves();
   }, []);
   return (
     <div>
       <div className="titleHeader">Control de registros</div>
+      <div><button className="btn btn-dark btn-sm mx-3" onClick={()=>history.back()}>Volver</button>
+      </div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="row px-3">
           <div className="col-12 col-md-6">
             <div className="row gap-3">
-              <div className="col-12 row">
+              <div className="row mb-2">
+                <div className="col-4  py-2">
+                  <label htmlFor="">Codigo de registro</label>
+                </div>
+                <div className="col-8 d-flex">
+                  <select
+                    {...register("codeLetter", { required: true })}
+                    style={{ width: "70px" }}
+                    onChange={handleChange}
+                    className="form-select medium-rounded-left  "
+                  >
+                         <option value="">...</option>
+                    {letterCode &&
+                      letterCode.map((letter) => (
+                        <option key={letter.id} value={letter.name} s>
+                          {letter.name}
+                        </option>
+                      ))}
+                  </select>
+                  <select
+                    style={{ width: "80px", borderRadius: "0px" }}
+                    {...register("processInitials", { required: true })}
+                    className="form-select"
+                    onChange={handleChange}
+                  >
+                    <option value="">...</option>
+                    {docType &&
+                      docType.map((type) => (
+                        <option key={type.id} value={type.name}>
+                          {type.name}
+                        </option>
+                      ))}
+                  </select>
+                  <input
+                    {...register("versionNumber", { required: true })}
+                    type="text"
+                    placeholder="00..."
+                    onKeyUp={handleChange}
+                    className="form-control medium-rounded-right  "
+                  />
+                </div>
+              </div>
+              {/* <div className="col-12 row">
                 <div className="col-4">
                   <label>Código</label>
                 </div>
@@ -105,7 +169,7 @@ function CreateControl() {
                     options={codigos}
                   ></Select>
                 </div>
-              </div>
+              </div> */}
               <div className="col-12 row">
                 <div className="col-4">
                   <label>Nombre del registro </label>
@@ -172,6 +236,7 @@ function CreateControl() {
                   </div>
                   <div className="col-7">
                     <input
+                      placeholder="# años"
                       className="form-control"
                       type="text"
                       {...register("actived_saved", { required: true })}
@@ -183,10 +248,10 @@ function CreateControl() {
                     <label htmlFor="">Archivo Inactivo</label>
                   </div>
                   <div className="col-7">
-                    {" "}
                     <input
                       className="form-control"
                       type="text"
+                      placeholder="# años"
                       {...register("inactived_saved", { required: true })}
                     />
                   </div>
@@ -204,7 +269,9 @@ function CreateControl() {
                     }}
                     className="w-75"
                   ></Select>
-                  <AddButton param={{name:"Disposición final",value:1}}></AddButton>
+                  <AddButton
+                    param={{ name: "Disposición final", value: 1 }}
+                  ></AddButton>
                 </div>
               </div>
             </div>

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { GrNext, GrPrevious } from "react-icons/gr";
 import { BiLastPage, BiFirstPage } from "react-icons/bi";
 import DownloadButton from "./DownloadButton";
-
+import ChangeDetails from "../pages/changes/ChangeDetails";
 import {
   useReactTable,
   getCoreRowModel,
@@ -14,11 +14,10 @@ import {
 } from "@tanstack/react-table";
 import Archived from "../pages/control/Archived";
 
-function Table({ data, columns, options = true, btnDetails }) {
+function Table({ data, columns, options = true, btnDetails,details=false }) {
   const [sorting, setSorting] = useState([]);
   const [filtering, setFilteting] = useState("");
   const [pageSize, setPageSize] = useState(window.innerWidth);
-
   const table = useReactTable({
     data,
     columns,
@@ -155,6 +154,7 @@ function Table({ data, columns, options = true, btnDetails }) {
                 ))}
                 {options && <th colSpan={1}>Opciones</th>}
                 {btnDetails && <th colSpan={1}>Detalles</th>}
+                {details && <th colSpan={1}>Detalles</th>}
               </tr>
             ))}
           </thead>
@@ -195,6 +195,14 @@ function Table({ data, columns, options = true, btnDetails }) {
                   <>
                     <td>
                       <Archived doc={btnDetails.doc[row.id]} text={btnDetails.text}></Archived></td>
+                  </>
+                )}
+                  {details && (
+                  <>
+                    <td>
+                     
+                      <ChangeDetails infor={data[row.id]}></ChangeDetails>
+                     </td>
                   </>
                 )}
               </tr>

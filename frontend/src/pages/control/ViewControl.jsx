@@ -38,6 +38,8 @@ function ViewControl() {
   }, []);
   return (
     <div>
+            <div className="titleHeader py-1">Retención documental</div>
+
       <Table
         columns={columns}
         data={data}

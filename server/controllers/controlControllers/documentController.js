@@ -15,65 +15,6 @@ const getDocuments = async (req, res) => {
     res.status(500).send("error");
   }
 };
-const createDocument = async (req, res) => {
-  const data = ({
-    typology,
-    process,
-    name,
-    code,
-    version,
-    last_revision,
-    comments,
-  } = req.body);
-
-  data.status = 1;
-  console.log(data);
-  try {
-    const response = await db.query("INSERT INTO documents SET  ? ", [data]);
-    console.log("respuesta", response);
-    res.send("Registro añadido correctamente!");
-  } catch (error) {
-    console.log(error.code);
-    if (error.code === "ER_DUP_ENTRY") {
-      return res.status(400).send("El codigo del archivo ya esta en uso");
-    }
-    res
-      .status(500)
-      .send("Lo sentimos... no pudimos realizar esa acción intenta mas tarde.");
-  }
-};
-const createDocuments2 = (req, res) => {
-  const data = ({
-    typology,
-    process,
-    name,
-    code,
-    version,
-    last_revision,
-    comments,
-  } = req.body);
-  data.status = 1;
-
-  const create = async () => {
-    try {
-      const response = await db.query("INSERT INTO documents SET  ? ", [data]);
-      console.log(response);
-      res.json({ status: 200, data: "Respuesta correcta" });
-    } catch (error) {
-      console.log(error.code);
-      console.log(error);
-      if (error.code === "ER_DUP_ENTRY") {
-        return res.status(400).send("El codigo del archivo ya esta en uso");
-      }
-      res
-        .status(500)
-        .send(
-          "Lo sentimos... no pudimos realizar esa acción intenta mas tarde."
-        );
-    }
-  };
-  create();
-};
 
 const getOneDocument = async (req, res) => {
   const { id } = req.params;
@@ -138,11 +79,9 @@ const createControl = async (req, res) => {
 };
 module.exports = {
   getDocuments,
-  createDocument,
   editDocument,
   deleteDocument,
   getOneDocument,
-  createDocuments2,
   createControl,
   makeDocument,
 };

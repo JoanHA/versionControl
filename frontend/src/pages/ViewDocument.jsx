@@ -14,8 +14,7 @@ function ViewDocument() {
   const [data, setData] = useState({});
   const [changes, setChanges] = useState([]);
   const getData = async () => {
-
-    const res = await getOneDocument(params.id); //Informacion del documento 
+    const res = await getOneDocument(params.id); //Informacion del documento
     const changeResponse = await getChangesFromOne(res.data[0].code); // Cambios que tiene el equipo
 
     //Agregarle el 0 a la version del equipo
@@ -24,7 +23,7 @@ function ViewDocument() {
       e.new_version = e.new_version < 10 ? `0${e.new_version}` : e.new_version;
       return e;
     });
-  
+
     //Guardar los datos
     setChanges(datos);
     setData(res.data[0]);
@@ -63,7 +62,7 @@ function ViewDocument() {
 
   return (
     <div>
-      <div className="w-100 d-flex justify-content-end">
+      <div className="w-100 d-flex ">
         {" "}
         <button
           type="button"
@@ -103,15 +102,29 @@ function ViewDocument() {
           </label>
         </div>
         <div className="col-12 col-md-5">
-          <label className="titleLabel">Fecha de emisión / Ultima revisión:</label>
+          <label className="titleLabel">
+            Fecha de emisión / Ultima revisión:
+          </label>
           <label className="inputLabel">{data.last_revision}</label>
         </div>
-        <div className="col-12 col-md-10">
+        <div className="col-12 col-md-5">
           <label className="titleLabel">Observaciones:</label>
           <label className="inputLabel">{data.comments}</label>
         </div>
+        <div className="col-12 col-md-4 ">
+          <label className="titleLabel">Link de sharePoint:</label>
+
+          <label className="inputLabel">
+            <a href={data.link} target="blank">
+              VISITAR LINK
+            </a>
+          </label>
+        </div>
         <div>
-          <Link to={ "/edit/" + data.id} className="btn btn-sm btn-warning mt-2 mx-1">
+          <Link
+            to={"/edit/" + data.id}
+            className="btn btn-sm btn-warning mt-2 mx-1"
+          >
             Editar archivo
           </Link>
 
@@ -137,7 +150,21 @@ function ViewDocument() {
         <Link className="btn btn-sm btn-primary mb-2 " to={"/createChange"}>
           Agregar cambio
         </Link>
-        <HistoricTable columns={columns} data={changes}></HistoricTable>
+        {data.link && (
+          <a
+            href={data.link}
+            target="blank"
+            className="btn btn-secondary btn-sm mb-2 ms-2"
+          >
+            Ver en sharepoint
+          </a>
+        )}
+
+        <HistoricTable
+          columns={columns}
+          data={changes}
+          info={data}
+        ></HistoricTable>
       </div>
     </div>
   );

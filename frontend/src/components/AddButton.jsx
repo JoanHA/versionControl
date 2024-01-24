@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-function AddButton({ param }) {
+import uniqid from "uniqid";
+import { newParam } from "../api/parameters";
+function AddButton({ param, cb }) {
+
+  //Prevenir se de el submit con enter
+  document.querySelector('form')?.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+      event.preventDefault(); // Evitar la acción por defecto (enviar el formulario)
+    }
+  });
   const {
     register,
     handleSubmit,
@@ -8,15 +17,37 @@ function AddButton({ param }) {
     formState: { errors },
     reset,
   } = useForm();
-
+  const [id, setId] = useState("");
   const [params, setParams] = useState({});
-  const onSubmit = () => {
-    setParams(param)
-    console.log(params);
-    const { name } = watch();
+  const [error, setError] = useState(false);
+  const onSubmit = async () => {
+    const value = watch("value");
+    if (value === "") {
+      setError(true);
+      return;
+    }
+    const datos = {
+      paramtype_id: watch("paramtype_id"),
+      value,
+    };
+    try {
+      const res = await newParam(datos);
+
+      if (res.status === 200) {
+        swal
+          .fire(`${watch("name")} guardada con exito! `, "", "success")
+          .then(async () => {
+            await cb();
+            reset();
+          });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
   useEffect(() => {
-    setParams(param)
+    setId(uniqid());
+    setParams(param);
     reset({
       paramtype_id: param.value,
       name: param.name,
@@ -24,9 +55,9 @@ function AddButton({ param }) {
   }, []);
   const close = () => {
     //Cerrar modal
-    document.getElementById("staticBackdrop").classList.add("d-none");
-    document.getElementById("staticBackdrop").style.display = "none";
-    document.getElementById("staticBackdrop").style.opacity = 0;
+    document.getElementById(id).classList.add("d-none");
+    document.getElementById(id).style.display = "none";
+    document.getElementById(id).style.opacity = 0;
   };
   return (
     <>
@@ -35,19 +66,18 @@ function AddButton({ param }) {
           type="button"
           className="btn btn-primary btn btn-secondary  medium-rounded-right"
           onClick={() => {
-            document
-              .getElementById("staticBackdrop")
-              .classList.remove("d-none");
-            document.getElementById("staticBackdrop").style.display = "block";
-            document.getElementById("staticBackdrop").style.opacity = 1;
+            document.getElementById(id).classList.remove("d-none");
+            document.getElementById(id).style.display = "block";
+            document.getElementById(id).style.opacity = 1;
           }}
         >
           +
         </button>
       </div>
       <div
-        className="modal d-none  d-flex align-items-center justify-content-center"
-        id="staticBackdrop"
+
+  className="modal d-none  modalBack d-flex align-items-center justify-content-center"
+        id={id}
         data-bs-backdrop="static"
         data-bs-keyboard="false"
         tabIndex="-1"
@@ -90,8 +120,17 @@ function AddButton({ param }) {
                     <input
                       type="text"
                       className="form-control"
-                      {...register("value", { required: true })}
+                      
+                      onKeyUp={(e) => {
+                        e.target.value !== "" && setError(false);
+                      }}
+                      {...register("value")}
                     />
+                    {error && (
+                      <p className="errorMsg" style={{ fontSize: "12px" }}>
+                        Este campo es obligatorio
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>

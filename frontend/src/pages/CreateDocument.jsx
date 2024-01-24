@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./../assets/CSS/document.css";
 import { useForm } from "react-hook-form";
 import Select from "react-select";
@@ -13,6 +13,7 @@ import { getProcessTypologies } from "../api/documentsAPI";
 import { useParams } from "react-router-dom";
 import AddButton from "../components/AddButton";
 import { formatDate } from "../lib/helper";
+import HistoricTable from "../components/HistoricTable";
 function CreateDocument() {
   const {
     reset,
@@ -21,6 +22,7 @@ function CreateDocument() {
     formState: { errors },
   } = useForm();
 
+  const formRef = useRef(null);
   const [letterCode, setLetterCode] = useState([]);
   const [docType, setDoctype] = useState([]);
   const [typologies, setTypologies] = useState([]);
@@ -64,30 +66,31 @@ function CreateDocument() {
     if (params.id) {
       values.process = values.processSelect;
       values.typology = values.typologySelect;
-      values.last_revision = values.date
+      values.last_revision = values.date;
       delete values.typologySelect;
       delete values.processSelect;
-      delete values.date
+      delete values.date;
       try {
         const res = await updateDocument(values);
         console.log(res);
-        if(res.status === 200){
-          swal.fire(res.data,"","success").then(()=>{reset()})
+        if (res.status === 200) {
+          swal.fire(res.data, "", "success").then(() => {
+            reset();
+          });
         }
       } catch (error) {
         console.log(error);
-        swal.fire("Tuvimos un error intenta mas tarde!","","error")
-
+        swal.fire("Tuvimos un error intenta mas tarde!", "", "error");
       }
 
       return;
     }
 
     if (!proValue) {
-      return swal.fire("El campo proceso es obligario", "", "info");
+      return swal.fire("El campo proceso es obligatorio", "", "info");
     }
     if (!typeValue) {
-      return swal.fire("El campo tipologia es obligario", "", "info");
+      return swal.fire("El campo tipologia es obligatorio", "", "info");
     }
     const data = {
       code: values.codeLetter + values.processInitials + values.versionNumber,
@@ -96,6 +99,7 @@ function CreateDocument() {
       process: proValue,
       typology: typeValue,
       name: values.name,
+      link: values.link,
       version: 1,
     };
     try {
@@ -142,6 +146,7 @@ function CreateDocument() {
           typologySelect: res.data[0].typology,
           date: res.data[0].last_revision.replaceAll("/", "-"),
           comments: res.data[0].comments,
+          link:res.data[0].link
         });
       } catch (error) {
         console.log(error);
@@ -167,17 +172,25 @@ function CreateDocument() {
       <div className="titleHeader text-center py-1">
         {params.id ? "Edición" : "Registro"} de documentos
       </div>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <div>
+        <button
+          className="btn btn-dark btn-sm mx-3"
+          onClick={() => history.back()}
+        >
+          Volver
+        </button>
+      </div>
+      <form onSubmit={handleSubmit(onSubmit)} ref={formRef}>
         {/* Contenedor flex */}
         <div className="mx-auto row">
           {/* First child */}
-          <div className="col-12 col-md-6 ">
+          <div className="col-12 col-md-7 ">
             {/* start children */}
             <div className="row mb-2">
               <div className="col-4  py-2">
-                <label htmlFor="">Codigo de registro</label>
+                <label htmlFor="">Codigo del documento</label>
               </div>
-              <div className="col-8 d-flex">
+              <div className="col-8 d-flex align-items-center">
                 {params.id ? (
                   <input
                     {...register("code", { required: true })}
@@ -189,9 +202,10 @@ function CreateDocument() {
                   <>
                     <select
                       {...register("codeLetter", { required: true })}
-                      style={{ width: "70px", borderTopLeftRadius: "0px" }}
+                      style={{ width: "80px", borderTopLeftRadius: "0px" }}
                       className="form-select medium-rounded-left  "
                     >
+                      <option value="">...</option>
                       {letterCode &&
                         letterCode.map((letter) => (
                           <option key={letter.id} value={letter.name}>
@@ -200,10 +214,11 @@ function CreateDocument() {
                         ))}
                     </select>
                     <select
-                      style={{ width: "70px", borderRadius: "0px" }}
+                      style={{ width: "80px", borderRadius: "0px" }}
                       {...register("processInitials", { required: true })}
                       className="form-select  "
                     >
+                      <option value="">...</option>
                       {docType &&
                         docType.map((type) => (
                           <option key={type.id} value={type.name}>
@@ -249,7 +264,10 @@ function CreateDocument() {
                         <option value={e.value}>{e.label.toUpperCase()}</option>
                       ))}
                     </select>
-                    <AddButton param={{ value: 3, name: "Procesos" }} />
+                    <AddButton
+                      param={{ value: 3, name: "Procesos" }}
+                      cb={fillSelects}
+                    />
                   </>
                 ) : (
                   <>
@@ -258,6 +276,7 @@ function CreateDocument() {
                         onChange={handleProcessChange}
                         data={processes}
                         param={{ value: 3, name: "Procesos" }}
+                        cb={fillSelects}
                       ></SelectInput>
                     </div>
                   </>
@@ -279,7 +298,10 @@ function CreateDocument() {
                         <option value={e.value}>{e.label.toUpperCase()}</option>
                       ))}
                     </select>
-                    <AddButton param={{ name: "Tipologias", value: 2 }} />
+                    <AddButton
+                      param={{ name: "Tipologias", value: 2 }}
+                      cb={fillSelects}
+                    />
                   </>
                 ) : (
                   <>
@@ -287,6 +309,7 @@ function CreateDocument() {
                       <SelectInput
                         data={typologies}
                         onChange={handleTypoChange}
+                        cb={fillSelects}
                         param={{ name: "Tipologias", value: 2 }}
                       ></SelectInput>
                     </div>
@@ -297,7 +320,7 @@ function CreateDocument() {
             <div className="row mb-2">
               <div className="col-4">
                 <label htmlFor="" className="w-50">
-                  Ultima revisión
+                  Emisión/ Ultima revisión
                 </label>
               </div>
               <div className="col-8">
@@ -311,18 +334,34 @@ function CreateDocument() {
             {/* End children */}
           </div>
           {/* Second child */}
-          <div className="col-12 col-md-6 ">
-            <div className=" d-flex align-items-center gap-2">
-              <label htmlFor="">Observaciones</label>
-              <textarea
-                style={{
-                  maxHeight: "200px",
-                }}
-                {...register("comments", { required: true })}
-                className="form-control  rounded w-100 "
-                cols="30"
-                rows="3"
-              ></textarea>
+          <div className="col-12 col-md-5 ">
+            <div className=" d-flex align-items-center gap-2 mb-2">
+              <div className="col-3">
+                <label htmlFor="">Observación</label>
+              </div>
+              <div className="col-9">
+                <textarea
+                  style={{
+                    maxHeight: "200px",
+                  }}
+                  {...register("comments", { required: true })}
+                  className="form-control  rounded w-100 "
+                  cols="30"
+                  rows="2"
+                ></textarea>
+              </div>
+            </div>
+            <div className=" row">
+              <div className="col-3">
+                <label htmlFor="">Link</label>
+              </div>
+              <div className="col-9 flex-fill">
+                <input
+                  type="text"
+                  {...register("link")}
+                  className="form-control  rounded  "
+                ></input>
+              </div>
             </div>
           </div>
           {/* last child Button */}
