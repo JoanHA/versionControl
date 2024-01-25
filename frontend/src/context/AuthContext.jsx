@@ -1,7 +1,8 @@
-import React, { createContext, useContext, useState,useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import Cookies from "js-cookie";
+import { Login } from "../api/auth";
 
-
+import { verifyToken } from "../api/auth";
 //contexto
 const context = createContext();
 //Usar el contexto
@@ -38,12 +39,12 @@ function AuthProvider({ children }) {
   //iniciar sesion incompleto
   const GetIn = async (data) => {
     try {
-      const res = await Login(data); //Crear funcion login
+      const res = await Login(data);
 
       if (res.status === 200) {
         setisAuthenticated(true);
-        setUser(res.data.data.user);
-        Cookies.set("token", res.data.data.token);
+        setUser(res.data);
+        Cookies.set("token", res.data.token);
         setLoading(false);
         return res;
       }
@@ -58,7 +59,7 @@ function AuthProvider({ children }) {
   const signup = async (user) => {
     try {
       const res = await SignUp(user); //Crear funcion SIgnup
-    
+
       if (res) {
         if (res.data.status === 200) {
           setUser(res.data.message);
@@ -74,8 +75,8 @@ function AuthProvider({ children }) {
       setLoading(false);
     }
     return false;
-  }; 
-//Cambiar contraseña incompleta
+  };
+  //Cambiar contraseña incompleta
   const PasswordChanger = async (newData) => {
     try {
       const res = await changePassword(newData); //Crear funcion cambiar contraseña
@@ -98,7 +99,6 @@ function AuthProvider({ children }) {
         setLoading(false);
         return;
       }
-
       try {
         const res = await verifyToken({ token: cookies.token });
         if (!res.data) {
@@ -115,21 +115,27 @@ function AuthProvider({ children }) {
     };
     checkLogin();
   }, []);
-    
-  return <context.Provider  value={{
-    user,
-    signup,
-    GetIn,
-    loading,
-    logOut,
-    isAuthenticated,
-    Errores,
-    PasswordChanger,
-    email,
-    setEmail,
-    otp,
-    setOtp,
-  }}>{children}</context.Provider>;
+
+  return (
+    <context.Provider
+      value={{
+        user,
+        signup,
+        GetIn,
+        loading,
+        logOut,
+        isAuthenticated,
+        Errores,
+        PasswordChanger,
+        email,
+        setEmail,
+        otp,
+        setOtp,
+      }}
+    >
+      {children}
+    </context.Provider>
+  );
 }
 
 export default AuthProvider;

@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { Link , useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/IMG/grupo-carval-Logo-Bioart.png";
 import { useForm } from "react-hook-form";
-import { useAuth } from "../context/AuthContext";
-
 import RecoverCode from "./Recovering/RecoverCode";
+import { useAuth } from "../context/AuthContext";
 function Login() {
   const navigate = useNavigate();
   const { GetIn, Errores } = useAuth();
@@ -18,7 +17,7 @@ function Login() {
       const res = await GetIn(data);
 
       if (Errores == null) {
-        if (res.data.status == 200) {
+        if (res.status === 200) {
           Swal.fire({
             position: "center",
             showClass: {
@@ -32,20 +31,21 @@ function Login() {
             showConfirmButton: false,
             timer: 2000,
           }).then(() => {
-            navigate("/");
-            location.reload();
+            navigate("/welcome");
+            // location.reload();
           });
           return;
         }
       }
     } catch (error) {
       console.log(error);
+      swal.fire("Tuvimos un error, intenta mas tarde","","error")
     }
   };
 
   return (
     <div>
-      <div className="d-flex  align-items-center justify-content-center ">
+      <div className="d-flex align-items-center justify-content-center ">
         <div
           id="form-container"
           className="  gap-3 py-3  mt-4"
@@ -68,21 +68,20 @@ function Login() {
                 {Errores &&
                   Errores.map((error) => (
                     <div key={0} className="spanError">
-                      <div></div>
-                      {error}
+                      <div>{error}</div>
                     </div>
                   ))}
                 <div className="form-floating rounded ">
                   <input
-                    type="email"
+                    type="text"
                     className="form-control form-control-sm inputs "
                     id="floatingInput"
-                    {...register("email", { required: true })}
+                    {...register("username", { required: true })}
                   />
-                  {errors.email?.type === "required" && (
+                  {errors.username?.type === "required" && (
                     <p className="errorMsg">Este campo es requerido</p>
                   )}
-                  <label htmlFor="floatingInput">Correo </label>
+                  <label htmlFor="floatingInput">Usuario </label>
                 </div>
                 <div className="form-floating">
                   <input
@@ -111,7 +110,6 @@ function Login() {
                   ¿Olvidaste tu contraseña?
                 </Link>
               </div>
-              
             </div>
           </div>
         </div>

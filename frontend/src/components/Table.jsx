@@ -13,6 +13,7 @@ import {
   getFilteredRowModel,
 } from "@tanstack/react-table";
 import Archived from "../pages/control/Archived";
+import { useAuth } from "../context/AuthContext";
 
 function Table({ data, columns, options = true, btnDetails,details=false }) {
   const [sorting, setSorting] = useState([]);
@@ -37,6 +38,7 @@ function Table({ data, columns, options = true, btnDetails,details=false }) {
   window.onresize = (e) => {
     setPageSize(window.innerWidth);
   };
+  const {isAuthenticated}=useAuth()
   useEffect(() => {
     if (window.innerWidth < 1148) {
       table.setPageSize(Number(5));
@@ -174,19 +176,22 @@ function Table({ data, columns, options = true, btnDetails,details=false }) {
                 {options && (
                   <>
                     <td className="" colSpan={2}>
-                      <div className="d-flex flex-wrap gap-1">
+                      <div className="d-flex flex-wrap gap-1 ">
                         <Link
                           to={`/document/${row.original.id}`} // this has to have the id of the row
-                          className="btn btn-primary btn-sm   "
+                          className="btn btn-primary btn-sm  flex-fill "
                         >
                           Ver
                         </Link>
-                        <Link
-                          to={`/edit/${row.original.id}`} // this has to have the id of the row
-                          className="btn btn-primary btn-sm "
-                        >
-                          Editar
-                        </Link>
+                        {
+                          isAuthenticated && ( <Link
+                            to={`/edit/${row.original.id}`} // this has to have the id of the row
+                            className="btn btn-primary btn-sm flex-fill"
+                          >
+                            Editar
+                          </Link>)
+                        }
+                       
                       </div>
                     </td>
                   </>

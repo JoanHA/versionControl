@@ -5,7 +5,6 @@ import { convertNumber } from "../lib/helper";
 import { useAuth } from "../context/AuthContext";
 function Documents() {
   const [data, setData] = useState([]);
-  const { isLoggedIn } = useAuth();
   useEffect(() => {
     const getdata = async () => {
       const res = await getAllDocuments();

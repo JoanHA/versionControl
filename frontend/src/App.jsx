@@ -16,12 +16,16 @@ import RecoverPassword from "./Auth/Recovering/RecoverPassword";
 import Not_Found from "./components/Not_Found";
 import ViewChanges from "./pages/changes/ViewChanges";
 import ViewControl from "./pages/control/ViewControl";
+import AdminView from "./pages/admin/AdminView";
+import Parameters from "./pages/admin/Parameters";
+import Users from "./pages/admin/Users";
+import AdminWelcome from "./pages/admin/AdminWelcome";
+import { ProtectedRoute } from "./Auth/ProtectedRoute";
 function App() {
   return (
     <div>
       <AuthProvider>
         <BrowserRouter>
-         
           <Header>
             <Routes>
               {/* Rutas de login y recuperacion de contraseña */}
@@ -29,7 +33,6 @@ function App() {
               <Route path="/reset" element={<RecoverPassword />} />
               <Route path="/enterEmail" element={<EnterEmail />} />
               <Route path="/otp" element={<RecoverCode />} />
-
               <Route path="/" element={<Documents />}></Route>
               <Route path="/welcome" element={<Welcome />}></Route>
               <Route path="/newDoc" element={<CreateDocument />}></Route>
@@ -40,15 +43,40 @@ function App() {
                 path="/createControl/:code"
                 element={<CreateControl />}
               ></Route>
+
+              <Route element={<ProtectedRoute/>}>
+                <Route
+                  path="/admin"
+                  element={
+                    <AdminView>
+                      <AdminWelcome></AdminWelcome>
+                    </AdminView>
+                  }
+                ></Route>
+                <Route
+                  path="/admin/users"
+                  element={
+                    <AdminView>
+                      <Users></Users>
+                    </AdminView>
+                  }
+                ></Route>
+                <Route
+                  path="/admin/parameters"
+                  element={
+                    <AdminView>
+                      <Parameters></Parameters>
+                    </AdminView>
+                  }
+                ></Route>
+              </Route>
+
               <Route path="/edit/:id" element={<CreateDocument />}></Route>
               <Route path="/changes" element={<ViewChanges />}></Route>
               <Route path="/control" element={<ViewControl />}></Route>
-            <Route path="*" element={<Not_Found></Not_Found>}></Route>
+              <Route path="*" element={<Not_Found />}></Route>
             </Routes>
-            
-          
           </Header>
-      
         </BrowserRouter>
       </AuthProvider>
     </div>

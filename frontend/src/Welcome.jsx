@@ -18,21 +18,34 @@ function Welcome() {
       </div>
       <div className="d-flex flex-row justify-content-evenly flex-wrap align-items-center">
         <div className="linksContainer mt-5">
+          <Link  to={"/"}>
           <div className="linkItem bg-light py-2 px-4 mb-4">
             <IoFileTrayFullOutline size={size} />
-            <Link className="link" to={"/"}>Maestro de documentos</Link>
+            <Link to={"/"} className="link">
+              Maestro de documentos
+            </Link>
             <FaArrowRight className="arrow" size={arrowSize} />
           </div>
+          </Link>
+          
+          <Link  to={"/changes"}>
           <div className="linkItem  bg-light py-2 px-4 mb-4">
             <MdOutlinePublishedWithChanges size={size} />
-            <Link className="link">Control de cambios</Link>
+            <Link  to={"/changes"} className="link">
+              Control de cambios
+            </Link>
             <FaArrowRight className="arrow" size={arrowSize} />
           </div>
-          <div className="linkItem  bg-light py-2 px-4">
-            <VscFileSubmodule size={size} />
-            <Link className="link">Retención documental</Link>
-            <FaArrowRight className="arrow" size={arrowSize} />
-          </div>
+          </Link>
+          <Link  to={"/control"} >
+            <div className="linkItem  bg-light py-2 px-4">
+              <VscFileSubmodule size={size} />
+              <Link to={"/control"} className="link">
+                Retención documental
+              </Link>
+              <FaArrowRight className="arrow" size={arrowSize} />
+            </div>
+          </Link>
         </div>
         <div>
           <img src={image} alt="Imagen de bienvenida" width={400} />

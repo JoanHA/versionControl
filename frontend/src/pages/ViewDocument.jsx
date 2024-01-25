@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { getOneDocument } from "../api/documentsAPI";
 import { Link } from "react-router-dom";
@@ -7,12 +6,15 @@ import Archived from "./control/Archived";
 
 import HistoricTable from "../components/HistoricTable";
 import { getChangesFromOne } from "../api/changes";
+import { useAuth } from "../context/AuthContext";
 function ViewDocument() {
   const params = useParams();
   const [isRegister, setIsRegister] = useState(false);
 
   const [data, setData] = useState({});
   const [changes, setChanges] = useState([]);
+
+  const { isAuthenticated } = useAuth();
   const getData = async () => {
     const res = await getOneDocument(params.id); //Informacion del documento
     const changeResponse = await getChangesFromOne(res.data[0].code); // Cambios que tiene el equipo
@@ -62,17 +64,56 @@ function ViewDocument() {
 
   return (
     <div>
-      <div className="w-100 d-flex ">
-        {" "}
+      <div className="w-100 d-flex align-items-center gap-2 flex-wrap my-1">
+     
         <button
           type="button"
           onClick={() => {
             history.back();
           }}
-          className="btn btn-dark mb-2 rounded btn-sm"
+          className="btn btn-dark rounded btn-sm"
         >
           Volver
         </button>
+        {isAuthenticated && (
+          <Link className="btn btn-sm btn-primary  " to={"/createChange"}>
+            Agregar cambio
+          </Link>
+        )}
+        {data.link && (
+          <a
+            href={data.link}
+            target="blank"
+            className="btn btn-secondary btn-sm "
+          >
+            Ver en sharepoint
+          </a>
+        )}
+        {isAuthenticated && (
+          <>
+            <Link
+              to={"/edit/" + data.id}
+              className="btn btn-sm btn-warning "
+            >
+              Editar archivo
+            </Link>
+
+            {isRegister && (
+              <>
+              <div className="" style={{marginBottom:"5px"}}>
+                <Archived doc={data.code ? data : null} />
+
+              </div>
+                <Link
+                  to={"/createControl/" + data.code}
+                  className="btn btn-success mx-1  btn-sm "
+                >
+                  Agregar control de archivo
+                </Link>
+              </>
+            )}
+          </>
+        )}
       </div>
       <div className="titleHeader text-center py-1">
         Información del documento {data.code}
@@ -120,26 +161,6 @@ function ViewDocument() {
             </a>
           </label>
         </div>
-        <div>
-          <Link
-            to={"/edit/" + data.id}
-            className="btn btn-sm btn-warning mt-2 mx-1"
-          >
-            Editar archivo
-          </Link>
-
-          {isRegister && (
-            <>
-              <Archived doc={data.code ? data : null} />
-              <Link
-                to={"/createControl/" + data.code}
-                className="btn btn-success mx-1  btn-sm mt-2"
-              >
-                Agregar control de archivo
-              </Link>
-            </>
-          )}
-        </div>
       </div>
       <div className="titleHeader text-center py-1 mt-3">
         {" "}
@@ -147,19 +168,6 @@ function ViewDocument() {
       </div>
 
       <div className="px-3">
-        <Link className="btn btn-sm btn-primary mb-2 " to={"/createChange"}>
-          Agregar cambio
-        </Link>
-        {data.link && (
-          <a
-            href={data.link}
-            target="blank"
-            className="btn btn-secondary btn-sm mb-2 ms-2"
-          >
-            Ver en sharepoint
-          </a>
-        )}
-
         <HistoricTable
           columns={columns}
           data={changes}

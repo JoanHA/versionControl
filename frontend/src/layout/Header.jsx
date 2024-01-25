@@ -1,15 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import logo from "../assets/IMG/grupo-carval-Logo-Bioart.png";
+import { useAuth } from "../context/AuthContext";
 const Header = ({ children }) => {
+  const { isAuthenticated } = useAuth();
+
   return (
     <div className="d-flex flex-column ">
       <header className="" id="navHeader">
         <nav className="navbar navbar-expand-lg  bg-body-tertiary">
           <div className="container-fluid">
             <div className="d-flex align-items-center pt-1 me-2">
+              <Link to={"/"}>
               <img src={logo} alt="Logo de Bioart" width={190} height={40} />
+              
+              </Link>
             </div>
             {/* <Link className="navbar-brand" to="/">
             Control de documentos
@@ -30,12 +36,25 @@ const Header = ({ children }) => {
                 id="ul"
                 className="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll "
               >
-                <li className="nav-item nav-link p-1">
-                  <Link to="/login" className="nav-link">
-                    Iniciar sesion
-                  </Link>
-                </li>
-                <li class="nav-item dropdown">
+                {isAuthenticated ? (
+                  <>
+                    <li className="nav-item nav-link p-1">
+                      <Link to="/admin" className="nav-link">
+                        Administrador
+                      </Link>
+                    </li>
+                  </>
+                ) : (
+                  <>
+                    {" "}
+                    <li className="nav-item nav-link p-1">
+                      <Link to="/login" className="nav-link">
+                        Iniciar sesion
+                      </Link>
+                    </li>
+                  </>
+                )}
+                <li className="nav-item dropdown">
                   <button
                     className="headerLinks dropdown-toggle"
                     data-bs-toggle="dropdown"
@@ -49,14 +68,16 @@ const Header = ({ children }) => {
                         Ver listado
                       </Link>
                     </li>
-                    <li>
-                      <Link to={"/newDoc"} className="dropdown-item">
-                        Agregar documento
-                      </Link>
-                    </li>
+                    {isAuthenticated && (
+                      <li>
+                        <Link to={"/newDoc"} className="dropdown-item">
+                          Agregar documento
+                        </Link>
+                      </li>
+                    )}
                   </ul>
                 </li>
-                <li class="nav-item dropdown">
+                <li className="nav-item dropdown">
                   <button
                     className="headerLinks dropdown-toggle"
                     data-bs-toggle="dropdown"
@@ -70,14 +91,16 @@ const Header = ({ children }) => {
                         Ver cambios
                       </Link>
                     </li>
-                    <li>
-                      <Link to={"/createChange"} className="dropdown-item">
-                        Agregar cambio a documento
-                      </Link>
-                    </li>
+                    {isAuthenticated && (
+                      <li>
+                        <Link to={"/createChange"} className="dropdown-item">
+                          Agregar cambio a documento
+                        </Link>
+                      </li>
+                    )}
                   </ul>
                 </li>{" "}
-                <li class="nav-item dropdown">
+                <li className="nav-item dropdown">
                   <button
                     className="headerLinks dropdown-toggle"
                     data-bs-toggle="dropdown"
@@ -91,11 +114,15 @@ const Header = ({ children }) => {
                         Retención documental
                       </Link>
                     </li>
-                    <li>
-                      <Link to={"/createControl"} className="dropdown-item">
-                        Crear control documental
-                      </Link>
-                    </li>
+                    {isAuthenticated && (
+                      <>
+                        <li>
+                          <Link to={"/createControl"} className="dropdown-item">
+                            Crear control documental
+                          </Link>
+                        </li>
+                      </>
+                    )}
                   </ul>
                 </li>
               </ul>
@@ -104,7 +131,7 @@ const Header = ({ children }) => {
         </nav>
       </header>
 
-      <div className="px-2 py-2  d-flex flex-row ">
+      <div className=" d-flex flex-row ">
         <Sidebar></Sidebar>
         <div className="flex-fill">{children}</div>
       </div>

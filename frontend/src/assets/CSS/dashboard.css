@@ -1,0 +1,16 @@
+/* Debo hacer el responsive de big card */
+.big-cards{
+    height:300px;
+    max-width: 300px !important;
+    margin-top: -6rem !important;
+}
+.dashboard-background{
+    background-color: #0a5edc;
+    height: 200px;
+    padding: 10px
+}
+.little-cards{
+    max-width: 300px;
+    width: 310px;    
+    height: 120px;
+}

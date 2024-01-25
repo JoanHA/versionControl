@@ -20,7 +20,6 @@ body {
 .errorMsg {
   color: red;
   font-size: 15px;
-  text-decoration: underline;
   margin: 0;
 }
 .headerLinks{

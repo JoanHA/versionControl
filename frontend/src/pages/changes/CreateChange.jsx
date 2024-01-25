@@ -11,7 +11,7 @@ function CreateChange() {
   const [data, setData] = useState([]);
   const [id, setId] = useState(null);
   const [selectedDoc, setSelectedDoc] = useState({});
-  const [defaultInput,setDefaultInput] = useState({})
+
   const params = useParams();
   const {
     register,
@@ -58,7 +58,6 @@ function CreateChange() {
         });
       });
       SetCodigos(codes);
-    getDefaultValue(codes)
 
     } catch (error) {
       console.log(error);
@@ -69,7 +68,9 @@ function CreateChange() {
   }, []);
   return (
     <div>
-      <div className="titleHeader py-2 ">Registrar cambios</div>
+      
+      <div className="titleHeader  ">Registrar cambios</div>
+       <button className="mx-1 btn btn-dark rounded btn-sm mb-1" onClick={()=>window.history.back()}>Volver</button>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mx-auto row ">
           <div className="col-12 col-sm-6 ">
@@ -182,7 +183,7 @@ function CreateChange() {
             <button className="btn btn-success shadow rounded">
               Registrar cambio
             </button>
-            <button className="mx-1 btn btn-secondary rounded" onClick={()=>window.history.back()}>Volver</button>
+           
           </div>
         </div>
       </form>

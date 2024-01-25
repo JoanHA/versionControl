@@ -45,18 +45,18 @@ function DownloadButton({ data = [], filter, info }) {
 
           doc.text(`Documento ${info?.code}`, 70, 10);
 
-          doc.text(`Nombre del documento: ${info?.name}`, 10, x + 20);
-          doc.text(`Tipologia: ${info?.typology_name}`, 10, x + 30);
-          doc.text(`Proceso: ${info?.process_name}`, 10, x + 40);
+          doc.text(`NOMBRE DEL DOCUMENTO: ${info?.name}`, 10, x + 20);
+          doc.text(`TIPOLOGÍA: ${info?.typology_name}`, 10, x + 30);
+          doc.text(`PROCESO: ${info?.process_name}`, 10, x + 40);
           doc.text(
-            `Version: ${
+            `VERSION: ${
               info?.version < 10 ? `0${info.version}` : info.version
             }`,
             120,
             x + 30
           );
           doc.text(
-            `Fecha de emision / ultima revisión: ${info?.last_revision}`,
+            `FECHA DE EMISIÓN / ULTIMA REVISIÓN: ${info?.last_revision}`,
             10,
             x + 50
           );
@@ -65,19 +65,19 @@ function DownloadButton({ data = [], filter, info }) {
             info?.comments,
             Options
             ).h;
-            doc.text(`Observaciones: ${info?.comments}`, 10, x + 60, Options);
+            doc.text(`OBSERVACIÓN: ${info?.comments}`, 10, x + 60, Options);
 
           // Ajustar posición del siguiente bloque de texto
           const nextTextY = x + 60 + observacionHeight + 5;
 
           doc.text(
-            `Link de sharepoint: ${info?.link ? info?.link : ""}`,
+            `LINK INTRANET: ${info?.link ? info?.link : ""}`,
             10,
             nextTextY +10 ,
             { maxWidth: 180 }
           );
 
-          doc.text("Cambios realizados a este documento", 50, 120);
+          doc.text("CAMBIOS REALIZADOS A ESTE DOCUMENTO", 50, 120);
 
           //Imprimir tabla de eventos
 

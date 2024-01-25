@@ -1,9 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 function Sidebar() {
+  const history = useLocation();
+  const [pathname, setPathname] = useState(history.pathname);
 
+  useEffect(() => {
+    setPathname(history.pathname);
+  }, [history]);
+
+  const classNameRender = ()=>{
+    if(pathname === "/welcome" || pathname === "/login" ||pathname === "/admin" ||pathname === "/users" || pathname === "/parameters"    ){
+      return "d-none"
+    }
+    return ""
+  }
+  const { isAuthenticated } = useAuth();
   return (
-    <div id="sidebar" >
+    <div id="sidebar" className={classNameRender() }>
       <div className="list-group px-1">
         <div className="dropdown">
           <button
@@ -20,11 +34,13 @@ function Sidebar() {
                 Ver listado maestro
               </Link>
             </li>
-            <li>
-              <Link className="dropdown-item" to="/newDoc">
-                Crear documento
-              </Link>
-            </li>
+            {isAuthenticated && (
+              <li>
+                <Link className="dropdown-item" to="/newDoc">
+                  Crear documento
+                </Link>
+              </li>
+            )}
           </ul>
         </div>
         <div className="dropdown">
@@ -42,11 +58,14 @@ function Sidebar() {
                 Ver cambios
               </Link>
             </li>
-            <li>
-              <Link className="dropdown-item" to="/createChange">
-                Crear cambio a documento
-              </Link>
-            </li>
+
+            {isAuthenticated && (
+              <li>
+                <Link className="dropdown-item" to="/createChange">
+                  Crear cambio a documento
+                </Link>
+              </li>
+            )}
           </ul>
         </div>
 
@@ -65,11 +84,13 @@ function Sidebar() {
                 Retencion documental
               </Link>
             </li>
-            <li>
-              <Link className="dropdown-item" to="/createControl">
-                Crear control documental
-              </Link>
-            </li>
+            {isAuthenticated && (
+              <li>
+                <Link className="dropdown-item" to="/createControl">
+                  Crear control documental
+                </Link>
+              </li>
+            )}
           </ul>
         </div>
       </div>
