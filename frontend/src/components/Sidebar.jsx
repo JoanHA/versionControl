@@ -7,17 +7,27 @@ function Sidebar() {
 
   useEffect(() => {
     setPathname(history.pathname);
+    console.log(history)
   }, [history]);
+//ho4bd6rr
 
-  const classNameRender = ()=>{
-    if(pathname === "/welcome" || pathname === "/login" ||pathname === "/admin" ||pathname === "/users" || pathname === "/parameters"    ){
-      return "d-none"
+  const classNameRender = () => {
+    console.log(pathname);
+    if (
+      pathname === "/welcome" ||
+      pathname === "/login" ||
+      pathname === "/admin" ||
+      pathname === "/admin/users" ||
+      pathname === "/admin/parameters" ||
+      pathname === "/admin/newUser" 
+    ) {
+      return "d-none";
     }
-    return ""
-  }
+    return "";
+  };
   const { isAuthenticated } = useAuth();
   return (
-    <div id="sidebar" className={classNameRender() }>
+    <div id="sidebar" className={classNameRender()}>
       <div className="list-group px-1">
         <div className="dropdown">
           <button

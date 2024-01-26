@@ -6,7 +6,6 @@ import { IoFileTrayFullOutline } from "react-icons/io5";
 import { FaArrowRight } from "react-icons/fa";
 import { MdOutlinePublishedWithChanges } from "react-icons/md";
 import { VscFileSubmodule } from "react-icons/vsc";
-
 function Welcome() {
   //Size of icons
   const size = 30;
@@ -21,9 +20,9 @@ function Welcome() {
           <Link  to={"/"}>
           <div className="linkItem bg-light py-2 px-4 mb-4">
             <IoFileTrayFullOutline size={size} />
-            <Link to={"/"} className="link">
+            <li  className="link">
               Maestro de documentos
-            </Link>
+            </li>
             <FaArrowRight className="arrow" size={arrowSize} />
           </div>
           </Link>
@@ -31,18 +30,18 @@ function Welcome() {
           <Link  to={"/changes"}>
           <div className="linkItem  bg-light py-2 px-4 mb-4">
             <MdOutlinePublishedWithChanges size={size} />
-            <Link  to={"/changes"} className="link">
+            <li   className="link">
               Control de cambios
-            </Link>
+            </li>
             <FaArrowRight className="arrow" size={arrowSize} />
           </div>
           </Link>
           <Link  to={"/control"} >
             <div className="linkItem  bg-light py-2 px-4">
               <VscFileSubmodule size={size} />
-              <Link to={"/control"} className="link">
+              <li className="link">
                 Retención documental
-              </Link>
+              </li>
               <FaArrowRight className="arrow" size={arrowSize} />
             </div>
           </Link>

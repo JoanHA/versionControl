@@ -15,7 +15,7 @@ import {
 import Archived from "../pages/control/Archived";
 import { useAuth } from "../context/AuthContext";
 
-function Table({ data, columns, options = true, btnDetails,details=false }) {
+function Table({ data, columns, options = true, btnDetails,details=false,editType }) {
   const [sorting, setSorting] = useState([]);
   const [filtering, setFilteting] = useState("");
   const [pageSize, setPageSize] = useState(window.innerWidth);
@@ -155,6 +155,7 @@ function Table({ data, columns, options = true, btnDetails,details=false }) {
                   </>
                 ))}
                 {options && <th colSpan={1}>Opciones</th>}
+                {editType && <th colSpan={1}>Opciones</th>}
                 {btnDetails && <th colSpan={1}>Detalles</th>}
                 {details && <th colSpan={1}>Detalles</th>}
               </tr>
@@ -173,6 +174,23 @@ function Table({ data, columns, options = true, btnDetails,details=false }) {
                     </td>
                   </>
                 ))}
+                {editType && (<>
+                    <td className="" colSpan={2}>
+                      <div className="d-flex flex-wrap gap-1 ">
+                        {
+                          <Link
+                            to={`/${editType ? editType : "document"}/${row.original.id}`} // this has to have the id of the row
+                            className="btn btn-primary btn-sm flex-fill"
+                          >
+                            Editar
+                          </Link>
+                        }
+                       
+                      </div>
+                    </td>
+                  </>
+
+                )}
                 {options && (
                   <>
                     <td className="" colSpan={2}>
@@ -185,7 +203,7 @@ function Table({ data, columns, options = true, btnDetails,details=false }) {
                         </Link>
                         {
                           isAuthenticated && ( <Link
-                            to={`/edit/${row.original.id}`} // this has to have the id of the row
+                            to={`/${editType ? editType : "document"}/${row.original.id}`} // this has to have the id of the row
                             className="btn btn-primary btn-sm flex-fill"
                           >
                             Editar

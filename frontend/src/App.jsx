@@ -8,7 +8,7 @@ import ViewDocument from "./pages/ViewDocument";
 import CreateChange from "./pages/changes/CreateChange";
 import CreateControl from "./pages/control/CreateControl";
 import "./App.css";
-import AuthProvider from "./context/AuthContext";
+import AuthProvider, { useAuth } from "./context/AuthContext";
 import Login from "./Auth/Login";
 import RecoverCode from "./Auth/Recovering/RecoverCode";
 import EnterEmail from "./Auth/Recovering/EnterEmail";
@@ -21,6 +21,7 @@ import Parameters from "./pages/admin/Parameters";
 import Users from "./pages/admin/Users";
 import AdminWelcome from "./pages/admin/AdminWelcome";
 import { ProtectedRoute } from "./Auth/ProtectedRoute";
+import EditUser from "./pages/admin/EditUser";
 function App() {
   return (
     <div>
@@ -34,7 +35,6 @@ function App() {
               <Route path="/enterEmail" element={<EnterEmail />} />
               <Route path="/otp" element={<RecoverCode />} />
               <Route path="/" element={<Documents />}></Route>
-              <Route path="/welcome" element={<Welcome />}></Route>
               <Route path="/newDoc" element={<CreateDocument />}></Route>
               <Route path="document/:id" element={<ViewDocument />}></Route>
               <Route path="/createChange" element={<CreateChange />}></Route>
@@ -44,7 +44,9 @@ function App() {
                 element={<CreateControl />}
               ></Route>
 
-              <Route element={<ProtectedRoute/>}>
+              <Route element={<ProtectedRoute />}>
+              <Route path="/welcome" element={<Welcome />}></Route>
+
                 <Route
                   path="/admin"
                   element={
@@ -70,6 +72,22 @@ function App() {
                   }
                 ></Route>
               </Route>
+              <Route
+                path="/admin/newUser"
+                element={
+                  <AdminView>
+                    <EditUser />
+                  </AdminView>
+                }
+              ></Route>
+              <Route
+                path="/editUser/:id"
+                element={
+                  <AdminView>
+                    <EditUser />
+                  </AdminView>
+                }
+              ></Route>
 
               <Route path="/edit/:id" element={<CreateDocument />}></Route>
               <Route path="/changes" element={<ViewChanges />}></Route>

@@ -12,7 +12,7 @@ const changesRoute = require("./routes/controlRoutes/changes.js")
 const authRoute = require("./routes/controlRoutes/auth.js")
 const recoverRoute = require("./routes/controlRoutes/recover.js")
 const paramRoute = require("./routes/controlRoutes/parameters.js")
-
+const usersRoute = require("./routes/controlRoutes/users.js")
 //------------------------------API v2 -------------------------
 
 
@@ -39,6 +39,7 @@ app.use("/api/v2/changes",changesRoute)
 app.use("/api/v2/auth",authRoute);
 app.use("/api/v2/recover",recoverRoute);
 app.use("/api/v2/parameters",paramRoute);
+app.use("/api/v2/users",usersRoute);
 
 //Control API v2-------------------------------
 

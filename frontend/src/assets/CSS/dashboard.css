@@ -1,16 +1,47 @@
 /* Debo hacer el responsive de big card */
-.big-cards{
-    height:300px;
-    max-width: 300px !important;
-    margin-top: -6rem !important;
+.big-cards {
+  height: 300px;
+  max-width: 300px !important;
+  margin-top: -6rem;
 }
-.dashboard-background{
-    background-color: #0a5edc;
-    height: 200px;
-    padding: 10px
+.dashboard-background {
+  height: 170px;
+  padding: 10px;
+  background-color: #0061f2 !important;
+  background-image: linear-gradient(
+    135deg,
+    #0061f2 0%,
+    rgba(105, 0, 199, 0.8) 100%
+  ) !important;
 }
-.little-cards{
-    max-width: 300px;
-    width: 310px;    
-    height: 120px;
+.little-cards {
+  max-width: 300px;
+  width: 310px;
+  height: 120px;
+}
+.cardTitle {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* TimeLine */
+.time-line {
+  font-size: 10px;
+  color: #464646;
+}
+.time-marker{
+    background-color: green;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+}
+
+/* modified */
+.code-label{
+    font-size: 14px;
+    font-weight: 700;
+}
+.qty-label{
+    font-size: 10px;
+    font-weight: 600;
 }

@@ -1,5 +1,6 @@
 .titleHeader {
-  background-color: #0d6efd;
+  background-color: #0061f2 !important;
+  background-image: linear-gradient(135deg, #0061f2 0%, rgba(105, 0, 199, 0.8) 100%) !important;
   color: white;
   font-size: 22px;
   font-weight: 700;
@@ -42,4 +43,9 @@
 
 .arrow{
     transition: all 2s;
+}
+.link{
+  list-style: none;
+  font-weight: 400;
+  font-size: 18px;
 }

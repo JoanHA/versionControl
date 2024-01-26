@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 require("dotenv").config();
 const nodemailer = require("nodemailer");
+
+//recover
 const {
   createEmail,
 } = require("../../controllers/controlControllers/recoverController");
