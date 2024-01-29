@@ -54,8 +54,31 @@ const mostModified = async (req, res) => {
     res.status(500).send("Tuvimos un error intenta mas tarde");
   }
 };
+
+const getParams = async(req,res)=>{
+  const sql = "SELECT * FROM params";
+  try {
+    const result = await db.query(sql);
+    res.send(result)
+    console.log(result)
+  } catch (error) {
+    console.log(error)
+    res.status(500).send("No pudimos realizar esa acción, intenta mas tarde");
+  }
+}
+
+
+const editParam = async (req,res)=>{
+  const {id,value} = req.body;
+  const sql =  `UPDATE params SET name = ${value} WHERE id = ${id}`;
+
+  console.log(sql);
+  res.send("recibido")
+}
 module.exports = {
   createParam,
   lastModified,
   mostModified,
+  getParams,
+  editParam
 };

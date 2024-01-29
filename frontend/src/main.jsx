@@ -4,10 +4,10 @@ import App from './App.jsx'
 import './index.css'
 import TimeAgo from 'javascript-time-ago'
 
-import en from 'javascript-time-ago/locale/en.json'
+import es from 'javascript-time-ago/locale/es-CO.json'
 import ru from 'javascript-time-ago/locale/ru.json'
 
-TimeAgo.addDefaultLocale(en)
+TimeAgo.addDefaultLocale(es)
 TimeAgo.addLocale(ru)
 
 ReactDOM.createRoot(document.getElementById('root')).render(

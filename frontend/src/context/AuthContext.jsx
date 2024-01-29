@@ -36,7 +36,7 @@ function AuthProvider({ children }) {
     };
   }, [Errores]);
 
-  //iniciar sesion incompleto
+
   const GetIn = async (data) => {
     try {
       const res = await Login(data);
@@ -55,15 +55,13 @@ function AuthProvider({ children }) {
     }
   };
 
-  //registarse incompleto
+ 
   const signup = async (user) => {
     try {
-      const res = await SignUp(user); //Crear funcion SIgnup
-
+      const res = await SignUp(user);
       if (res) {
-        if (res.data.status === 200) {
-          setUser(res.data.message);
-          Cookies.set("token", res.data.message.token);
+        if (res.status === 200) {
+          setUser(res.data);
           setisAuthenticated(true);
           setLoading(false);
           return res;
@@ -71,7 +69,6 @@ function AuthProvider({ children }) {
       }
     } catch (error) {
       setErrores(error.response.data);
-      setisAuthenticated(false);
       setLoading(false);
     }
     return false;
@@ -103,10 +100,11 @@ function AuthProvider({ children }) {
         const res = await verifyToken({ token: cookies.token });
         if (!res.data) {
           setisAuthenticated(false);
+          setLoading(false);
           return;
         }
         setisAuthenticated(true);
-        setUser(res.data.user);
+        setUser(res.data);
         setLoading(false);
       } catch (error) {
         console.log(error);

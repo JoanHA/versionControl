@@ -1,0 +1,30 @@
+.paramLinks {
+  background-color: #a7bbe5;
+  padding: 6px;
+  border-radius: 12px;
+  cursor: pointer;
+  border: 1px solid gray;
+  font-weight: 700;
+}
+.paramLinks:hover{
+    filter: brightness(70%);
+}
+.paramTitle{
+    background-color: #0061f2 !important;
+    background-image: linear-gradient(
+      135deg,
+      #0061f2 0%,
+      rgba(105, 0, 199, 0.8) 100%
+    ) !important;
+    margin-bottom: 6px;
+    border-radius: 10px;
+    font-weight: 800;
+    color:  white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.addbtn{
+    background-color: transparent;
+    border: none;
+}

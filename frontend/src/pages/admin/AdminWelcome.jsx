@@ -33,7 +33,9 @@ function AdminWelcome() {
     <div>
       <header className="dashboard-header">
         <div className="dashboard-background">
-          <h3 style={{ color: "white", fontWeight: "700" }}>Dashboard</h3>
+          <h3 style={{ color: "white", fontWeight: "700" }}>
+            Panel de control
+          </h3>
           <p style={{ color: "white", fontWeight: "500" }}>
             Aqui podras, agregar editar y eliminar los usuarios que tienen
             permisos de administrador, tus tipos de documentos , procesos y
@@ -70,9 +72,9 @@ function AdminWelcome() {
                   Ultimos modificados
                 </div>
                 <div className="card-body">
-                  <p className="card-text">
+                  <div className="card-text">
                     {last ? (
-                      <div className="d-flex gap-4 flex-column  ">
+                      <div className="d-flex gap-3 flex-column align-items-between justify-content-evenly">
                         {last.map((e) => (
                           <>
                             <div
@@ -99,9 +101,11 @@ function AdminWelcome() {
                         ))}
                       </div>
                     ) : (
-                      <></>
+                      <>
+                        <p>Aún no hay documentos modificados</p>
+                      </>
                     )}
-                  </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -112,37 +116,39 @@ function AdminWelcome() {
                 </div>
                 <div className="card-body">
                   <div className="d-flex flex-column gap-2">
-                    {most
-                      ? most.map((e) => (
-                          <>
-                            <div key={e.code}>
-                              <div className="d-flex flex-row justify-content-between align-items-center">
-                                <label className="code-label">{e.code}</label>
-                                <label className="qty-label">
-                                  {" "}
-                                  Cambios {e.count}
-                                </label>
-                              </div>
-                              <div
-                                className="progress"
-                                role="progressbar"
-                                aria-label="basic example"
-                                aria-valuenow="0"
-                                aria-valuemin="0"
-                                aria-valuemax="100"
-                              >
-                                <div
-                                  className="progress-bar"
-                                  style={{
-                                    width: `${e.count}0%`,
-                                    background: `${e.color}`,
-                                  }}
-                                ></div>
-                              </div>
+                    {most ? (
+                      most.map((e) => (
+                        <>
+                          <div key={e.code}>
+                            <div className="d-flex flex-row justify-content-between align-items-center">
+                              <label className="code-label">{e.code}</label>
+                              <label className="qty-label">
+                                {" "}
+                                Cambios {e.count}
+                              </label>
                             </div>
-                          </>
-                        ))
-                      : ""}
+                            <div
+                              className="progress"
+                              role="progressbar"
+                              aria-label="basic example"
+                              aria-valuenow="0"
+                              aria-valuemin="0"
+                              aria-valuemax="100"
+                            >
+                              <div
+                                className="progress-bar"
+                                style={{
+                                  width: `${e.count}0%`,
+                                  background: `${e.color}`,
+                                }}
+                              ></div>
+                            </div>
+                          </div>
+                        </>
+                      ))
+                    ) : (
+                      <p>No hay documentos con cambios</p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -156,9 +162,9 @@ function AdminWelcome() {
               className="card text-bg-primary mb-3  little-cards "
               style={{ maxWidth: "15rem" }}
             >
-              <div className="card-header">Dashboard</div>
+              <div className="card-header">Panel</div>
               <div className="card-body">
-                <p className="card-text" style={{ color: "black" }}>
+                <p className="card-text">
                   Aqui podras manejar todo de tu plataforma
                 </p>
               </div>
@@ -184,7 +190,7 @@ function AdminWelcome() {
             >
               <div className="card-header">Parametros</div>
               <div className="card-body">
-                <p className="card-text" style={{ color: "black" }}>
+                <p className="card-text">
                   Agregar, editar y eliminar tipos de documentos
                 </p>
               </div>

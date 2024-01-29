@@ -30,7 +30,21 @@ const updateUsers = async (req, res) => {
     res.status(500).send("Tuvimos un error, intenta mas tarde")
   }
 };
+
+const getOneUser = async(req, res)=>{
+  const {id} = req.params
+  const sql = "SELECT users.username, users.email ,users.status FROM users WHERE users.id = ?"
+  try {
+   const result = await db.query(sql,[id]);
+   res.send(result)
+  } catch (error) {
+    console.log(error)
+    res.status(401).send("Tuvimos un error, intenta mas tarde")
+  }
+
+}
 module.exports = {
   getAllUsers,
   updateUsers,
+  getOneUser,
 };

@@ -43,7 +43,7 @@ function Documents() {
   ];
   return (
     <div>
-      <div className="titleHeader text-center py-2">Control de registros</div>
+      <div className="titleHeader text-center py-2">Listado maestro</div>
       <div>
         <Table columns={columns} data={data}></Table>
       </div>

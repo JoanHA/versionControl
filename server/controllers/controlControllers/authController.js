@@ -33,7 +33,7 @@ const login = async (req, res) => {
     res.cookie("token", token);
 
     //Send to the client
-    console.log("Usuario logueado correctamente");
+  
     res.send({
       id: userFound.id,
       username: userFound.username,

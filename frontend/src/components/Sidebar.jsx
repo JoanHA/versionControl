@@ -7,19 +7,20 @@ function Sidebar() {
 
   useEffect(() => {
     setPathname(history.pathname);
-    console.log(history)
+  
   }, [history]);
-//ho4bd6rr
+
 
   const classNameRender = () => {
-    console.log(pathname);
+
     if (
       pathname === "/welcome" ||
       pathname === "/login" ||
       pathname === "/admin" ||
       pathname === "/admin/users" ||
       pathname === "/admin/parameters" ||
-      pathname === "/admin/newUser" 
+      pathname === "/admin/newUser" ||
+      pathname.split("/")[1] === "editUser"
     ) {
       return "d-none";
     }

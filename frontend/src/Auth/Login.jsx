@@ -38,8 +38,8 @@ function Login() {
         }
       }
     } catch (error) {
-      console.log(error);
-      swal.fire("Tuvimos un error, intenta mas tarde","","error")
+      // console.log(error);
+      // swal.fire("Tuvimos un error, intenta mas tarde","","error")
     }
   };
 

@@ -1,22 +1,10 @@
 import React, { useEffect, useState } from "react";
 import uniqid from 'uniqid';
 function ChangeDetails({infor}) {
-//   const [isEmpty, setIsEmpty] = useState(false);
+
 const [info ,setInfo] = useState({})
 const [id,setId] = useState("")
-//   const getInfo = async () => {
-//     try {
-    
-//       if (res.data.status === 404) {
-//         return setIsEmpty(true);
-//       }
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   };
-//   useEffect(() => {
-//     getInfo();
-//   }, []);
+
 useEffect(()=>{
     setInfo(infor)
     setId(uniqid())
@@ -108,9 +96,7 @@ useEffect(()=>{
               >
                 Cerrar
               </button>
-              {/* <button type="button" className="btn btn-primary">
-                  Save changes
-                </button> */}
+            
             </div>
           </div>
         </div>
