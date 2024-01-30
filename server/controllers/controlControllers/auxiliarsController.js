@@ -2,7 +2,9 @@ const db = require("../../dbControl");
 const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
-//Obtener las iniciales y los tipos de documento 
+const Excel = require("exceljs");
+const path = require("path");
+//Obtener las iniciales y los tipos de documento
 const getCodeLetters = async (req, res) => {
   const sql =
     "SELECT paramtype_id,name,id FROM params WHERE paramtype_id = 4 OR paramtype_id=5 AND status =1";
@@ -14,39 +16,41 @@ const getCodeLetters = async (req, res) => {
   }
 };
 //obtener los procesos y tipologias de la base de datos
-const getProcessAndTypologies =async(req,res)=>{
+const getProcessAndTypologies = async (req, res) => {
   const sql = `
   SELECT paramtype_id,name,id FROM params WHERE paramtype_id = 2 OR paramtype_id=3 AND status =1
   `;
-  
+
   try {
     const response = await db.query(sql);
     res.send(response);
   } catch (error) {
     console.error(error);
   }
-}
+};
 //Obtener la disposicion final
-const getLastMove = async(req,res)=>{
+const getLastMove = async (req, res) => {
   const sql = `SELECT id, name, paramtype_id FROM params WHERE paramtype_id = 1`;
   try {
     const response = await db.query(sql);
-    res.send(response)
+    res.send(response);
   } catch (error) {
-    res.status(500).send("No pudimos realizar esa acción intenta mas tarde")
-    console.log(error)
+    res.status(500).send("No pudimos realizar esa acción intenta mas tarde");
+    console.log(error);
   }
-}
+};
 
 const verify = async (req, res) => {
   const { token } = req.body;
-  jwt.verify(token, process.env.JWT_SECRET,async (error, user) => {
+  jwt.verify(token, process.env.JWT_SECRET, async (error, user) => {
     if (error) {
       res.status(500).json({ status: 500, error });
       console.log(error);
     } else {
       try {
-        const row = await db.query( `SELECT users.* FROM users WHERE users.id=${user.id}`);
+        const row = await db.query(
+          `SELECT users.* FROM users WHERE users.id=${user.id}`
+        );
         const usuario = {
           id: row[0].id,
           username: row[0].username,
@@ -55,15 +59,33 @@ const verify = async (req, res) => {
           rol: row[0].rol,
         };
         res.send(usuario);
-        
       } catch (error) {
-        res.status(500).send("Tuvimos un error intenta mas tarde")
+        res.status(500).send("Tuvimos un error intenta mas tarde");
         return console.log(error);
       }
     }
   });
-}
+};
 
+const createMasive = async (req, res) => {
+  const file = req.file;
+  const workbook = new Excel.Workbook();
+  var filePath = path.join(__dirname + "../../public/uploads/" + file.filename);
+
+  var arr = [];
+  var pages = 0;
+
+  const response = await workbook.xlsx.readFile(file.path);
+
+  // for (let index = 0; index < workbook.worksheets.length; index++) {
+  //   pages = index;
+  //   console.log(workbook.worksheets[index]._columns)
+  // }
+  console.log(workbook.worksheets[0].dataValidations.model.D183);
+
+  
+  res.send("recibido");
+};
 // //Cambiar contraseña para usuario
 // router.post("/changePassword", (req, res) => {
 //   const { id } = req.body;
@@ -173,48 +195,10 @@ const verify = async (req, res) => {
 //   );
 // });
 
-// //editar de parametros
-// router.put("/editParams/:id", (req, res) => {
-//   const id = req.params.id;
-//   const { name } = req.body;
-//   const año = new Date().getFullYear();
-//   const dia = new Date().getDay();
-//   const mes = new Date().getMonth();
-
-//   db.query(
-//     `UPDATE params SET name = ? WHERE id = ? `,
-//     [name, id],
-//     (error, result) => {
-//       if (error) {
-//         console.log(error);
-//         return res.status(500).send("Tuvimos un error");
-//       }
-//       res.send("Editado Correctamente");
-//     }
-//   );
-// });
-
-// //eliminar parametro
-// router.delete("/deleteParams/:id", (req, res) => {
-//   const id = req.params.id;
-//   const año = new Date().getFullYear();
-//   const dia = new Date().getDay();
-//   const mes = new Date().getMonth();
-//   db.query(
-//     `UPDATE params SET param_state = 3 WHERE id = ? `,
-//     [id],
-//     (error, result) => {
-//       if (error) {
-//         console.log(error);
-//         return res.status(500).send("Tuvimos un error");
-//       }
-//       res.send("Eliminado Correctamente");
-//     }
-//   );
-// });
 module.exports = {
   getCodeLetters,
   getProcessAndTypologies,
   getLastMove,
   verify,
+  createMasive,
 };

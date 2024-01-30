@@ -12,6 +12,7 @@ function Parameters() {
   const [name, setName] = useState(null);
   const [id, setId] = useState(null);
   const [typeId, setTypeId] = useState(null);
+  const [value,setValue] = useState(null)
   const getAll = async () => {
     try {
       const res = await getAllParameters();
@@ -42,8 +43,14 @@ function Parameters() {
       swal.fire(error.response.data, "", "error");
     }
   };
-  const editParams = (id, name, paramType) => {
-    console.log("Id:", id, "Name:" + name, "Parametro:", paramType);
+  const editParams = (id, name,value) => {
+    setId(id);
+    setName(name);
+    setValue(value);
+ 
+    document.getElementById("AddParams").classList.remove("d-none");
+    document.getElementById("AddParams").style.display = "block";
+    document.getElementById("AddParams").style.opacity = 1;
   };
   const newParam = (entername, enterid) => {
     setTypeId(enterid);
@@ -57,7 +64,7 @@ function Parameters() {
   }, []);
   return (
     <div>
-      <AddParams name={name} typeid={typeId} callback={getAll} id={id} />
+      <AddParams name={name} typeid={typeId} callback={getAll} id={id} value={value} />
       <div className="titleHeader">Gestión de parametros</div>
       <div className="row gap-2 justify-content-center">
         <div className="col-lg-5 col-sm-12">
@@ -81,7 +88,7 @@ function Parameters() {
                     className="paramLinks"
                     key={e.id}
                     onClick={() => {
-                      editParams(e.id, "Disposición final", e.paramtype_id);
+                      editParams(e.id, "Disposición final" ,e.name,);
                     }}
                   >
                     {e.name}
@@ -93,7 +100,7 @@ function Parameters() {
         <div className="col-lg-5 col-sm-12">
           <div className="">
             <div className="paramTitle">
-              Procesos{" "}
+              Procesos
               <button
                 className="addbtn"
                 type="button"
@@ -111,7 +118,7 @@ function Parameters() {
                     className="paramLinks"
                     key={e.id}
                     onClick={() => {
-                      editParams(e.id, "Disposición final", e.paramtype_id);
+                      editParams(e.id, "Procesos",e.name,);
                     }}
                   >
                     {e.name}
@@ -123,7 +130,7 @@ function Parameters() {
         <div className="col-lg-5 col-sm-12">
           <div className="">
             <div className="paramTitle">
-              Tipologias{" "}
+              Tipologias
               <button
                 className="addbtn"
                 type="button"
@@ -141,7 +148,7 @@ function Parameters() {
                     className="paramLinks"
                     key={e.id}
                     onClick={() => {
-                      editParams(e.id, "Disposición final", e.paramtype_id);
+                      editParams(e.id, "Tipologias",e.name,);
                     }}
                   >
                     {e.name}
@@ -171,7 +178,7 @@ function Parameters() {
                     className="paramLinks"
                     key={e.id}
                     onClick={() => {
-                      editParams(e.id, "Disposición final", e.paramtype_id);
+                      editParams(e.id, "Iniciales de proceso",e.name,);
                     }}
                   >
                     {e.name}
@@ -183,7 +190,7 @@ function Parameters() {
         <div className="col-lg-5 col-sm-12">
           <div className="">
             <div className="paramTitle">
-              Iniciales de código{" "}
+              Iniciales de código
               <button
                 className="addbtn"
                 type="button"
@@ -201,7 +208,7 @@ function Parameters() {
                     className="paramLinks"
                     key={e.id}
                     onClick={() => {
-                      editParams(e.id, "Disposición final", e.paramtype_id);
+                      editParams(e.id, "Iniciales de código",e.name,);
                     }}
                   >
                     {e.name}

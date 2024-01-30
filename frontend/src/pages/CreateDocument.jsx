@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import Select from "react-select";
+import { PiUploadSimpleBold } from "react-icons/pi";
+
 import {
   createDocument,
   getAuxiliars,
@@ -13,6 +15,7 @@ import { useParams } from "react-router-dom";
 import AddButton from "../components/AddButton";
 import { formatDate } from "../lib/helper";
 import HistoricTable from "../components/HistoricTable";
+import Masived from "../components/Masived";
 function CreateDocument() {
   const {
     reset,
@@ -145,7 +148,7 @@ function CreateDocument() {
           typologySelect: res.data[0].typology,
           date: res.data[0].last_revision.replaceAll("/", "-"),
           comments: res.data[0].comments,
-          link:res.data[0].link
+          link: res.data[0].link,
         });
       } catch (error) {
         console.log(error);
@@ -168,12 +171,13 @@ function CreateDocument() {
   }, [typologies]);
   return (
     <div>
+      <Masived></Masived>
       <div className="titleHeader text-center py-1">
         {params.id ? "Edición" : "Registro"} de documentos
       </div>
       <div>
         <button
-          className="btn btn-dark btn-sm mx-3"
+          className="btn btn-dark btn-sm mx-3 py-1"
           onClick={() => history.back()}
         >
           Volver
@@ -365,12 +369,21 @@ function CreateDocument() {
           </div>
           {/* last child Button */}
 
-          <div className="col-12 align-self-center mt-2">
+          <div className="col-12 align-self-center mt-2  d-flex  align-items-center gap-2">
             <button
-              className="shadow btn btn-success rounded  my-2 col-12"
+              className="shadow btn btn-success   my-2 col-12"
               style={{ maxWidth: "230px" }}
             >
               Registrar documento
+            </button>
+            <button
+              type="button"
+              className="btn btn-info shadow "
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal"
+              data-bs-whatever="@fat"
+            >
+              Carga masiva <PiUploadSimpleBold />
             </button>
           </div>
         </div>

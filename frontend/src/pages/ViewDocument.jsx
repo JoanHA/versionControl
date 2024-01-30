@@ -97,13 +97,10 @@ function ViewDocument() {
             >
               Editar archivo
             </Link>
-
+          
             {isRegister && (
               <>
-              <div className="" style={{marginBottom:"5px"}}>
-                <Archived doc={data.code ? data : null} />
-
-              </div>
+             
                 <Link
                   to={"/createControl/" + data.code}
                   className="btn btn-success mx-1  btn-sm "
@@ -114,6 +111,11 @@ function ViewDocument() {
             )}
           </>
         )}
+         
+         {isRegister && ( <div className="" style={{marginBottom:"5px"}}>
+                <Archived doc={data.code ? data : null} />
+
+              </div>)}
       </div>
       <div className="titleHeader text-center py-1">
         Información del documento {data.code}
@@ -157,7 +159,7 @@ function ViewDocument() {
 
           <label className="inputLabel">
             <a href={data.link} target="blank">
-              VISITAR LINK
+              {data.link? "VISITAR LINK": "NO HAY LINK"}
             </a>
           </label>
         </div>

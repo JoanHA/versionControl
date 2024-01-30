@@ -23,3 +23,6 @@ export const getLastMove = ()=>axios.get(URI+ "auxiliars/lastMove")
 
 //Crear el control de archivo
 export const createControl = (data) =>axios.post(URI +"documents/control",data)
+
+//Masive saved
+export const saveMasive = (data)=>axios.post(URI + "auxiliars/masive",data)

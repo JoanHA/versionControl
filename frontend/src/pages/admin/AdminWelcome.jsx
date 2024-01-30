@@ -138,6 +138,7 @@ function AdminWelcome() {
                               <div
                                 className="progress-bar"
                                 style={{
+                                  transition:"all 2s",
                                   width: `${e.count}0%`,
                                   background: `${e.color}`,
                                 }}

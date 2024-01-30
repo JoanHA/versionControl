@@ -35,8 +35,8 @@ useEffect(()=>{
         id={id} //exampleModal
         tabIndex="-1"
       >
-        <div className="modal-dialog">
-          <div className="modal-content">
+        <div className="modal-dialog   modal-dialog-scrollable">
+          <div className="modal-content mt-5">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="exampleModalLabel">
                 <strong>Cambio al documento {info.code}</strong>

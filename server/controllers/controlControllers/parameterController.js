@@ -47,7 +47,7 @@ const mostModified = async (req, res) => {
     "SELECT COUNT(code) AS count ,code FROM changes GROUP BY code ORDER BY COUNT(code) DESC LIMIT 5";
   try {
     const response = await db.query(sql);
-    
+
     res.send(response);
   } catch (error) {
     console.log(error);
@@ -55,30 +55,44 @@ const mostModified = async (req, res) => {
   }
 };
 
-const getParams = async(req,res)=>{
-  const sql = "SELECT * FROM params";
+const getParams = async (req, res) => {
+  const sql = "SELECT * FROM params WHERE status = 1";
   try {
     const result = await db.query(sql);
-    res.send(result)
-    console.log(result)
+    res.send(result);
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).send("No pudimos realizar esa acción, intenta mas tarde");
   }
-}
+};
 
+const editParam = async (req, res) => {
+  const { id, value } = req.body;
+  const sql = `UPDATE params SET name = '${value}' WHERE id = ${id}`;
+  try {
+    const result = await db.query(sql);
 
-const editParam = async (req,res)=>{
-  const {id,value} = req.body;
-  const sql =  `UPDATE params SET name = ${value} WHERE id = ${id}`;
-
-  console.log(sql);
-  res.send("recibido")
-}
+    res.send("Parametro actualizado exitosamente!");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Tuvimos un error, intenta mas tarde");
+  }
+};
+const deleteParam = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await db.query("UPDATE params SET status=2 WHERE id=?", [id]);
+    res.send("Parametro eliminado exitosamente!");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Tuvimos un error, intenta mas tarde");
+  }
+};
 module.exports = {
   createParam,
   lastModified,
   mostModified,
   getParams,
-  editParam
+  editParam,
+  deleteParam,
 };

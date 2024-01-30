@@ -3,6 +3,8 @@ import { FaDownload } from "react-icons/fa";
 import * as XLSX from "xlsx/xlsx.mjs";
 import autoTable from "jspdf-autotable";
 import jsPDF from "jspdf";
+import logo from "../assets/IMG/LogoBioartPDF.png";
+import logoIcontent from "../assets/IMG/logoIcontec.png";
 
 function DownloadButton({ data = [], filter, info }) {
   const handlePDF = () => {
@@ -41,39 +43,45 @@ function DownloadButton({ data = [], filter, info }) {
             body.push(cambio);
           });
 
+          doc.setFontSize(10);
           // Imprimir info del equipo
+          doc.addImage(logo, "PNG", 10, 1, 75, 27);
 
-          doc.text(`Documento ${info?.code}`, 70, 10);
+          doc.addImage(logoIcontent, "PNG", 170, 5, 30, 25);
 
-          doc.text(`NOMBRE DEL DOCUMENTO: ${info?.name}`, 10, x + 20);
-          doc.text(`TIPOLOGÍA: ${info?.typology_name}`, 10, x + 30);
-          doc.text(`PROCESO: ${info?.process_name}`, 10, x + 40);
+          doc.text(
+            `NOMBRE DEL DOCUMENTO:  ${info?.code} ${info?.name}`,
+            10,
+            x + 30
+          );
+          doc.text(`TIPOLOGÍA: ${info?.typology_name}`, 10, x + 40);
+          doc.text(`PROCESO: ${info?.process_name}`, 10, x + 50);
           doc.text(
             `VERSION: ${
               info?.version < 10 ? `0${info.version}` : info.version
             }`,
             120,
-            x + 30
+            x + 40
           );
           doc.text(
             `FECHA DE EMISIÓN / ULTIMA REVISIÓN: ${info?.last_revision}`,
             10,
-            x + 50
+            x + 60
           );
           const Options = { maxWidth: 180 };
           const observacionHeight = doc.getTextDimensions(
             info?.comments,
             Options
-            ).h;
-            doc.text(`OBSERVACIÓN: ${info?.comments}`, 10, x + 60, Options);
+          ).h;
+          doc.text(`OBSERVACIÓN: ${info?.comments}`, 10, x + 70, Options);
 
           // Ajustar posición del siguiente bloque de texto
-          const nextTextY = x + 60 + observacionHeight + 5;
+          const nextTextY = x + 80 + observacionHeight + 5;
 
           doc.text(
             `LINK INTRANET: ${info?.link ? info?.link : ""}`,
             10,
-            nextTextY +10 ,
+            nextTextY + 1,
             { maxWidth: 180 }
           );
 
@@ -83,12 +91,14 @@ function DownloadButton({ data = [], filter, info }) {
 
           doc.autoTable({
             body: body,
-            startY: y,
+            startY: y ,
             head: [headers],
             theme: "striped",
+            styles: {fonSize:8},
             headStyles: {
               fillColor: [240, 248, 255],
               textColor: [0, 0, 0],
+              fonSize:10
             },
           });
           //Guardar documento
