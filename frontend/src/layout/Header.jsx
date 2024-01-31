@@ -17,9 +17,6 @@ const Header = ({ children }) => {
               
               </Link>
             </div>
-            {/* <Link className="navbar-brand" to="/">
-            Control de documentos
-            </Link> */}
             <button
               className="navbar-toggler"
               type="button"

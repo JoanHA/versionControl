@@ -7,12 +7,23 @@ function Sidebar() {
 
   useEffect(() => {
     setPathname(history.pathname);
-  
   }, [history]);
 
-
+  window.addEventListener("resize", () => {
+    if (innerWidth <= 1181) {
+      if (
+        pathname.split("/")[1] != "admin" &&
+        pathname.split("/")[1] != "editUser"
+      ) {
+        document.querySelector("#navHeader")?.classList?.add("navClose");
+        console.log("true");
+      } else {
+        document.querySelector("#navHeader")?.classList?.remove("navClose");
+        document.querySelector("#navHeader")?.classList?.add("navOpen");
+      }
+    }
+  });
   const classNameRender = () => {
-
     if (
       pathname === "/welcome" ||
       pathname === "/login" ||

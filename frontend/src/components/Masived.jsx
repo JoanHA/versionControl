@@ -14,10 +14,18 @@ function Masived() {
     formData.append("file", data.file[0]);
 
     try {
+      document.querySelector("#btnEnviar").innerHTML = "Cargando...";
       const res = await saveMasive(formData);
-      console.log(res)
+      document.querySelector("#btnEnviar").innerHTML = "Enviar";
+
+      swal.fire(res.data, "", "success").then(() => {
+        reset();
+      });
     } catch (error) {
       console.log(error);
+      document.querySelector("#btnEnviar").innerHTML = "Enviar";
+
+      swal.fire(error.response.data, "", "error");
     }
   };
 
@@ -62,9 +70,11 @@ function Masived() {
                   className="btn btn-secondary"
                   data-bs-dismiss="modal"
                 >
-                  Close
+                  Cerrar
                 </button>
-                <button className="btn btn-primary">Enviar</button>
+                <button className="btn btn-primary" id="btnEnviar">
+                  Enviar
+                </button>
               </div>
             </form>
           </div>

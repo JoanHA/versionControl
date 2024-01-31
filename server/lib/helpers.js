@@ -39,7 +39,9 @@ helper.convertDate = (Stringdate)=>{
   return fecha
 }
 
-
+helper.removeAccents = (str) => {
+  return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+} 
 helper.createToken = (payload)=>{
   return new Promise((resolve, reject) => {
     jwt.sign(payload, 

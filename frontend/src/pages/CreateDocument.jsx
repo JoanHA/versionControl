@@ -16,11 +16,13 @@ import AddButton from "../components/AddButton";
 import { formatDate } from "../lib/helper";
 import HistoricTable from "../components/HistoricTable";
 import Masived from "../components/Masived";
+import CreateControl from "./control/CreateControl";
 function CreateDocument() {
   const {
     reset,
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm();
 
@@ -31,6 +33,7 @@ function CreateDocument() {
   const [processes, setProcesses] = useState([]);
   const [typeValue, setTypeValue] = useState(null);
   const [proValue, setProValue] = useState(null);
+  const [showControl, setShowControl] = useState(false);
   const [doc, setDoc] = useState({});
   const params = useParams();
 
@@ -169,226 +172,252 @@ function CreateDocument() {
       });
     }
   }, [typologies]);
+  const showCreateControl = (e) => {
+    console.log();
+    if (e.target.value === "R-") {
+      setShowControl(true)
+    }else{
+      setShowControl(false)
+
+    }
+  };
   return (
-    <div>
-      <Masived></Masived>
-      <div className="titleHeader text-center py-1">
-        {params.id ? "Edición" : "Registro"} de documentos
-      </div>
+    <>
       <div>
-        <button
-          className="btn btn-dark btn-sm mx-3 py-1"
-          onClick={() => history.back()}
-        >
-          Volver
-        </button>
-      </div>
-      <form onSubmit={handleSubmit(onSubmit)} ref={formRef}>
-        {/* Contenedor flex */}
-        <div className="mx-auto row">
-          {/* First child */}
-          <div className="col-12 col-md-7 ">
-            {/* start children */}
-            <div className="row mb-2">
-              <div className="col-4  py-2">
-                <label htmlFor="">Codigo del documento</label>
-              </div>
-              <div className="col-8 d-flex align-items-center">
-                {params.id ? (
-                  <input
-                    {...register("code", { required: true })}
-                    type="text"
-                    placeholder="R-..."
-                    className="form-control rounded  "
-                  />
-                ) : (
-                  <>
-                    <select
-                      {...register("codeLetter", { required: true })}
-                      style={{ width: "80px", borderTopLeftRadius: "0px" }}
-                      className="form-select medium-rounded-left  "
-                    >
-                      <option value="">...</option>
-                      {letterCode &&
-                        letterCode.map((letter) => (
-                          <option key={letter.id} value={letter.name}>
-                            {letter.name}
-                          </option>
-                        ))}
-                    </select>
-                    <select
-                      style={{ width: "80px", borderRadius: "0px" }}
-                      {...register("processInitials", { required: true })}
-                      className="form-select  "
-                    >
-                      <option value="">...</option>
-                      {docType &&
-                        docType.map((type) => (
-                          <option key={type.id} value={type.name}>
-                            {type.name}
-                          </option>
-                        ))}
-                    </select>
+        <Masived></Masived>
+        <div className="titleHeader text-center py-1">
+          {params.id ? "Edición" : "Registro"} de documentos
+        </div>
+        <div>
+          <button
+            className="btn btn-dark btn-sm mx-3 py-1"
+            onClick={() => history.back()}
+          >
+            Volver
+          </button>
+        </div>
+        <form onSubmit={handleSubmit(onSubmit)} ref={formRef}>
+          {/* Contenedor flex */}
+          <div className="mx-auto row">
+            {/* First child */}
+            <div className="col-12 col-md-7 ">
+              {/* start children */}
+              <div className="row mb-2">
+                <div className="col-4  py-2">
+                  <label htmlFor="">Codigo del documento</label>
+                </div>
+                <div className="col-8 d-flex align-items-center">
+                  {params.id ? (
                     <input
-                      {...register("versionNumber", { required: true })}
+                      {...register("code", { required: true })}
                       type="text"
-                      placeholder="00..."
-                      className="form-control medium-rounded-right  "
+                      placeholder="R-..."
+                      className="form-control rounded  "
                     />
-                  </>
-                )}
+                  ) : (
+                    <>
+                      <select
+                        {...register("codeLetter", { required: true })}
+                        style={{ width: "80px", borderTopLeftRadius: "0px" }}
+                        className="form-select medium-rounded-left  "
+                        onChange={(e) => {
+                          showCreateControl(e);
+                        }}
+                      >
+                        <option value="">...</option>
+                        {letterCode &&
+                          letterCode.map((letter) => (
+                            <option key={letter.id} value={letter.name}>
+                              {letter.name}
+                            </option>
+                          ))}
+                      </select>
+                      <select
+                        style={{ width: "80px", borderRadius: "0px" }}
+                        {...register("processInitials", { required: true })}
+                        className="form-select  "
+                      >
+                        <option value="">...</option>
+                        {docType &&
+                          docType.map((type) => (
+                            <option key={type.id} value={type.name}>
+                              {type.name}
+                            </option>
+                          ))}
+                      </select>
+                      <input
+                        {...register("versionNumber", { required: true })}
+                        type="text"
+                        placeholder="00..."
+                        className="form-control medium-rounded-right  "
+                      />
+                    </>
+                  )}
+                </div>
               </div>
-            </div>
-            <div className="row mb-2 ">
-              <div className="col-4">
-                <label htmlFor="">Nombre del documento</label>
+              <div className="row mb-2 ">
+                <div className="col-4">
+                  <label htmlFor="">Nombre del documento</label>
+                </div>
+                <div className="col-8">
+                  <input
+                    {...register("name", { required: true })}
+                    type="text"
+                    className="form-control  rounded "
+                    placeholder="Registro..."
+                  />
+                </div>
               </div>
-              <div className="col-8">
-                <input
-                  {...register("name", { required: true })}
-                  type="text"
-                  className="form-control  rounded "
-                  placeholder="Registro..."
-                />
-              </div>
-            </div>
-            <div className=" row mb-2">
-              <div className="col-4">
-                <label className="">Proceso</label>
-              </div>
-              <div className="col-8 d-flex ">
-                {params.id ? (
-                  <>
-                    <select
-                      className="form-select rounded"
-                      {...register("processSelect")}
-                    >
-                      {processes.map((e) => (
-                        <option value={e.value}>{e.label.toUpperCase()}</option>
-                      ))}
-                    </select>
-                    <AddButton
-                      param={{ value: 3, name: "Procesos" }}
-                      cb={fillSelects}
-                    />
-                  </>
-                ) : (
-                  <>
-                    <div className="flex-fill">
-                      <SelectInput
-                        onChange={handleProcessChange}
-                        data={processes}
+              <div className=" row mb-2">
+                <div className="col-4">
+                  <label className="">Proceso</label>
+                </div>
+                <div className="col-8 d-flex ">
+                  {params.id ? (
+                    <>
+                      <select
+                        className="form-select rounded"
+                        {...register("processSelect")}
+                      >
+                        {processes.map((e) => (
+                          <option value={e.value}>
+                            {e.label.toUpperCase()}
+                          </option>
+                        ))}
+                      </select>
+                      <AddButton
                         param={{ value: 3, name: "Procesos" }}
                         cb={fillSelects}
-                      ></SelectInput>
-                    </div>
-                  </>
-                )}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <div className="flex-fill">
+                        <SelectInput
+                          onChange={handleProcessChange}
+                          data={processes}
+                          param={{ value: 3, name: "Procesos" }}
+                          cb={fillSelects}
+                        ></SelectInput>
+                      </div>
+                    </>
+                  )}
+                </div>
               </div>
-            </div>
-            <div className="row mb-2">
-              <div className="col-4">
-                <label className="me-2">Tipologia</label>
-              </div>
-              <div className="col-8 d-flex ">
-                {params.id ? (
-                  <>
-                    <select
-                      className="form-select rounded"
-                      {...register("typologySelect")}
-                    >
-                      {typologies.map((e) => (
-                        <option value={e.value}>{e.label.toUpperCase()}</option>
-                      ))}
-                    </select>
-                    <AddButton
-                      param={{ name: "Tipologias", value: 2 }}
-                      cb={fillSelects}
-                    />
-                  </>
-                ) : (
-                  <>
-                    <div className="flex-fill">
-                      <SelectInput
-                        data={typologies}
-                        onChange={handleTypoChange}
-                        cb={fillSelects}
+              <div className="row mb-2">
+                <div className="col-4">
+                  <label className="me-2">Tipologia</label>
+                </div>
+                <div className="col-8 d-flex ">
+                  {params.id ? (
+                    <>
+                      <select
+                        className="form-select rounded"
+                        {...register("typologySelect")}
+                      >
+                        {typologies.map((e) => (
+                          <option value={e.value}>
+                            {e.label.toUpperCase()}
+                          </option>
+                        ))}
+                      </select>
+                      <AddButton
                         param={{ name: "Tipologias", value: 2 }}
-                      ></SelectInput>
-                    </div>
-                  </>
-                )}
+                        cb={fillSelects}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <div className="flex-fill">
+                        <SelectInput
+                          data={typologies}
+                          onChange={handleTypoChange}
+                          cb={fillSelects}
+                          param={{ name: "Tipologias", value: 2 }}
+                        ></SelectInput>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+              <div className="row mb-2">
+                <div className="col-4">
+                  <label htmlFor="" className="w-50">
+                    Emisión/ Ultima revisión
+                  </label>
+                </div>
+                <div className="col-8">
+                  <input
+                    type="date"
+                    {...register("date", { required: true })}
+                    className="form-control"
+                  />
+                </div>
+              </div>
+              {/* End children */}
+            </div>
+            {/* Second child */}
+            <div className="col-12 col-md-5 ">
+              <div className=" d-flex align-items-center gap-2 mb-2">
+                <div className="col-3">
+                  <label htmlFor="">Observación</label>
+                </div>
+                <div className="col-9">
+                  <textarea
+                    style={{
+                      maxHeight: "200px",
+                    }}
+                    {...register("comments", { required: true })}
+                    className="form-control  rounded w-100 "
+                    cols="30"
+                    rows="2"
+                  ></textarea>
+                </div>
+              </div>
+              <div className=" row">
+                <div className="col-3">
+                  <label htmlFor="">Link</label>
+                </div>
+                <div className="col-9 flex-fill">
+                  <input
+                    type="text"
+                    {...register("link")}
+                    className="form-control  rounded  "
+                  ></input>
+                </div>
               </div>
             </div>
-            <div className="row mb-2">
-              <div className="col-4">
-                <label htmlFor="" className="w-50">
-                  Emisión/ Ultima revisión
-                </label>
-              </div>
-              <div className="col-8">
-                <input
-                  type="date"
-                  {...register("date", { required: true })}
-                  className="form-control"
-                />
-              </div>
-            </div>
-            {/* End children */}
-          </div>
-          {/* Second child */}
-          <div className="col-12 col-md-5 ">
-            <div className=" d-flex align-items-center gap-2 mb-2">
-              <div className="col-3">
-                <label htmlFor="">Observación</label>
-              </div>
-              <div className="col-9">
-                <textarea
-                  style={{
-                    maxHeight: "200px",
-                  }}
-                  {...register("comments", { required: true })}
-                  className="form-control  rounded w-100 "
-                  cols="30"
-                  rows="2"
-                ></textarea>
-              </div>
-            </div>
-            <div className=" row">
-              <div className="col-3">
-                <label htmlFor="">Link</label>
-              </div>
-              <div className="col-9 flex-fill">
-                <input
-                  type="text"
-                  {...register("link")}
-                  className="form-control  rounded  "
-                ></input>
-              </div>
-            </div>
-          </div>
-          {/* last child Button */}
+            {/* last child Button */}
 
-          <div className="col-12 align-self-center mt-2  d-flex  align-items-center gap-2">
-            <button
-              className="shadow btn btn-success   my-2 col-12"
-              style={{ maxWidth: "230px" }}
-            >
-              Registrar documento
-            </button>
-            <button
-              type="button"
-              className="btn btn-info shadow "
-              data-bs-toggle="modal"
-              data-bs-target="#exampleModal"
-              data-bs-whatever="@fat"
-            >
-              Carga masiva <PiUploadSimpleBold />
-            </button>
+            <div className="col-12 align-self-center mt-2  d-flex  align-items-center gap-2">
+              <button
+                className="shadow btn btn-success   my-2 col-12"
+                style={{ maxWidth: "230px" }}
+              >
+                Registrar documento
+              </button>
+              {params.id ? (
+                ""
+              ) : (
+                <button
+                  type="button"
+                  className="btn btn-info shadow "
+                  data-bs-toggle="modal"
+                  data-bs-target="#exampleModal"
+                  data-bs-whatever="@fat"
+                >
+                  Carga masiva <PiUploadSimpleBold />
+                </button>
+              )}
+            </div>
           </div>
-        </div>
-      </form>
-    </div>
+        </form>
+      </div>
+      <div>
+      
+      </div>
+      <div>{ showControl && <CreateControl  desactivate={true}/>}</div>
+    </>
   );
 }
 

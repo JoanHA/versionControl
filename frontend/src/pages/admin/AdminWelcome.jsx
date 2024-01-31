@@ -74,12 +74,12 @@ function AdminWelcome() {
                 <div className="card-body">
                   <div className="card-text">
                     {last ? (
-                      <div className="d-flex gap-3 flex-column align-items-between justify-content-evenly">
+                      <div className="d-flex gap-2 flex-column align-items-between justify-content-evenly">
                         {last.map((e) => (
                           <>
                             <div
                               key={e.code}
-                              className="d-flex gap-2 align-items-center "
+                              className="d-flex gap-1 align-items-center "
                             >
                               <div className="time-line">
                                 <ReactTimeAgo

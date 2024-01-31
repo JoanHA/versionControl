@@ -15,7 +15,7 @@ const createParam = async (req, res) => {
     }
     const response = await db.query(
       "INSERT INTO params (id,name,status,paramtype_id) VALUES (?,?,1,?)",
-      [lastId + 1, value, paramtype_id]
+      [lastId + 9000, value, paramtype_id]
     );
 
     res.send("Parametro creado con exito!");
@@ -30,7 +30,7 @@ const createParam = async (req, res) => {
 //Ultimos datos modificado para el welcome de admin
 const lastModified = async (req, res) => {
   const sql =
-    "SELECT code,updated_at FROM documents WHERE updated_at > CURRENT_TIMESTAMP - INTERVAL 5 DAY ORDER BY updated_at DESC LIMIT 5;";
+    "SELECT code, updated_at FROM documents WHERE updated_at > CURRENT_TIMESTAMP - INTERVAL 5 DAY ORDER BY updated_at DESC LIMIT 5;";
   try {
     const response = await db.query(sql);
 

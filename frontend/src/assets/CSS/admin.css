@@ -10,6 +10,16 @@ background-color: black;
   top: 63px;
   box-shadow: 5px 0 10px #d3d3d3;
 }
+.navOpen {
+  width: 77% !important;
+  position: relative !important;
+  left: 250px !important;
+}
+.navClose{
+  width: 100% !important;
+  position: relative !important;
+  left: 0 !important;
+}
 @media (max-width: 1181px) {
   .AdminSidebar {
     top: 0;

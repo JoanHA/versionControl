@@ -4,6 +4,7 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 const Excel = require("exceljs");
 const path = require("path");
+const helper = require("../../lib/helpers");
 //Obtener las iniciales y los tipos de documento
 const getCodeLetters = async (req, res) => {
   const sql =
@@ -67,133 +68,130 @@ const verify = async (req, res) => {
   });
 };
 
-const createMasive = async (req, res) => {
-  const file = req.file;
-  const workbook = new Excel.Workbook();
-  var filePath = path.join(__dirname + "../../public/uploads/" + file.filename);
+const getId = async (string, type) => {
+  try {
+    const params = await db.query("SELECT * FROM params WHERE status = 1");
 
-  var arr = [];
-  var pages = 0;
+    const result = params.find(
+      (e) => e.name.toLowerCase().trim() == string.toLowerCase().trim()
+    );
 
-  const response = await workbook.xlsx.readFile(file.path);
-
-  // for (let index = 0; index < workbook.worksheets.length; index++) {
-  //   pages = index;
-  //   console.log(workbook.worksheets[index]._columns)
-  // }
-  console.log(workbook.worksheets[0].dataValidations.model.D183);
-
-  
-  res.send("recibido");
+    if (result) {
+      return result.id;
+    }
+    const lastID = params[params.length - 1].id;
+    const newParam = {
+      id: lastID + 1,
+      name: string,
+      paramtype_id: type,
+      status: 1,
+    };
+    const newP = await db.query(`INSERT INTO PARAMS SET ? `, [newParam]);
+    return lastID + 1;
+  } catch (error) {
+    console.log(error);
+    return 2
+  }
 };
-// //Cambiar contraseña para usuario
-// router.post("/changePassword", (req, res) => {
-//   const { id } = req.body;
-//   //Buscat el usuario que tenga ese id
-//   db.query(
-//     "SELECT password,rol from users where id = ? ",
-//     [id],
-//     async (err, rows) => {
-//       if (err) throw new Error(err);
-//       //Validar que hayan usuarios con ese id
-//       if (rows.length > 0) {
-//         //Traer el rol y la contraseña del usuario a editar
-//         const rol = rows[0].rol;
-//         const oldpassword = rows[0].password;
+const createMasive = async (req, res) => {
+  try {
+    const file = req.file;
+    const workbook = new Excel.Workbook();
+    const filePath = path.join(
+      __dirname,
+      "../../public/uploads/",
+      file.filename
+    );
 
-//         //Validar si es usuario es administrar o no
-//         if (rol != 271) {
-//           //Si NO es administrador  validar que las contraseñas sean iguales
-//           const newPassword = req.body.Newpassword;
-//           const confirmPassword = req.body.Confirmpassword;
+    const response = await workbook.xlsx.readFile(filePath);
 
-//           if (newPassword === confirmPassword) {
-//             const hashPassword = await helper.encypt(newPassword); //Si son iguales encriptar la contraseña nueva
-//             //Actualizar usuario
-//             db.query(
-//               "UPDATE users SET password = ? where id = ?",
-//               [hashPassword, id],
-//               (error, result) => {
-//                 if (error) throw new Error(error);
-//                 console.log(result);
-//                 res.send("Usuario actualizado Correctamente!"); //Usuario  Actualizado
-//               }
-//             );
-//             //Si son diferentes Enviar el error
-//           } else {
-//             res.status(300).send(["Las contraseñas no son iguales..."]);
-//           }
+    const jsonData = {};
 
-//           //SI es usuario es admin
-//         } else {
-//           //Validar si la contraseña actual es la misma que envió
-//           const Password = req.body.Password;
+    workbook.eachSheet((worksheet, sheetId) => {
+      const sheetData = [];
 
-//           const isMatch = await helper.compare(Password, oldpassword);
-//           console.log(isMatch);
-//           //Si es igual
-//           if (isMatch == true) {
-//             const newPassword = req.body.Newpassword;
-//             const confirmPassword = req.body.Confirmpassword;
-//             if (newPassword === confirmPassword) {
-//               const hashPassword = await helper.encypt(newPassword); //Si son iguales encriptar la contraseña nueva
-//               //Actualizar usuario
-//               db.query(
-//                 "UPDATE users SET password = ? where id = ?",
-//                 [hashPassword, id],
-//                 (error, result) => {
-//                   if (error) throw new Error(error);
-//                   console.log(result);
-//                   res.send("Usuario actualizado Correctamente!"); //Usuario  Actualizado
-//                 }
-//               );
-//               //Si son diferentes Enviar el error
-//             } else {
-//               res.status(300).send(["Las contraseñas no son iguales..."]);
-//             }
+      worksheet.eachRow((row, rowNumber) => {
+        const rowData = {};
+        row.eachCell((cell, colNumber) => {
+          rowData[`column${colNumber}`] = cell.value;
+        });
+        sheetData.push(rowData);
+      });
 
-//             //Si la contraseña actual es erronea
-//           } else {
-//             res.status(300).send(["La contraseña actual es incorrecta..."]);
-//           }
-//         }
-//       }
-//     }
-//   );
-// });
+      jsonData[`Sheet${sheetId}`] = sheetData;
+    });
+    const MasterList = [];
+    const changes = [];
+    const retention = [];
 
-// //cambiar contraseña con email
-// router.put("/changePassword/email", (req, res) => {
-//   const { email, password } = req.body;
-//   //Buscar el usuario que tenga ese email
-//   db.query(
-//     "SELECT * from users where email = ? ",
-//     [email],
-//     async (err, rows) => {
-//       if (err) {
-//         console.log(err);
-//         throw new Error(err);
-//       }
-//       //Validar que hayan usuarios con ese email
-//       if (rows.length > 0) {
-//         //Validar si es usuario es administrar o no
-//         const hashPassword = await helper.encypt(password); //Si son iguales encriptar la contraseña nueva
-//         //Actualizar usuario
-//         db.query(
-//           "UPDATE users SET password = ? where email = ?",
-//           [hashPassword, email],
-//           (error, result) => {
-//             if (error) throw new Error(error);
-//             console.log(result);
-//             res.send("Usuario actualizado Correctamente!"); //Usuario  Actualizado
-//           }
-//         );
-//       } else {
-//         res.status(300).send(["No hay usuarios con ese email"]);
-//       }
-//     }
-//   );
-// });
+    //Guardar listado maestro
+    for (let i = 4; i < jsonData.Sheet1.length; i++) {
+      const dato = jsonData.Sheet1[i];
+      const listData = {
+        typology: dato.column1 ? await getId(dato.column1, 2) : null,
+        process: dato.column2 ? await getId(dato.column2, 3) : null,
+        code: dato.column6.result ? dato.column6.result : null,
+        name: dato.column7 ? dato.column7 : null,
+        version: dato.column8
+          ? isNaN(parseInt(dato.column8))
+            ? 0
+            : parseInt(dato.column8)
+          : 0,
+        last_revision: dato.column9 ? dato.column9 : null,
+        comments: dato.column10 ? dato.column10 : null,
+        status: 1,
+      };
+      const resList = await db.query("INSERT INTO documents SET ?", listData);
+    }
+    //Guardar cambios
+    for (let i = 4; i < jsonData.Sheet6.length; i++) {
+      const dato = jsonData.Sheet6[i];
+      const changesData = {
+        code: `${dato.column1 ? dato.column1 : null}${
+          dato.column2 ? dato.column2 : null
+        }${dato.column3 ? dato.column3 : null}`,
+        claimant: dato.column5 ? dato.column5 : null,
+        reason: dato.column6 ? dato.column6 : null,
+        details: dato.column7 ? dato.column7 : null,
+        aproved_by: dato.column9 ? dato.column9 : null,
+        new_version: dato.column8
+          ? isNaN(parseInt(dato.column8))
+            ? 0
+            : parseInt(dato.column8)
+          : 0,
+        status: 1,
+      };
+      const resChange = await db.query("INSERT INTO changes SET ?", [
+        changesData,
+      ]);
+    }
+
+    //guargar control de registros
+    for (let i = 4; i < jsonData.Sheet5.length; i++) {
+      const dato = jsonData.Sheet5[i];
+      const retentiondata = {
+        code: dato.column3 ? dato.column3 : null,
+        responsible: dato.column4 ? dato.column4 : null,
+        saved_in: dato.column5 ? dato.column5 : null,
+        saved_format: dato.column6 ? dato.column6 : null,
+        actived_saved: dato.column7 ? dato.column7 : null,
+        inactived_saved: dato.column8 ? dato.column8 : null,
+        last_move: dato.column9 ? await getId(dato.column9, 1) : null,
+        status: 1,
+      };
+      const resControl = await db.query("INSERT INTO storages SET ?", [
+        retentiondata,
+      ]);
+    }
+
+    res.send("Documentos creados correctamente");
+  } catch (error) {
+    console.error("Error al procesar el archivo Excel:", error);
+    res.status(500).send("Error al procesar el archivo Excel.");
+  }
+};
+
+
 
 module.exports = {
   getCodeLetters,

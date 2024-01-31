@@ -10,7 +10,7 @@ import {
 import { getLastMove } from "../../api/documentsAPI";
 import AddButton from "../../components/AddButton";
 import { useParams } from "react-router-dom";
-function CreateControl() {
+function CreateControl({ desactivate = null }) {
   const {
     register,
     handleSubmit,
@@ -40,30 +40,27 @@ function CreateControl() {
     delete values.codeLetter;
 
     try {
-      // const res = await createControl(values);
-      // swal.fire(res.data, "", "success").then(() => {
-      //   reset();
-      // });
+      const res = await createControl(values);
+      swal.fire(res.data, "", "success").then(() => {
+        reset();
+      });
     } catch (error) {
       console.log(error);
       swal.fire(error.response.data, "", "error");
     }
   };
   const handleChange = () => {
-    console.log(watch("processInitials"))
     const code = `${watch("codeLetter")}${watch("processInitials")}${watch(
       "versionNumber"
     )}`;
     if (data) {
       const selected = data.find((e) => e.code == code);
-    
 
       if (selected) {
         reset({
           documentName: selected.name,
         });
       }
-     
     }
   };
 
@@ -108,7 +105,17 @@ function CreateControl() {
   return (
     <div>
       <div className="titleHeader">Control de registros</div>
-      <div><button className="btn btn-dark btn-sm mx-3" onClick={()=>history.back()}>Volver</button>
+      <div>
+        {desactivate ? (
+          ""
+        ) : (
+          <button
+            className="btn btn-dark btn-sm mx-3"
+            onClick={() => history.back()}
+          >
+            Volver
+          </button>
+        )}
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="row px-3">
@@ -125,7 +132,7 @@ function CreateControl() {
                     onChange={handleChange}
                     className="form-select medium-rounded-left  "
                   >
-                         <option value="">...</option>
+                    <option value="">...</option>
                     {letterCode &&
                       letterCode.map((letter) => (
                         <option key={letter.id} value={letter.name} s>

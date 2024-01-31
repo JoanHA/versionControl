@@ -112,7 +112,7 @@ function AddParams({ name, typeid, id = null, callback, value = null }) {
           try {
             const res = await deleteParam(id);
             if (res.status === 200) {
-              swal.fire(res.data, "", "success").then(()=>{
+              swal.fire(res.data, "", "success").then(() => {
                 callback();
                 document.getElementById("AddParams").classList.add("d-none");
                 document.getElementById("AddParams").style.display = "none";
@@ -127,12 +127,14 @@ function AddParams({ name, typeid, id = null, callback, value = null }) {
       }
     });
   };
+
   useEffect(() => {
     reset({
       name: name,
       paramtype_id: typeid,
+      value: "",
     });
-  }, [name]);
+  }, [value]);
   useEffect(() => {
     if (id) {
       reset({

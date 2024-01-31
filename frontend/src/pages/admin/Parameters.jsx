@@ -55,6 +55,8 @@ function Parameters() {
   const newParam = (entername, enterid) => {
     setTypeId(enterid);
     setName(entername);
+    setId(null);
+    setValue(null);
     document.getElementById("AddParams").classList.remove("d-none");
     document.getElementById("AddParams").style.display = "block";
     document.getElementById("AddParams").style.opacity = 1;

@@ -43,11 +43,7 @@ function HistoricTable({ data, columns,info }) {
       table.setPageSize(Number(10)); 
     }
   }, [pageSize]);
-  useEffect(()=>{
-    console.log(info)
-    console.log(data)
 
-  },[])
   return (
     <div>
       <div

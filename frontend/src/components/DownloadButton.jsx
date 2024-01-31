@@ -85,7 +85,7 @@ function DownloadButton({ data = [], filter, info }) {
             { maxWidth: 180 }
           );
 
-          doc.text("CAMBIOS REALIZADOS A ESTE DOCUMENTO", 50, 120);
+          doc.text("CAMBIOS REALIZADOS A ESTE DOCUMENTO", 70, 120);
 
           //Imprimir tabla de eventos
 

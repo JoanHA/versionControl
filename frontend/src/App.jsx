@@ -43,9 +43,9 @@ function App() {
                 path="/createControl/:code"
                 element={<CreateControl />}
               ></Route>
-
+              {/* Rutas protegidas (SOlO INGRESA LOGUEADO)*/}
               <Route element={<ProtectedRoute />}>
-              <Route path="/welcome" element={<Welcome />}></Route>
+                <Route path="/welcome" element={<Welcome />}></Route>
 
                 <Route
                   path="/admin"
@@ -71,23 +71,23 @@ function App() {
                     </AdminView>
                   }
                 ></Route>
+                <Route
+                  path="/admin/newUser"
+                  element={
+                    <AdminView>
+                      <EditUser />
+                    </AdminView>
+                  }
+                ></Route>
+                <Route
+                  path="/editUser/:id"
+                  element={
+                    <AdminView>
+                      <EditUser />
+                    </AdminView>
+                  }
+                ></Route>
               </Route>
-              <Route
-                path="/admin/newUser"
-                element={
-                  <AdminView>
-                    <EditUser />
-                  </AdminView>
-                }
-              ></Route>
-              <Route
-                path="/editUser/:id"
-                element={
-                  <AdminView>
-                    <EditUser />
-                  </AdminView>
-                }
-              ></Route>
 
               <Route path="/edit/:id" element={<CreateDocument />}></Route>
               <Route path="/changes" element={<ViewChanges />}></Route>
