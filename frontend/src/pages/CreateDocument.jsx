@@ -64,6 +64,7 @@ function CreateDocument() {
     });
     setLetterCode(letter);
     setDoctype(types);
+
     setProcesses(process);
     setTypologies(typology);
   };
@@ -77,7 +78,6 @@ function CreateDocument() {
       delete values.date;
       try {
         const res = await updateDocument(values);
-        console.log(res);
         if (res.status === 200) {
           swal.fire(res.data, "", "success").then(() => {
             reset();
@@ -280,7 +280,7 @@ function CreateDocument() {
                         {...register("processSelect")}
                       >
                         {processes.map((e) => (
-                          <option value={e.value}>
+                          <option value={e.value} key={e.value}>
                             {e.label.toUpperCase()}
                           </option>
                         ))}
@@ -316,7 +316,7 @@ function CreateDocument() {
                         {...register("typologySelect")}
                       >
                         {typologies.map((e) => (
-                          <option value={e.value}>
+                          <option  key={e.value} value={e.value} >
                             {e.label.toUpperCase()}
                           </option>
                         ))}

@@ -53,6 +53,14 @@ function AddButton({ param, cb }) {
       name: param.name,
     });
   }, []);
+  useEffect(() => {
+    setId(uniqid());
+    setParams(param);
+    reset({
+      paramtype_id: param.value,
+      name: param.name,
+    });
+  }, [param]);
   const close = () => {
     //Cerrar modal
     document.getElementById(id).classList.add("d-none");

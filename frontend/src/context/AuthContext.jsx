@@ -61,8 +61,6 @@ function AuthProvider({ children }) {
       const res = await SignUp(user);
       if (res) {
         if (res.status === 200) {
-          setUser(res.data);
-          setisAuthenticated(true);
           setLoading(false);
           return res;
         }
@@ -129,6 +127,7 @@ function AuthProvider({ children }) {
         setEmail,
         otp,
         setOtp,
+        setErrores,
       }}
     >
       {children}

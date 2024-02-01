@@ -58,11 +58,10 @@ const changePassword = async (req, res) => {
     ]);
     if (rows.affectedRows > 0) {
       res.send("Contraseña editada correctamente");
-      return
+      return;
     }
 
     res.status(300).send("Ese usuario no esta registrado");
-
 
     //Actualizar usuario
   } catch (error) {
@@ -71,9 +70,21 @@ const changePassword = async (req, res) => {
   }
 };
 
+const deleteUser = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const sql = `DELETE FROM users WHERE id = ${id}`;
+    const result = await db.query(sql);
+    res.send("Usuario eliminado correctamente!");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("No pudimos eliminar el usuario, intenta mas tarde");
+  }
+};
 module.exports = {
   getAllUsers,
   updateUsers,
   getOneUser,
   changePassword,
+  deleteUser,
 };

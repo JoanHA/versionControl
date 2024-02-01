@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 // import { recoveryPassword } from "../../lib/sendOtp";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { recoveryPassword } from "../../api/recover";
 function EnterEmail() {
   const navigate = useNavigate();
   const { setEmail, setOtp } = useAuth();
@@ -25,8 +26,7 @@ function EnterEmail() {
     };
     try {
       const res = await recoveryPassword(datos);
-   
-      if (res.status == 200) {
+      if (res.status === 200) {
         setLoading(false);
         swal.fire("Tu codigo ha sido enviado", "", "success").then(() => {
           navigate("/otp");

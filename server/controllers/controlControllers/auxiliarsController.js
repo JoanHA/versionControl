@@ -5,6 +5,8 @@ const jwt = require("jsonwebtoken");
 const Excel = require("exceljs");
 const path = require("path");
 const helper = require("../../lib/helpers");
+require("dotenv").config();
+const nodemailer = require("nodemailer");
 //Obtener las iniciales y los tipos de documento
 const getCodeLetters = async (req, res) => {
   const sql =
@@ -31,7 +33,7 @@ const getProcessAndTypologies = async (req, res) => {
 };
 //Obtener la disposicion final
 const getLastMove = async (req, res) => {
-  const sql = `SELECT id, name, paramtype_id FROM params WHERE paramtype_id = 1`;
+  const sql = `SELECT id, name, paramtype_id FROM params WHERE paramtype_id = 1 AND status=1`;
   try {
     const response = await db.query(sql);
     res.send(response);
@@ -90,7 +92,7 @@ const getId = async (string, type) => {
     return lastID + 1;
   } catch (error) {
     console.log(error);
-    return 2
+    return 2;
   }
 };
 const createMasive = async (req, res) => {
@@ -190,8 +192,93 @@ const createMasive = async (req, res) => {
     res.status(500).send("Error al procesar el archivo Excel.");
   }
 };
+//Recuperar contraseña
 
+function sendEmail(recipient_email, OTP) {
+  return new Promise((resolve, reject) => {
+    var transporter = nodemailer.createTransport({
+      service: "gmail",
+      secure: false, // Cambia a 'true' si usas el puerto 465
+      auth: {
+        user: process.env.MY_EMAIL,
+        pass: process.env.MY_PASSWORD,
+      },
+    });
 
+    const mail_configs = {
+      from: process.env.MY_EMAIL,
+      to: recipient_email,
+      subject: "Recuperación de contraseña",
+      html: `<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Recuperar contraseña</title>
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<div style="font-family: Helvetica,Arial,sans-serif;min-width:1000px;overflow:auto;line-height:2">
+  <div style="margin:50px auto;width:70%;padding:20px 0">
+    <div style="border-bottom:1px solid #eee">
+      <a href="" style="font-size:1.4em;color: #00466a;text-decoration:none;font-weight:600">Recuperación de contraseña</a>
+    </div>
+    <p style="font-size:1.1em">Hi,</p>
+    <p> Usa el siguiente Código para completar la recuperacion de tu contraseña. El código es valido por  5 minutos</p>
+    <h2 style="background: #00466a;margin: 0 auto;width: max-content;padding: 0 10px;color: #fff;border-radius: 4px;">${OTP}</h2>
+    <p style="font-size:0.9em;">Regards,<br />Bioart</p>
+    <hr style="border:none;border-top:1px solid #eee" />
+    <div style="float:right;padding:8px 0;color:#aaa;font-size:0.8em;line-height:1;font-weight:300">
+      <p>Bioart SA</p>
+    </div>
+  </div>
+</div>
+<!-- partial -->
+  
+</body>
+</html>`,
+    };
+    transporter.sendMail(mail_configs, function (error, info) {
+      if (error) {
+        console.log(error);
+        return reject({ message: `An error has occured` });
+      }
+      return resolve({ message: "Email sent succesfuly" });
+    });
+  });
+}
+const sendEmails = (req, res) => {
+  const { OTP, recipient_email } = req.body;
+  sendEmail(recipient_email, OTP)
+    .then((response) => res.send(response.message))
+    .catch((error) => res.status(500).send(error.message));
+};
+
+//cambiar contraseña con email
+const changePasswordWithEmail = async (req, res) => {
+  const { email, password } = req.body;
+  //Buscar el usuario que tenga ese email
+  try {
+    const rows = await db.query("SELECT * from users where email = ? ", [
+      email,
+    ]);
+    console.log(rows);
+    if (rows.length > 0) {
+      const properEmail = rows[0].email;
+      console.log(properEmail);
+      const hashPassword = await helper.encypt(password);
+      const response = await db.query(
+        "UPDATE users SET password = ? where email = ?",
+        [hashPassword, email]
+      );
+      res.send("Usuario actualizado Correctamente!");
+    } else {
+      res.status(404).send("Ese usuario no existe en la plataforma!");
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("No pudimos realizar esta acción");
+  }
+};
 
 module.exports = {
   getCodeLetters,
@@ -199,4 +286,6 @@ module.exports = {
   getLastMove,
   verify,
   createMasive,
+  sendEmails,
+  changePasswordWithEmail,
 };

@@ -130,7 +130,7 @@ function HistoricTable({ data, columns,info }) {
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <>
+                  
                     <th
                       key={header.id}
                       onClick={header.column.getToggleSortingHandler()}
@@ -150,7 +150,7 @@ function HistoricTable({ data, columns,info }) {
                         </div>
                       )}
                     </th>
-                  </>
+                  
                 ))}
               </tr>
             ))}
@@ -159,14 +159,14 @@ function HistoricTable({ data, columns,info }) {
             {table.getRowModel().rows.map((row) => (
               <tr key={row.id} id={row.id}>
                 {row.getVisibleCells().map((cell) => (
-                  <>
+                  
                     <td key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
                       )}
                     </td>
-                  </>
+                  
                 ))}
               </tr>
             ))}

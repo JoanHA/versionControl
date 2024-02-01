@@ -8,7 +8,7 @@ const getDocuments = async (req, res) => {
     const response = await db.query(`SELECT  *,
      (SELECT name FROM params WHERE params.id = documents.typology) AS typology_name,
      (SELECT name FROM params WHERE params.id = documents.process) AS process_name
-      FROM documents `);
+      FROM documents WHERE status =1 `);
     res.send(response);
   } catch (error) {
     console.log(error);
@@ -36,7 +36,6 @@ const editDocument = async (req, res) => {
   const sql = `UPDATE documents SET ? WHERE code='${code}'`;
   try {
     const result = await db.query(sql,[datos]);
-    console.log(result)
     res.send("Actualizado con exito!")
   } catch (error) {
     console.log(error);
@@ -50,12 +49,10 @@ const makeDocument = async (req, res) => {
   data.version = 1;
   data.last_revision = new Date().toISOString();
   data.status = 1;
-  console.log(data);
   const sql = `INSERT INTO documents SET ?`;
   try {
     const response = await db.query(sql, data);
     res.send("Documento registrado correctamente!");
-    console.log(response);
   } catch (error) {
     console.log(error);
     if (error.code === "ER_DUP_ENTRY") {

@@ -42,7 +42,6 @@ function AddParams({ name, typeid, id = null, callback, value = null }) {
     };
     try {
       const res = await newParam(datos);
-      console.log(res);
       if (res.status === 200) {
         Swal.fire({
           position: "center",
@@ -135,6 +134,7 @@ function AddParams({ name, typeid, id = null, callback, value = null }) {
       value: "",
     });
   }, [value]);
+ 
   useEffect(() => {
     if (id) {
       reset({

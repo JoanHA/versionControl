@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { AiFillEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { useAuth } from "../context/AuthContext";
-import { getUser, updateUser } from "../api/users";
+import { deleteUsers, getUser, updateUser } from "../api/users";
 import ChangePassword from "./ChangePassword";
 function UserForm() {
   const {
@@ -14,7 +14,7 @@ function UserForm() {
   } = useForm();
   const params = useParams();
   const [data, setData] = useState({});
-  const { signup } = useAuth();
+  const { signup,Errores,setErrores } = useAuth();
   const navigate = useNavigate();
 
   const getUserData = async () => {
@@ -29,7 +29,7 @@ function UserForm() {
         status: datos.status,
       });
     } catch (error) {
-      console.log(error);
+      console.log("error" + error.response);
       swal.fire(error.response.data, "", "error");
     }
   };
@@ -37,8 +37,6 @@ function UserForm() {
   const createUser = async (values) => {
     try {
       const res = await signup(values);
-      console.log(res);
-      console.log("Se enviaron los datos");
       if (res.status === 200) {
         swal
           .fire("Usuario registrado correctamente", "", "success")
@@ -54,7 +52,7 @@ function UserForm() {
   const updateUsers = async (values) => {
     try {
       const res = await updateUser(values);
-      console.log(res.data);
+
       if (res.status === 200) {
         Swal.fire({
           position: "center",
@@ -85,6 +83,7 @@ function UserForm() {
           return updateUsers(values);
         }
       });
+      return;
     }
     Swal.fire({
       title: "Estas seguro de esto?",
@@ -94,12 +93,16 @@ function UserForm() {
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Si, guardar!",
-    }).then((result) => {
+    }).then( async(result) => {
       if (result.isConfirmed) {
-        createUser(values);
+        try {
+          await createUser(values);
+        } catch (error) {
+          console.log(error)
+          swal.fire(error.response.data, "", "error");
+        }
       }
     });
- 
   };
   const changeEye = () => {
     document.getElementById("eye-outline").classList.toggle("inactive");
@@ -110,11 +113,44 @@ function UserForm() {
         : "text";
   };
 
+  const deleteUser = async()=>{
+    Swal.fire({
+      title: "Estas seguro de esto?",
+      text: "No podrás revertir esta acción!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, guardar!",
+    }).then(async(result) => {
+      if (result.isConfirmed) {
+        const id = params.id;
+        try {
+          const res = await deleteUsers(id);
+          swal
+          .fire("Usuario eliminado correctamente", "", "success")
+          .then(() => {
+            navigate("/admin/users");
+          });
+        } catch (error) {
+          swal.fire(error.response.data, "", "error");
+          
+        }
+      }
+    });
+    
+
+  }
   useEffect(() => {
     if (params.id) {
       getUserData();
     }
   }, [params.id]);
+  useEffect(()=>{
+   if (Errores) {
+    swal.fire(Errores, "", "error").then(()=>{setErrores(null)});
+   }
+  },[Errores])
   return (
     <div>
       <div className="py-2">
@@ -236,6 +272,7 @@ function UserForm() {
                 <button className="btn btn-success my-2">
                   {params.id ? "Editar" : "Guardar"}
                 </button>
+                <button className="btn btn-danger" type="button" onClick={deleteUser}>Eliminar</button>
                 <button
                   type="button"
                   className="btn btn-secondary"

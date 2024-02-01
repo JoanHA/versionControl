@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import "../../assets/CSS/recovery.css";
 import { useAuth } from "../../context/AuthContext";
 import { useForm } from "react-hook-form";
-// import { changePasswordEmail } from "../../api/user.controller";
+
 import {  useNavigate } from "react-router-dom";
+import { changePasswordEmail } from "../../api/recover";
 function RecoverPassword() {
   const {
     register,
@@ -15,10 +16,10 @@ function RecoverPassword() {
   const { email } = useAuth();
 
   const onSubmit = async (data) => {
-    if (data.password != data.confirmPassword) {
+    if (data.password !== data.confirmPassword) {
       return setError(true);
     }
-    try {
+    try { 
       const res = await changePasswordEmail({ email, password: data.password });
       if (res.status == 200) {
         swal.fire("Tu contraseña ha sido cambiada", "", "success").then(() => {

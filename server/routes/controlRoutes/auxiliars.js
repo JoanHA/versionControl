@@ -9,17 +9,21 @@ const {
   getLastMove,
   verify,
   createMasive,
+  sendEmails,
+  changePasswordWithEmail,
 } = require("../../controllers/controlControllers/auxiliarsController");
 //auxiliars
 const storage = multer.diskStorage({
-    destination: path.join(__dirname, "../../public/uploads"),
-    filename: function (req, file, cb) {
-      cb(null, Date.now() + "-" + file.originalname);
-    },
-  });
+  destination: path.join(__dirname, "../../public/uploads"),
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
 router.get("/", getCodeLetters);
 router.get("/pyt", getProcessAndTypologies);
 router.get("/lastMove", getLastMove);
 router.post("/verifyToken", verify);
 router.post("/masive", multer({ storage }).single("file"), createMasive);
+router.post("/send_recovery_email", sendEmails);
+router.put("/changePassword/email", changePasswordWithEmail)
 module.exports = router;

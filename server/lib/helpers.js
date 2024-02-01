@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const helper ={}
 
 helper.encypt = async (password)=>{
-    const salt = await bcrypt.genSalt(10)
+    const salt = await bcrypt.genSalt(8)
     const hash  = await bcrypt.hash(password,salt)
     return hash;
 }

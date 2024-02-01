@@ -61,7 +61,7 @@ const register = async (req, res) => {
       [email, username]
     );
     if (result.length > 0) {
-      res.status(401).send(["Ese correo/usuario ya esta registrado"]);
+      res.status(403).send("Ese correo/usuario ya esta registrado");
       return;
     } else {
       await db.query("INSERT INTO users SET ?", [user]); //Guardar el usuario

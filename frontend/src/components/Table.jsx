@@ -15,7 +15,14 @@ import {
 import Archived from "../pages/control/Archived";
 import { useAuth } from "../context/AuthContext";
 
-function Table({ data, columns, options = true, btnDetails,details=false,editType }) {
+function Table({
+  data,
+  columns,
+  options = true,
+  btnDetails,
+  details = false,
+  editType,
+}) {
   const [sorting, setSorting] = useState([]);
   const [filtering, setFilteting] = useState("");
   const [pageSize, setPageSize] = useState(window.innerWidth);
@@ -38,7 +45,7 @@ function Table({ data, columns, options = true, btnDetails,details=false,editTyp
   window.onresize = (e) => {
     setPageSize(window.innerWidth);
   };
-  const {isAuthenticated}=useAuth()
+  const { isAuthenticated } = useAuth();
   useEffect(() => {
     if (window.innerWidth < 1148) {
       table.setPageSize(Number(5));
@@ -132,27 +139,25 @@ function Table({ data, columns, options = true, btnDetails,details=false,editTyp
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <>
-                    <th
-                      key={header.id}
-                      onClick={header.column.getToggleSortingHandler()}
-                    >
-                      {header.isPlaceholder ? null : (
-                        <div>
-                          {flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                  <th
+                    key={header.id}
+                    onClick={header.column.getToggleSortingHandler()}
+                  >
+                    {header.isPlaceholder ? null : (
+                      <div>
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
 
-                          {
-                            { asc: "↑", desc: "↓" }[
-                              header.column.getIsSorted() ?? null
-                            ]
-                          }
-                        </div>
-                      )}
-                    </th>
-                  </>
+                        {
+                          { asc: "↑", desc: "↓" }[
+                            header.column.getIsSorted() ?? null
+                          ]
+                        }
+                      </div>
+                    )}
+                  </th>
                 ))}
                 {options && <th colSpan={1}>Opciones</th>}
                 {editType && <th colSpan={1}>Opciones</th>}
@@ -165,31 +170,27 @@ function Table({ data, columns, options = true, btnDetails,details=false,editTyp
             {table.getRowModel().rows.map((row) => (
               <tr key={row.id} id={row.id}>
                 {row.getVisibleCells().map((cell) => (
-                  <>
-                    <td key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
-                  </>
+                  <td key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
                 ))}
-                {editType && (<>
+                {editType && (
+                  <>
                     <td className="" colSpan={2}>
                       <div className="d-flex flex-wrap gap-1 ">
                         {
                           <Link
-                            to={`/${editType ? editType : "document"}/${row.original.id}`} // this has to have the id of the row
+                            to={`/${editType ? editType : "edit"}/${
+                              row.original.id
+                            }`} // this has to have the id of the row
                             className="btn btn-primary btn-sm flex-fill"
                           >
                             Editar
                           </Link>
                         }
-                       
                       </div>
                     </td>
                   </>
-
                 )}
                 {options && (
                   <>
@@ -201,15 +202,16 @@ function Table({ data, columns, options = true, btnDetails,details=false,editTyp
                         >
                           Ver
                         </Link>
-                        {
-                          isAuthenticated && ( <Link
-                            to={`/${editType ? editType : "document"}/${row.original.id}`} // this has to have the id of the row
+                        {isAuthenticated && (
+                          <Link
+                            to={`/${editType ? editType : "edit"}/${
+                              row.original.id
+                            }`} // this has to have the id of the row
                             className="btn btn-primary btn-sm flex-fill"
                           >
                             Editar
-                          </Link>)
-                        }
-                       
+                          </Link>
+                        )}
                       </div>
                     </td>
                   </>
@@ -217,15 +219,18 @@ function Table({ data, columns, options = true, btnDetails,details=false,editTyp
                 {btnDetails && (
                   <>
                     <td>
-                      <Archived doc={btnDetails.doc[row.id]} text={btnDetails.text}></Archived></td>
+                      <Archived
+                        doc={btnDetails.doc[row.id]}
+                        text={btnDetails.text}
+                      ></Archived>
+                    </td>
                   </>
                 )}
-                  {details && (
+                {details && (
                   <>
                     <td>
-                     
                       <ChangeDetails infor={data[row.id]}></ChangeDetails>
-                     </td>
+                    </td>
                   </>
                 )}
               </tr>

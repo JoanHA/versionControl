@@ -45,7 +45,7 @@ function Documents() {
     <div>
       <div className="titleHeader text-center py-2">Listado maestro</div>
       <div>
-        <Table columns={columns} data={data}></Table>
+        <Table columns={columns} data={data} ></Table>
       </div>
     </div>
   );

@@ -163,20 +163,6 @@ function CreateControl({ desactivate = null }) {
                   />
                 </div>
               </div>
-              {/* <div className="col-12 row">
-                <div className="col-4">
-                  <label>Código</label>
-                </div>
-
-                <div className="col-8">
-                  <Select
-                    {...register("code")}
-                    required
-                    onChange={handleChange}
-                    options={codigos}
-                  ></Select>
-                </div>
-              </div> */}
               <div className="col-12 row">
                 <div className="col-4">
                   <label>Nombre del registro </label>
@@ -278,6 +264,7 @@ function CreateControl({ desactivate = null }) {
                   ></Select>
                   <AddButton
                     param={{ name: "Disposición final", value: 1 }}
+                    cb={fillSelects}
                   ></AddButton>
                 </div>
               </div>
