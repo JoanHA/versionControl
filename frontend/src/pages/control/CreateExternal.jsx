@@ -22,11 +22,13 @@ function CreateExternal() {
       if (result.isConfirmed) {
         values.last_move = selectedMove;
         values.external = 1;
-        values.status = values.status === true ? 1 : 3;
+        values.status = 1;
         try {
           const res = await createExternal(values);
           if (res.status === 200) {
-            swal.fire(res.data, "", "succes").then(()=>{reset()});
+            swal.fire(res.data, "", "succes").then(() => {
+              reset();
+            });
           }
         } catch (error) {
           swal.fire(error.response.data, "", "error");
@@ -170,15 +172,6 @@ function CreateExternal() {
                     cb={getLastMoves}
                   ></AddButton>
                 </div>
-              </div>
-              <div className="col-12 d-flex gap-2 ">
-                <label htmlFor="">Estado obsoleto</label>
-
-                <input
-                  type="checkbox"
-                  style={{ width: "20px" }}
-                  {...register("status")}
-                />
               </div>
             </div>
           </div>
