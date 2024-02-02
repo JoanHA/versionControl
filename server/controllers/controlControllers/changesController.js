@@ -92,11 +92,24 @@ try {
   console.log(error);
 }
 }
+const createExternal = async(req,res)=>{
+  const data = req.body;
+
+  const sql = `INSERT INTO storages SET ? `;
+  try {
+    const response = await db.query(sql, [data]);
+    res.send("Documento externo guardado exitosamente!");
+  } catch (error) {
+    console.log(error);
+    res.status(400).send("No pudimos realizar esa acción, intenta mas tarde");
+  }
+}
 module.exports = {
   createChange,
   getChangesFromOne,
   getArchivedInfo,
   getChanges,
   getArchived,
+  createExternal,
   getExternals,
 };

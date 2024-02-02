@@ -96,7 +96,7 @@ const Header = ({ children }) => {
                       </li>
                     )}
                   </ul>
-                </li>{" "}
+                </li>
                 <li className="nav-item dropdown">
                   <button
                     className="headerLinks dropdown-toggle"
@@ -107,20 +107,21 @@ const Header = ({ children }) => {
                   </button>
                   <ul className="dropdown-menu ">
                     <li>
-                      <Link to={"/control"} className="dropdown-item">
-                        Retención documental
+                      <Link to={"/external"} className="dropdown-item">
+                         Documentos externos
                       </Link>
                     </li>
                     {isAuthenticated && (
                       <>
                         <li>
-                          <Link to={"/createControl"} className="dropdown-item">
-                            Crear control documental
+                          <Link to={"/createExternal"} className="dropdown-item">
+                            Agregar documento externo
                           </Link>
                         </li>
                       </>
                     )}
                   </ul>
+                  
                 </li>
               </ul>
             </div>

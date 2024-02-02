@@ -109,6 +109,26 @@ function Sidebar() {
                 Retencion documental
               </Link>
             </li>
+         
+            {isAuthenticated && (
+              <li>
+                <Link className="dropdown-item" to="/createControl">
+                  Crear control documental
+                </Link>
+              </li>
+            )}
+          </ul>
+        </div>
+        <div className="dropdown">
+          <button
+            type="button"
+            className="list-group-item list-group-item-action dropdown-toggle"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <Link >Documentos externos </Link>
+          </button>
+          <ul className="dropdown-menu">
             <li>
               <Link className="dropdown-item" to="/external">
                   Documentos externos
@@ -116,8 +136,8 @@ function Sidebar() {
             </li>
             {isAuthenticated && (
               <li>
-                <Link className="dropdown-item" to="/createControl">
-                  Crear control documental
+                <Link className="dropdown-item" to="/createExternal">
+                  Agregar documento externo
                 </Link>
               </li>
             )}

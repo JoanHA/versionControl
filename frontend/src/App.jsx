@@ -23,6 +23,7 @@ import AdminWelcome from "./pages/admin/AdminWelcome";
 import { ProtectedRoute } from "./Auth/ProtectedRoute";
 import EditUser from "./pages/admin/EditUser";
 import External from "./pages/control/External";
+import CreateExternal from "./pages/control/CreateExternal";
 function App() {
   return (
     <div>
@@ -98,6 +99,7 @@ function App() {
               <Route path="/changes" element={<ViewChanges />}></Route>
               <Route path="/control" element={<ViewControl />}></Route>
               <Route path="/external" element={<External />}></Route>
+              <Route path="/CreateExternal" element={<CreateExternal />}></Route>
               <Route path="*" element={<Not_Found />}></Route>
             </Routes>
           </Header>

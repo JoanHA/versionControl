@@ -8,9 +8,11 @@ const {
   getChanges,
   getArchived,
   getExternals,
+  createExternal,
 } = require("../../controllers/controlControllers/changesController");
 
 router.get("/externals",getExternals);
+router.post("/externals",createExternal);
 router.get("/archived",getArchived)
 router.get("/archived/:code", getArchivedInfo);
 router.get("/:code", getChangesFromOne);

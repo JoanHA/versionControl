@@ -7,9 +7,11 @@ function Archived({ doc, text }) {
   const [id, setId] = useState("");
   const getInfo = async () => {
     try {
-      const res = await getInformation(doc.code);
-      setInfo(res.data[0]);
-      if (res.data.status === 404) {
+      // const res = await getInformation(doc.code);
+      // setInfo(res.data[0]);
+      // console.log(doc)
+      setInfo(doc)
+      if (!doc) {
         return setIsEmpty(true);
       }
     } catch (error) {
@@ -49,11 +51,11 @@ function Archived({ doc, text }) {
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
       >
-        <div className="modal-dialog">
+        <div className="modal-dialog" style={{maxWidth:"800px"}}>
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="exampleModalLabel">
-                <strong>Documento {doc.code}</strong>
+                <strong>Documento {doc.code ? doc.code:"Externo"}</strong>
               </h1>
               <button
                 type="button"

@@ -20,3 +20,6 @@ export const getInformation = (code)=>axios.get(URI+`changes/archived/${code}`);
 export const getArchived = ()=>axios.get(URI+"changes/archived");
 //Traer todos los datos externos
 export const getExternal = ()=>axios.get(URI+"changes/externals");
+
+//Crear documento externo
+export const createExternal = (data)=>axios.post(URI+"changes/externals",data)
