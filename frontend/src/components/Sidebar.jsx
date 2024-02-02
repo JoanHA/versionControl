@@ -109,6 +109,11 @@ function Sidebar() {
                 Retencion documental
               </Link>
             </li>
+            <li>
+              <Link className="dropdown-item" to="/external">
+                  Documentos externos
+              </Link>
+            </li>
             {isAuthenticated && (
               <li>
                 <Link className="dropdown-item" to="/createControl">

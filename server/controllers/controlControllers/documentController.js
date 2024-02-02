@@ -7,8 +7,9 @@ const getDocuments = async (req, res) => {
   try {
     const response = await db.query(`SELECT  *,
      (SELECT name FROM params WHERE params.id = documents.typology) AS typology_name,
-     (SELECT name FROM params WHERE params.id = documents.process) AS process_name
-      FROM documents WHERE status =1 `);
+     (SELECT name FROM params WHERE params.id = documents.process) AS process_name,
+     (SELECT name FROM params WHERE params.id = documents.status) AS status_name
+      FROM documents  `);
     res.send(response);
   } catch (error) {
     console.log(error);
@@ -20,7 +21,9 @@ const getOneDocument = async (req, res) => {
   const { id } = req.params;
   const sql = `SELECT *, 
     (SELECT name FROM params WHERE params.id = documents.typology) AS typology_name,
-    (SELECT name FROM params WHERE params.id = documents.process) AS process_name FROM documents WHERE id= ?`;
+    (SELECT name FROM params WHERE params.id = documents.process) AS process_name,
+    (SELECT name FROM params WHERE params.id = documents.status) AS status_name
+    FROM documents WHERE id= ?`;
   try {
     const response = await db.query(sql, [id]);
     response[0].last_revision = helper.convertTime(response[0].last_revision);

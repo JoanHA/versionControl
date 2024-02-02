@@ -18,36 +18,49 @@ function CreateControl({ desactivate = null }) {
     watch,
     formState: { errors },
   } = useForm();
-  // const [codigos, SetCodigos] = useState([]);
+
   const [data, setData] = useState([]);
-  // const [code, setCode] = useState(null);
+
   const [lastMove, setLastMove] = useState([]);
   const [selectedMove, setSelectedMove] = useState(null);
 
-  // const params = useParams();
-  // const [defaultValue, setDefaultV] = useState({});
+  const params = useParams();
 
   const [letterCode, setLetterCode] = useState([]);
   const [docType, setDoctype] = useState([]);
 
   //Funciones
   const onSubmit = async (values) => {
-    values.last_move = selectedMove;
-    values.code = `${values.codeLetter}${values.processInitials}${values.versionNumber}`;
-    delete values.documentName;
-    delete values.versionNumber;
-    delete values.processInitials;
-    delete values.codeLetter;
+    Swal.fire({
+      title: "Estas seguro de esto?",
+      text: "No podrás revertir esta acción!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, guardar!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        values.last_move = selectedMove;
+        values.code = params.code
+          ? params.code
+          : `${values.codeLetter}${values.processInitials}${values.versionNumber}`;
+        delete values.documentName;
+        delete values.versionNumber;
+        delete values.processInitials;
+        delete values.codeLetter;
 
-    try {
-      const res = await createControl(values);
-      swal.fire(res.data, "", "success").then(() => {
-        reset();
-      });
-    } catch (error) {
-      console.log(error);
-      swal.fire(error.response.data, "", "error");
-    }
+        try {
+          const res = await createControl(values);
+          swal.fire(res.data, "", "success").then(() => {
+            reset();
+          });
+        } catch (error) {
+          console.log(error);
+          swal.fire(error.response.data, "", "error");
+        }
+      }
+    });
   };
   const handleChange = () => {
     const code = `${watch("codeLetter")}${watch("processInitials")}${watch(
@@ -61,6 +74,14 @@ function CreateControl({ desactivate = null }) {
           documentName: selected.name,
         });
       }
+    }
+  };
+  const handleParam = (datos) => {
+    const selected = datos.find((e) => e.code == params.code);
+    if (selected) {
+      reset({
+        documentName: selected.name,
+      });
     }
   };
 
@@ -92,6 +113,9 @@ function CreateControl({ desactivate = null }) {
     try {
       const res = await getAllDocuments();
       setData(res.data);
+      if (params.code) {
+        handleParam(res.data);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -125,43 +149,60 @@ function CreateControl({ desactivate = null }) {
                 <div className="col-4  py-2">
                   <label htmlFor="">Codigo de registro</label>
                 </div>
-                <div className="col-8 d-flex">
-                  <select
-                    {...register("codeLetter", { required: true })}
-                    style={{ width: "70px" }}
-                    onChange={handleChange}
-                    className="form-select medium-rounded-left  "
-                  >
-                    <option value="">...</option>
-                    {letterCode &&
-                      letterCode.map((letter) => (
-                        <option key={letter.id} value={letter.name} s>
-                          {letter.name}
-                        </option>
-                      ))}
-                  </select>
-                  <select
-                    style={{ width: "80px", borderRadius: "0px" }}
-                    {...register("processInitials", { required: true })}
-                    className="form-select"
-                    onChange={handleChange}
-                  >
-                    <option value="">...</option>
-                    {docType &&
-                      docType.map((type) => (
-                        <option key={type.id} value={type.name}>
-                          {type.name}
-                        </option>
-                      ))}
-                  </select>
-                  <input
-                    {...register("versionNumber", { required: true })}
-                    type="text"
-                    placeholder="00..."
-                    onKeyUp={handleChange}
-                    className="form-control medium-rounded-right  "
-                  />
-                </div>
+                {params.code ? (
+                  <>
+                    <div className="col-8 d-flex">
+                      <input
+                        type="text"
+                        {...register("code")}
+                        disabled
+                        value={params.code}
+                        className="form-control"
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    {" "}
+                    <div className="col-8 d-flex">
+                      <select
+                        {...register("codeLetter", { required: true })}
+                        style={{ width: "70px" }}
+                        onChange={handleChange}
+                        className="form-select medium-rounded-left  "
+                      >
+                        <option value="">...</option>
+                        {letterCode &&
+                          letterCode.map((letter) => (
+                            <option key={letter.id} value={letter.name} s>
+                              {letter.name}
+                            </option>
+                          ))}
+                      </select>
+                      <select
+                        style={{ width: "80px", borderRadius: "0px" }}
+                        {...register("processInitials", { required: true })}
+                        className="form-select"
+                        onChange={handleChange}
+                      >
+                        <option value="">...</option>
+                        {docType &&
+                          docType.map((type) => (
+                            <option key={type.id} value={type.name}>
+                              {type.name}
+                            </option>
+                          ))}
+                      </select>
+                      <input
+                        {...register("versionNumber", { required: true })}
+                        type="text"
+                        placeholder="00..."
+                        onKeyUp={handleChange}
+                        className="form-control medium-rounded-right  "
+                      />
+                    </div>
+                  </>
+                )}
               </div>
               <div className="col-12 row">
                 <div className="col-4">

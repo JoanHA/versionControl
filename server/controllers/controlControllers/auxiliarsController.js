@@ -10,7 +10,7 @@ const nodemailer = require("nodemailer");
 //Obtener las iniciales y los tipos de documento
 const getCodeLetters = async (req, res) => {
   const sql =
-    "SELECT paramtype_id,name,id FROM params WHERE paramtype_id = 4 OR paramtype_id=5 AND status =1";
+    "SELECT paramtype_id,name,id FROM params WHERE status = 1 AND (paramtype_id = 4 OR paramtype_id=5 ); ";
   try {
     const response = await db.query(sql);
     res.send(response);
@@ -21,7 +21,10 @@ const getCodeLetters = async (req, res) => {
 //obtener los procesos y tipologias de la base de datos
 const getProcessAndTypologies = async (req, res) => {
   const sql = `
-  SELECT paramtype_id,name,id FROM params WHERE paramtype_id = 2 OR paramtype_id=3 AND status =1
+  SELECT paramtype_id, name, id
+FROM params
+WHERE status = 1 AND (paramtype_id = 2 OR paramtype_id = 3);
+
   `;
 
   try {

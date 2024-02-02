@@ -7,12 +7,14 @@ const {
   getArchivedInfo,
   getChanges,
   getArchived,
+  getExternals,
 } = require("../../controllers/controlControllers/changesController");
 
-router.post("/", createChange);
+router.get("/externals",getExternals);
 router.get("/archived",getArchived)
-router.get("/:code", getChangesFromOne);
 router.get("/archived/:code", getArchivedInfo);
+router.get("/:code", getChangesFromOne);
+router.post("/", createChange);
 router.get("/", getChanges);
 
 

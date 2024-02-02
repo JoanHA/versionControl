@@ -17,4 +17,6 @@ export const getChanges = ()=> axios.get(URI+"changes")
 export const getInformation = (code)=>axios.get(URI+`changes/archived/${code}`);
 
 //Traer todos los datos 
-export const getArchived = ()=>axios.get(URI+"changes/archived")
+export const getArchived = ()=>axios.get(URI+"changes/archived");
+//Traer todos los datos externos
+export const getExternal = ()=>axios.get(URI+"changes/externals");

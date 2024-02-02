@@ -22,6 +22,7 @@ import Users from "./pages/admin/Users";
 import AdminWelcome from "./pages/admin/AdminWelcome";
 import { ProtectedRoute } from "./Auth/ProtectedRoute";
 import EditUser from "./pages/admin/EditUser";
+import External from "./pages/control/External";
 function App() {
   return (
     <div>
@@ -38,6 +39,10 @@ function App() {
               <Route path="/newDoc" element={<CreateDocument />}></Route>
               <Route path="document/:id" element={<ViewDocument />}></Route>
               <Route path="/createChange" element={<CreateChange />}></Route>
+              <Route
+                path="/createChange/:code"
+                element={<CreateChange />}
+              ></Route>
               <Route path="/createControl" element={<CreateControl />}></Route>
               <Route
                 path="/createControl/:code"
@@ -92,6 +97,7 @@ function App() {
               <Route path="/edit/:id" element={<CreateDocument />}></Route>
               <Route path="/changes" element={<ViewChanges />}></Route>
               <Route path="/control" element={<ViewControl />}></Route>
+              <Route path="/external" element={<External />}></Route>
               <Route path="*" element={<Not_Found />}></Route>
             </Routes>
           </Header>

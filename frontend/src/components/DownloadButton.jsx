@@ -68,9 +68,10 @@ function DownloadButton({ data = [], filter, info }) {
             10,
             x + 60
           );
+          const VALORCOMMENTS = info?.comments ? info.comments:""
           const Options = { maxWidth: 180 };
           const observacionHeight = doc.getTextDimensions(
-            info?.comments,
+            VALORCOMMENTS,
             Options
           ).h;
           doc.text(`OBSERVACIÓN: ${info?.comments}`, 10, x + 70, Options);
