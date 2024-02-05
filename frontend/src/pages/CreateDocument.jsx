@@ -69,57 +69,70 @@ function CreateDocument() {
     setTypologies(typology);
   };
   const onSubmit = async (values) => {
-    if (params.id) {
-      values.process = values.processSelect;
-      values.typology = values.typologySelect;
-      values.last_revision = values.date;
-      delete values.typologySelect;
-      delete values.processSelect;
-      delete values.date;
-      try {
-        const res = await updateDocument(values);
-        if (res.status === 200) {
-          swal.fire(res.data, "", "success").then(() => {
-            reset();
-          });
+    Swal.fire({
+      title: "Estas seguro de esta acción?",
+      text: "No serás capaz de revertir esta acción!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, hazlo!"
+    }).then(async(result) => {
+      if (result.isConfirmed) {
+        if (params.id) {
+          values.process = values.processSelect;
+          values.typology = values.typologySelect;
+          values.last_revision = values.date;
+          delete values.typologySelect;
+          delete values.processSelect;
+          delete values.date;
+          try {
+            const res = await updateDocument(values);
+            if (res.status === 200) {
+              swal.fire(res.data, "", "success").then(() => {
+                reset();
+              });
+            }
+          } catch (error) {
+            console.log(error);
+            swal.fire("Tuvimos un error intenta mas tarde!", "", "error");
+          }
+    
+          return;
         }
-      } catch (error) {
-        console.log(error);
-        swal.fire("Tuvimos un error intenta mas tarde!", "", "error");
+    
+        if (!proValue) {
+          return swal.fire("El campo proceso es obligatorio", "", "info");
+        }
+        if (!typeValue) {
+          return swal.fire("El campo tipologia es obligatorio", "", "info");
+        }
+        const data = {
+          code: values.codeLetter + values.processInitials + values.versionNumber,
+          comments: values.comments,
+          last_revision: values.date,
+          process: proValue,
+          typology: typeValue,
+          name: values.name,
+          link: values.link,
+          version: 1,
+        };
+        try {
+          const response = await createDocument(data);
+          if (response.status === 200) {
+            swal.fire(response.data, "", "success").then(() => {
+              reset();
+              handleProcessChange();
+              handleTypoChange();
+            });
+          }
+        } catch (error) {
+          swal.fire(error.response.data, "", "error");
+          console.log(error);
+        }
       }
-
-      return;
-    }
-
-    if (!proValue) {
-      return swal.fire("El campo proceso es obligatorio", "", "info");
-    }
-    if (!typeValue) {
-      return swal.fire("El campo tipologia es obligatorio", "", "info");
-    }
-    const data = {
-      code: values.codeLetter + values.processInitials + values.versionNumber,
-      comments: values.comments,
-      last_revision: values.date,
-      process: proValue,
-      typology: typeValue,
-      name: values.name,
-      link: values.link,
-      version: 1,
-    };
-    try {
-      const response = await createDocument(data);
-      if (response.status === 200) {
-        swal.fire(response.data, "", "success").then(() => {
-          reset();
-          handleProcessChange();
-          handleTypoChange();
-        });
-      }
-    } catch (error) {
-      swal.fire(error.response.data, "", "error");
-      console.log(error);
-    }
+    });
+   
   };
 
   const handleProcessChange = (event) => {
@@ -185,7 +198,7 @@ function CreateDocument() {
     <>
       <div>
         <Masived></Masived>
-        <div className="titleHeader text-center py-1">
+        <div className="titleHeader text-center ">
           {params.id ? "Edición" : "Registro"} de documentos
         </div>
         <div>
@@ -394,7 +407,7 @@ function CreateDocument() {
                 className="shadow btn btn-success   my-2 col-12"
                 style={{ maxWidth: "230px" }}
               >
-                Registrar documento
+                {params.id ? "Editar" : "Registrar"} documento
               </button>
               {params.id ? (
                 ""

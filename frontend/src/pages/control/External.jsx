@@ -4,7 +4,7 @@ import Table from '../../components/Table';
 function External() {
     const columns = [
         {
-          header: "Codigo",
+          header: "Código",
           accessorKey: "code",
         },
         {
@@ -20,7 +20,7 @@ function External() {
           accessorKey: "saved_format",
         },
         {
-          header: "Disposicion final",
+          header: "Disposición final",
           accessorKey: "last_move_name",
         },
       ];
@@ -30,14 +30,14 @@ function External() {
         const getData = async () => {
           const res = await getExternal();
           setData(res.data);
-          console.log(res.data)
+
     
         };
         getData();
       }, []);
       return (
         <div>
-                <div className="titleHeader py-1">Documentos externos</div>
+                <div className="titleHeader">Documentos externos</div>
     
           <Table
             columns={columns}

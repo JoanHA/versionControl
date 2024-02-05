@@ -5,15 +5,18 @@ function Archived({ doc, text }) {
   const [info, setInfo] = useState({});
   const [isEmpty, setIsEmpty] = useState(false);
   const [id, setId] = useState("");
+
+  //This is for getting the data aboout where it's archived
   const getInfo = async () => {
     try {
-      // const res = await getInformation(doc.code);
-      // setInfo(res.data[0]);
-      // console.log(doc)
-      setInfo(doc)
       if (!doc) {
         return setIsEmpty(true);
       }
+      if (doc.code) {
+        const res = await getInformation(doc.code);
+        return setInfo(res.data[0]);
+      }
+      setInfo(doc);
     } catch (error) {
       console.log(error);
     }
@@ -51,11 +54,11 @@ function Archived({ doc, text }) {
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
       >
-        <div className="modal-dialog" style={{maxWidth:"800px"}}>
+        <div className="modal-dialog" style={{ maxWidth: "800px" }}>
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="exampleModalLabel">
-                <strong>Documento {doc.code ? doc.code:"Externo"}</strong>
+                <strong>Documento {doc.code ? doc.code : "Externo"}</strong>
               </h1>
               <button
                 type="button"
@@ -69,7 +72,6 @@ function Archived({ doc, text }) {
               {isEmpty ? (
                 <div>
                   <h2>
-                    {" "}
                     <strong>
                       Este documento aun no tiene lugar de archivo
                     </strong>
@@ -81,13 +83,17 @@ function Archived({ doc, text }) {
                     <label>
                       <strong>Nombre del documento</strong>
                     </label>
-                    <label htmlFor="">{doc.name}</label>
+                    <label htmlFor="">
+                      {doc.name ? doc.name : doc.documentName}
+                    </label>
                   </div>
                   <div className="col-6 d-flex flex-column">
                     <label>
                       <strong>Responsable</strong>
                     </label>
-                    <label htmlFor="">{info.responsible}</label>
+                    <label htmlFor="">
+                      {info.responsible ? info.responsible : ""}
+                    </label>
                   </div>
                   <div className="col-6 d-flex flex-column">
                     <label>

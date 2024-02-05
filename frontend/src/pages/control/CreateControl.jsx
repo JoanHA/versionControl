@@ -147,7 +147,7 @@ function CreateControl({ desactivate = null }) {
             <div className="row gap-3">
               <div className="row mb-2">
                 <div className="col-4  py-2">
-                  <label htmlFor="">Codigo de registro</label>
+                  <label htmlFor="">Código de registro</label>
                 </div>
                 {params.code ? (
                   <>

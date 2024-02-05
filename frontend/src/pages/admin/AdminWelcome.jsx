@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../../assets/CSS/dashboard.css";
-import { useAuth } from "../../context/AuthContext";
 import adminLogo from "../../assets/IMG/admin.jpg";
-import { Link } from "react-router-dom";
 import { LastModified, MostModified } from "../../api/parameters";
 import ReactTimeAgo from "react-time-ago";
 function AdminWelcome() {
@@ -37,9 +35,7 @@ function AdminWelcome() {
             Panel de control
           </h3>
           <p style={{ color: "white", fontWeight: "500" }}>
-            Aqui podras, agregar editar y eliminar los usuarios que tienen
-            permisos de administrador, tus tipos de documentos , procesos y
-            tipologias que manejas{" "}
+          Aquí podrás agregar, editar y eliminar a los usuarios que tienen permisos de administrador, así como tus tipos de documentos, procesos y tipologías que manejas.
           </p>
         </div>
       </header>

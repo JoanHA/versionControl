@@ -178,16 +178,14 @@ function Table({
                   <>
                     <td className="" colSpan={2}>
                       <div className="d-flex flex-wrap gap-1 ">
-                        {
-                          <Link
-                            to={`/${editType ? editType : "edit"}/${
-                              row.original.id
-                            }`} // this has to have the id of the row
-                            className="btn btn-primary btn-sm flex-fill"
-                          >
-                            Editar
-                          </Link>
-                        }
+                        <Link
+                          to={`/${editType ? editType : "edit"}/${
+                            row.original.id
+                          }`} // this has to have the id of the row
+                          className="btn btn-primary btn-sm flex-fill"
+                        >
+                          Editar
+                        </Link>
                       </div>
                     </td>
                   </>
@@ -203,14 +201,20 @@ function Table({
                           Ver
                         </Link>
                         {isAuthenticated && (
-                          <Link
-                            to={`/${editType ? editType : "edit"}/${
-                              row.original.id
-                            }`} // this has to have the id of the row
-                            className="btn btn-primary btn-sm flex-fill"
-                          >
-                            Editar
-                          </Link>
+                          <>
+                            {data[row.id].version !== "OBSOLETO" && (
+                              <>
+                                <Link
+                                  to={`/${editType ? editType : "edit"}/${
+                                    row.original.id
+                                  }`} // this has to have the id of the row
+                                  className="btn btn-primary btn-sm flex-fill"
+                                >
+                                  Editar
+                                </Link>
+                              </>
+                            )}
+                          </>
                         )}
                       </div>
                     </td>

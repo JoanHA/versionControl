@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Table from "../components/Table";
 import { getAllDocuments } from "../api/documentsAPI";
 import { convertNumber } from "../lib/helper";
-import { useAuth } from "../context/AuthContext";
 function Documents() {
   const [data, setData] = useState([]);
   useEffect(() => {
@@ -10,14 +9,14 @@ function Documents() {
       const res = await getAllDocuments();
 
       const CleanData = convertNumber(res.data);
-
+  
       setData(CleanData);
     };
     getdata();
   }, []);
   const columns = [
     {
-      header: "Codigo",
+      header: "Código",
       accessorKey: "code",
     },
     {
@@ -33,7 +32,7 @@ function Documents() {
       accessorKey: "process_name",
     },
     {
-      header: "Version",
+      header: "Versión",
       accessorKey: "version",
     },
     {
@@ -43,7 +42,7 @@ function Documents() {
   ];
   return (
     <div>
-      <div className="titleHeader text-center py-2">Listado maestro</div>
+      <div className="titleHeader text-center py-1">Listado maestro</div>
       <div>
         <Table columns={columns} data={data} ></Table>
       </div>

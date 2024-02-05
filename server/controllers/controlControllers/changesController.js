@@ -30,7 +30,6 @@ const createChange = async (req, res) => {
     res.status(500).send("No podemos");
   }
 };
-
 const getChangesFromOne = async (req, res) => {
   const code = req.params.code;
   try {
@@ -42,7 +41,6 @@ const getChangesFromOne = async (req, res) => {
     res.status(404).send("NO PUDIMOS REALIZAR ESA ACCION");
   }
 };
-
 const getArchivedInfo = async (req, res) => {
   const code = req.params.code;
   const sql = `SELECT storages.*,
@@ -86,7 +84,6 @@ const getExternals = async (req,res)=>{
   "SELECT storages.*, (SELECT name FROM documents WHERE documents.code = storages.code) AS name, (SELECT name from params WHERE params.id = storages.last_move) AS last_move_name FROM storages WHERE storages.external = 1";
 try {
   const response = await db.query(sql);
-  console.log("LLegop aca")
   res.json(response);
 } catch (error) {
   console.log(error);

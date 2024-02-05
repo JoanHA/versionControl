@@ -34,7 +34,7 @@ function CreateChange() {
         values.status = values.status === true ? 3 : 1;
         values.new_version = values.status === 1 ? selectedDoc.version + 1 : 0;
         values.code = params.code ? params.code : selectedDoc.code;
-        console.log(values);
+     
         try {
           const res = await createChange(values);
           if (res.status === 200) {

@@ -5,7 +5,7 @@ import { getChanges } from "../../api/changes";
 function ViewChanges() {
   const columns = [
     {
-      header: "Codigo",
+      header: "Código",
       accessorKey: "code",
     },
     {
@@ -21,7 +21,7 @@ function ViewChanges() {
       accessorKey: "reason",
     },
     {
-      header: "Nueva version",
+      header: "Nueva versión",
       accessorKey: "new_version",
     },
     {
@@ -48,7 +48,7 @@ function ViewChanges() {
   }, []);
   return (
     <div>
-      <div className="titleHeader py-1">Cambios realizados</div>
+      <div className="titleHeader ">Cambios realizados</div>
       <Table 
         columns={columns}
         data={data} 

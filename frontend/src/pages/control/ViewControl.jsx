@@ -6,11 +6,11 @@ import { getArchived } from "../../api/changes";
 function ViewControl() {
   const columns = [
     {
-      header: "Codigo",
+      header: "Código",
       accessorKey: "code",
     },
     {
-      header: "responsable",
+      header: "Responsable",
       accessorKey: "responsible",
     },
     {
@@ -22,7 +22,7 @@ function ViewControl() {
       accessorKey: "saved_format",
     },
     {
-      header: "Disposicion final",
+      header: "Disposición final",
       accessorKey: "last_move_name",
     },
   ];
@@ -38,7 +38,7 @@ function ViewControl() {
   }, []);
   return (
     <div>
-            <div className="titleHeader py-1">Retención documental</div>
+            <div className="titleHeader ">Retención documental</div>
 
       <Table
         columns={columns}

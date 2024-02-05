@@ -21,7 +21,7 @@ function Users() {
       accessorKey: "statusName",
     },
     {
-      header: "Creacion",
+      header: "Creación",
       accessorKey: "created_at",
     },
   ];

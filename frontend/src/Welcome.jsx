@@ -13,7 +13,7 @@ function Welcome() {
   return (
     <div>
       <div className="titleHeader w-100 text-center p-2">
-        Bienvenido al sistemas de control de archivos
+        Bienvenido al sistema de control de archivos
       </div>
       <div className="d-flex flex-row justify-content-evenly flex-wrap align-items-center">
         <div className="linksContainer mt-5">
