@@ -68,7 +68,7 @@ function Parameters() {
     <div>
       <AddParams name={name} typeid={typeId} callback={getAll} id={id} value={value} />
       <div className="titleHeader">Gestión de parametros</div>
-      <div className="row gap-2 justify-content-center">
+      <div className="row gap-2 justify-content-center" id="insider">
         <div className="col-lg-5 col-sm-12">
           <div className="">
             <div className="paramTitle">

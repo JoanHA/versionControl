@@ -7,6 +7,7 @@ import Archived from "./control/Archived";
 import HistoricTable from "../components/HistoricTable";
 import { getChangesFromOne } from "../api/changes";
 import { useAuth } from "../context/AuthContext";
+import { formatTimeStamp } from "../lib/helper";
 function ViewDocument() {
   const params = useParams();
   const [isRegister, setIsRegister] = useState(false);
@@ -172,6 +173,10 @@ function ViewDocument() {
         <div className="col-12 col-md-5">
           <label className="titleLabel">Estado: </label>
           <label className="inputLabel"> {data.status_name}</label>
+        </div>
+        <div className="col-12 col-md-5">
+          <label className="titleLabel">Fecha de creación: </label>
+          <label className="inputLabel"> { formatTimeStamp(data.created_at)}</label>
         </div>
       </div>
       <div className="titleHeader text-center py-1 mt-3">

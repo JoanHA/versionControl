@@ -1,14 +1,44 @@
 export const convertNumber = (object) => {
   const newObject = [];
   object.forEach((d) => {
-    d.last_revision = formatTimeStamp(d.last_revision);
-    if (d.version === 0) {
-      d.version = "OBSOLETO";
+    try {
+      d.last_revision = formatTimeStamp(d.last_revision);
+   
+        if (d.version === 0) {
+          d.version = "OBSOLETO";
+          return newObject.push(d);
+        }
+        if (d.version < 10) {
+          d.version = `0${d.version}`;
+          return newObject.push(d);
+        }
+      
+
       return newObject.push(d);
+    } catch (error) {
+      console.log(error);
     }
-    if (d.version < 10) {
-      d.version = `0${d.version}`;
+  });
+  return newObject;
+};
+export const convertChangesVersion = (object) => {
+  const newObject = [];
+  object.forEach((d) => {
+    try {
+      d.created_at = formatTimeStamp(d.created_at);
+
+      if (d.new_version === 0) {
+        d.new_version = "OBSOLETO";
+        return newObject.push(d);
+      }
+      if (d.new_version < 10) {
+        d.new_version = `0${d.new_version}`;
+        return newObject.push(d);
+      }
+
       return newObject.push(d);
+    } catch (error) {
+      console.log(error);
     }
   });
   return newObject;

@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
-import uniqid from 'uniqid';
-function ChangeDetails({infor}) {
+import uniqid from "uniqid";
+import { formatTimeStamp } from "../../lib/helper";
+function ChangeDetails({ infor }) {
+  const [info, setInfo] = useState({});
+  const [id, setId] = useState("");
 
-const [info ,setInfo] = useState({})
-const [id,setId] = useState("")
-
-useEffect(()=>{
-    setInfo(infor)
-    setId(uniqid())
-},[])
+  useEffect(() => {
+    setInfo(infor);
+    setId(uniqid());
+  }, []);
   const onClick = () => {
     //Cerrar modal
     document.getElementById(id).classList.add("d-none");
@@ -27,7 +27,7 @@ useEffect(()=>{
           document.getElementById(id).style.opacity = 1;
         }}
       >
-    Detalles
+        Detalles
       </button>
 
       <div
@@ -35,7 +35,7 @@ useEffect(()=>{
         id={id} //exampleModal
         tabIndex="-1"
       >
-        <div className="modal-dialog   modal-dialog-scrollable">
+        <div className="modal-dialog   modal-dialog-scrollable" style={{maxWidth:"670px"}}>
           <div className="modal-content mt-5">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="exampleModalLabel">
@@ -48,45 +48,50 @@ useEffect(()=>{
               ></button>
             </div>
             <div className="modal-body">
-              
-                <div className="row">
-                  <div className="col-6 d-flex flex-column">
-                    <label>
-                      <strong>Nombre del documento</strong>
-                    </label>
-                    <label htmlFor="">{info.name}</label>
-                  </div>
-                  <div className="col-6 d-flex flex-column">
-                    <label>
-                      <strong>Solicitante</strong>
-                    </label>
-                    <label htmlFor="">{info.claimant}</label>
-                  </div>
-                  <div className="col-6 d-flex flex-column">
-                    <label>
-                      <strong>Justificación</strong>
-                    </label>
-                    <label htmlFor="">{info.reason}</label>
-                  </div>
-                  <div className="col-6 d-flex flex-column">
-                    <label>
-                      <strong>Nueva versión</strong>
-                    </label>
-                    <label htmlFor="">{info.new_version}</label>
-                  </div>
-                  <div className="col-6 d-flex flex-column">
-                    <label>
-                      <strong>Aprueba</strong>
-                    </label>
-                  <label htmlFor="">{info.aproved_by}</label>
-                  </div>
-                  <div className="col-6 d-flex flex-column">
-                    <label>
-                      <strong>Detalles</strong>
-                    </label>
-                    <label htmlFor="">{info.details}</label>
-                  </div>
+              <div className="row ">
+                <div className="col-6 d-flex flex-column my-1">
+                  <label>
+                    <strong>Nombre del documento</strong>
+                  </label>
+                  <label htmlFor="">{info.name}</label>
                 </div>
+                <div className="col-6 d-flex flex-column">
+                  <label>
+                    <strong>Solicitante</strong>
+                  </label>
+                  <label htmlFor="">{info.claimant}</label>
+                </div>
+                <div className="col-6 d-flex flex-column my-1">
+                  <label>
+                    <strong>Justificación</strong>
+                  </label>
+                  <label htmlFor="">{info.reason}</label>
+                </div>
+                <div className="col-6 d-flex flex-column">
+                  <label>
+                    <strong>Nueva versión</strong>
+                  </label>
+                  <label htmlFor="">{info.new_version}</label>
+                </div>
+                <div className="my-1 col-6 d-flex flex-column">
+                  <label>
+                    <strong>Aprueba</strong>
+                  </label>
+                  <label htmlFor="">{info.aproved_by}</label>
+                </div>
+                <div className="col-6 d-flex flex-column">
+                  <label>
+                    <strong>Realizado el:</strong>
+                  </label>
+                  <label htmlFor="">{ formatTimeStamp(info.created_at)}</label>
+                </div>
+                <div className="col-6 d-flex flex-column">
+                  <label>
+                    <strong>Detalles</strong>
+                  </label>
+                  <label htmlFor="">{info.details}</label>
+                </div>
+              </div>
             </div>
             <div className="modal-footer">
               <button
@@ -96,7 +101,6 @@ useEffect(()=>{
               >
                 Cerrar
               </button>
-            
             </div>
           </div>
         </div>

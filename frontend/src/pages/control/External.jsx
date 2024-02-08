@@ -3,12 +3,9 @@ import { getExternal } from '../../api/changes';
 import Table from '../../components/Table';
 function External() {
     const columns = [
+       
         {
-          header: "Código",
-          accessorKey: "code",
-        },
-        {
-          header: "responsable",
+          header: "Responsable",
           accessorKey: "responsible",
         },
         {

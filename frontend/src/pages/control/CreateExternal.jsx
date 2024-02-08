@@ -23,10 +23,11 @@ function CreateExternal() {
         values.last_move = selectedMove;
         values.external = 1;
         values.status = 1;
+        values.external = 1
         try {
           const res = await createExternal(values);
           if (res.status === 200) {
-            swal.fire(res.data, "", "succes").then(() => {
+            swal.fire(res.data, "", "success").then(() => {
               reset();
             });
           }

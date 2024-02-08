@@ -61,7 +61,7 @@ const getArchivedInfo = async (req, res) => {
 };
 const getChanges = async (req, res) => {
   const sql =
-    "SELECT changes.*, (SELECT name FROM documents WHERE documents.code = changes.code) AS name FROM changes";
+    "SELECT * FROM changes";
   try {
     const response = await db.query(sql);
     res.send(response);
@@ -71,7 +71,7 @@ const getChanges = async (req, res) => {
 };
 const getArchived = async (req, res) => {
   const sql =
-    "SELECT storages.*, (SELECT name FROM documents WHERE documents.code = storages.code) AS name, (SELECT name from params WHERE params.id = storages.last_move) AS last_move_name FROM storages WHERE external <> 1";
+    "SELECT storages.*, (SELECT name FROM documents WHERE documents.code = storages.code) AS name, (SELECT name from params WHERE params.id = storages.last_move) AS last_move_name FROM storages WHERE external = 2";
   try {
     const response = await db.query(sql);
     res.json(response);

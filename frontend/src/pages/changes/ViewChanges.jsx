@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Table from "../../components/Table";
 import { getChanges } from "../../api/changes";
+import { convertChangesVersion, convertNumber } from "../../lib/helper";
 
 function ViewChanges() {
   const columns = [
@@ -33,15 +34,7 @@ function ViewChanges() {
   useEffect(() => {
     const getData = async () => {
       const res = await getChanges();
-  
-      //Agregarle el 0 a la version del equipo
-      const datos = res.data.map((element) => {
-        const e = { ...element };
-        e.new_version =
-          e.new_version < 10 ? `0${e.new_version}` : e.new_version;
-        return e;
-      });
-
+      const datos = convertChangesVersion(res.data);
       setData(datos);
     };
     getData();

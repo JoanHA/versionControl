@@ -68,6 +68,8 @@ const makeDocument = async (req, res) => {
 const createControl = async (req, res) => {
   const data = req.body;
   data.status = 1;
+  data.external = 2
+  console.log(data)
   const sql = `INSERT INTO storages SET ? `;
   try {
     const response = await db.query(sql, [data]);

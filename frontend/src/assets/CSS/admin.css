@@ -11,16 +11,23 @@ background-color: black;
   box-shadow: 5px 0 10px #d3d3d3;
 }
 .navOpen {
-  width: 77% !important;
-  position: relative !important;
-  left: 250px !important;
+  width: 77% ;
+  position: relative ;
+  left: 250px ;
 }
 .navClose{
   width: 100% !important;
   position: relative !important;
   left: 0 !important;
 }
-@media (max-width: 1181px) {
+#insider{
+  scroll-behavior: smooth;
+  overflow-y: scroll;
+  max-height: 85vh;
+  padding: 5px;
+  margin: 10px;
+}
+@media (max-width: 1271px) {
   .AdminSidebar {
     top: 0;
   }

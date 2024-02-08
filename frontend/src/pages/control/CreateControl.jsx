@@ -42,6 +42,7 @@ function CreateControl({ desactivate = null }) {
     }).then(async (result) => {
       if (result.isConfirmed) {
         values.last_move = selectedMove;
+        values.external = 2;
         values.code = params.code
           ? params.code
           : `${values.codeLetter}${values.processInitials}${values.versionNumber}`;

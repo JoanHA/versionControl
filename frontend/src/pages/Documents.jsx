@@ -7,9 +7,7 @@ function Documents() {
   useEffect(() => {
     const getdata = async () => {
       const res = await getAllDocuments();
-
       const CleanData = convertNumber(res.data);
-  
       setData(CleanData);
     };
     getdata();

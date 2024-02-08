@@ -7,24 +7,39 @@ function Sidebar() {
 
   useEffect(() => {
     setPathname(history.pathname);
-    changeSize()
+     changeSize()
   }, [history]);
 
   const changeSize = ()=>{
-    if (innerWidth <= 1181) {
+    
+    if (window.outerWidth <= 1271) {
+      
       if (
         pathname.split("/")[1] != "admin" &&
         pathname.split("/")[1] != "editUser"
       ) {
+        console.log("cambia")
         document.querySelector("#navHeader")?.classList?.add("navClose");
-      } else {
+        return
+      }else{
         document.querySelector("#navHeader")?.classList?.remove("navClose");
-        document.querySelector("#navHeader")?.classList?.add("navOpen");
+        document.querySelector("#navHeader")?.classList?.remove("navOpen");
+        return
       }
     }
+    if (
+      pathname.split("/")[1] != "admin" &&
+      pathname.split("/")[1] != "editUser"
+    ) {
+      document.querySelector("#navHeader")?.classList?.add("navClose");
+    }else{
+      document.querySelector("#navHeader")?.classList?.remove("navClose");
+      return
+    }
+
   }
   window.addEventListener("resize", () => {
-    changeSize()
+     changeSize()
   });
   const classNameRender = () => {
     if (

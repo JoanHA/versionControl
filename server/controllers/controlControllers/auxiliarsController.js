@@ -86,7 +86,7 @@ const getId = async (string, type) => {
     }
     const lastID = params[params.length - 1].id;
     const newParam = {
-      id: lastID + 1,
+      id: lastID + 10,
       name: string,
       paramtype_id: type,
       status: 1,
@@ -97,6 +97,15 @@ const getId = async (string, type) => {
     console.log(error);
     return 2;
   }
+};
+
+const convertRichText = (arrayText) => {
+  var text = "";
+
+  arrayText.forEach((objectText) => {
+    text = text.concat(" ", objectText.text);
+  });
+  return text;
 };
 const createMasive = async (req, res) => {
   try {
@@ -125,9 +134,6 @@ const createMasive = async (req, res) => {
 
       jsonData[`Sheet${sheetId}`] = sheetData;
     });
-    const MasterList = [];
-    const changes = [];
-    const retention = [];
 
     //Guardar listado maestro
     for (let i = 4; i < jsonData.Sheet1.length; i++) {
@@ -155,9 +161,14 @@ const createMasive = async (req, res) => {
         code: `${dato.column1 ? dato.column1 : null}${
           dato.column2 ? dato.column2 : null
         }${dato.column3 ? dato.column3 : null}`,
+        name: dato.column4 ? dato.column4 : null,
         claimant: dato.column5 ? dato.column5 : null,
         reason: dato.column6 ? dato.column6 : null,
-        details: dato.column7 ? dato.column7 : null,
+        details: dato.column7
+          ? dato.column7.richText
+            ? convertRichText(dato.column7.richText)
+            : dato.column7
+          : null,
         aproved_by: dato.column9 ? dato.column9 : null,
         new_version: dato.column8
           ? isNaN(parseInt(dato.column8))
@@ -171,7 +182,7 @@ const createMasive = async (req, res) => {
       ]);
     }
 
-    //guargar control de registros
+    //guardar control de registros
     for (let i = 4; i < jsonData.Sheet5.length; i++) {
       const dato = jsonData.Sheet5[i];
       const retentiondata = {
@@ -182,10 +193,33 @@ const createMasive = async (req, res) => {
         actived_saved: dato.column7 ? dato.column7 : null,
         inactived_saved: dato.column8 ? dato.column8 : null,
         last_move: dato.column9 ? await getId(dato.column9, 1) : null,
+       
         status: 1,
+        external: 2,
       };
+
       const resControl = await db.query("INSERT INTO storages SET ?", [
         retentiondata,
+      ]);
+    }
+    //guardar registros externos
+    for (let i = 2; i < jsonData.Sheet9.length; i++) {
+      const dato = jsonData.Sheet9[i];
+      const externalData = {
+        documentName: dato.column1 ? dato.column1 : null,
+        responsible: dato.column2 ? dato.column2 : null,
+        saved_in: dato.column3 ? dato.column3 : null,
+        saved_format: dato.column4 ? dato.column4 : null,
+        actived_saved: dato.column5 ? dato.column5 : null,
+        inactived_saved: dato.column6 ? dato.column6 : null,
+        last_move: dato.column7 ? await getId(dato.column7) : null,
+        status: 1,
+        external: 1,
+      };
+
+
+      const resExternal = await db.query("INSERT INTO storages SET ?", [
+        externalData,
       ]);
     }
 
