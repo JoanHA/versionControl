@@ -10,6 +10,7 @@ function AdminWelcome() {
     const getData = async () => {
       const lastModifiedRes = await LastModified();
       const mostModifiedRes = await MostModified();
+      console.log(mostModifiedRes)
       var color = "green";
       const modified = mostModifiedRes.data.map((m) => {
         m.color = color;
@@ -69,7 +70,8 @@ function AdminWelcome() {
                 </div>
                 <div className="card-body">
                   <div className="card-text">
-                    {last ? (
+                 
+                    {last.length < 0 ? (
                       <div className="d-flex gap-2 flex-column align-items-between justify-content-evenly">
                         {last.map((e) => (
                           <>
@@ -112,7 +114,7 @@ function AdminWelcome() {
                 </div>
                 <div className="card-body">
                   <div className="d-flex flex-column gap-2">
-                    {most ? (
+                    {most.length > 0 ? (
                       most.map((e) => (
                         <>
                           <div key={e.code}>
