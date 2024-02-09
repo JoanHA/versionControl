@@ -30,7 +30,6 @@ function CreateChange() {
       confirmButtonText: "Si, guardar!",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        delete values.name;
         values.status = values.status === true ? 3 : 1;
         values.new_version = values.status === 1 ? selectedDoc.version + 1 : 0;
         values.code = params.code ? params.code : selectedDoc.code;

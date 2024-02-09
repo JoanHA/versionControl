@@ -14,6 +14,9 @@ function Archived({ doc, text }) {
       }
       if (doc.code) {
         const res = await getInformation(doc.code);
+        if (res.data.status === 404) {
+          return setIsEmpty(true);
+        }
         return setInfo(res.data[0]);
       }
       setInfo(doc);
@@ -78,6 +81,7 @@ function Archived({ doc, text }) {
                   </h2>
                 </div>
               ) : (
+              
                 <div className="row">
                   <div className="col-6 d-flex flex-column">
                     <label>

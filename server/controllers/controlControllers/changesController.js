@@ -9,6 +9,7 @@ const createChange = async (req, res) => {
     reason,
     new_version,
     details,
+    name
   } = req.body);
   const last_revision = new Date().toISOString();
 
