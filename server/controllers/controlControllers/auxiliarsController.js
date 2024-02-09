@@ -156,8 +156,8 @@ const createMasive = async (req, res) => {
         comments: dato.column10 ? dato.column10 : null,
         status: 1,
       };
-      console.log(listData.last_revision);
-      // const resList = await db.query("INSERT INTO documents SET ?", listData);
+
+      const resList = await db.query("INSERT INTO documents SET ?", listData);
     }
     //Guardar cambios
     for (let i = 4; i < jsonData.Sheet6.length; i++) {
@@ -182,9 +182,9 @@ const createMasive = async (req, res) => {
           : 0,
         status: 1,
       };
-      // const resChange = await db.query("INSERT INTO changes SET ?", [
-      //   changesData,
-      // ]);
+      const resChange = await db.query("INSERT INTO changes SET ?", [
+        changesData,
+      ]);
     }
 
     //guardar control de registros
@@ -203,9 +203,9 @@ const createMasive = async (req, res) => {
         external: 2,
       };
 
-      // const resControl = await db.query("INSERT INTO storages SET ?", [
-      //   retentiondata,
-      // ]);
+      const resControl = await db.query("INSERT INTO storages SET ?", [
+        retentiondata,
+      ]);
     }
     //guardar registros externos
     for (let i = 2; i < jsonData.Sheet9.length; i++) {
@@ -222,9 +222,9 @@ const createMasive = async (req, res) => {
         external: 1,
       };
 
-      // const resExternal = await db.query("INSERT INTO storages SET ?", [
-      //   externalData,
-      // ]);
+      const resExternal = await db.query("INSERT INTO storages SET ?", [
+        externalData,
+      ]);
     }
 
     res.send("Documentos creados correctamente");
