@@ -9,26 +9,31 @@ const createChange = async (req, res) => {
     reason,
     new_version,
     details,
-    name
+    name,
   } = req.body);
+
   const last_revision = new Date().toISOString();
-
+  const dateString = last_revision;
+  const dateWithoutMilliseconds = dateString.replace(/\.\d+Z$/, "Z");
+  const date = new Date(dateWithoutMilliseconds);
+  const formattedDate = date.toISOString().slice(0, 19).replace("T", " ");
+ //sql para actualizar
+  const sql = `UPDATE documents SET
+  version =${data.new_version},
+  last_revision='${formattedDate}',
+  status=${req.body.status} WHERE code = '${data.code}' `;
   try {
-
-
+  
     //Save change
     const response = await db.query("INSERT INTO changes SET ?", [data]);
 
     //Update the last version of the doc
-      const respuesta = await db.query(
-        `UPDATE documents SET version =${data.new_version},last_revision='${last_revision}', status=${req.body.status} WHERE code = '${data.code}' `
-      );
-    
-  
+    const respuesta = await db.query(sql);
+
     res.send("Datos Ingresados correctamente");
   } catch (error) {
     console.log(error);
-    res.status(500).send("No podemos");
+    res.status(500).send("No podemos realizar esa acción");
   }
 };
 const getChangesFromOne = async (req, res) => {
@@ -61,8 +66,7 @@ const getArchivedInfo = async (req, res) => {
   }
 };
 const getChanges = async (req, res) => {
-  const sql =
-    "SELECT * FROM changes";
+  const sql = "SELECT * FROM changes";
   try {
     const response = await db.query(sql);
     res.send(response);
@@ -80,17 +84,17 @@ const getArchived = async (req, res) => {
     console.log(error);
   }
 };
-const getExternals = async (req,res)=>{
+const getExternals = async (req, res) => {
   const sql =
-  "SELECT storages.*, (SELECT name FROM documents WHERE documents.code = storages.code) AS name, (SELECT name from params WHERE params.id = storages.last_move) AS last_move_name FROM storages WHERE storages.external = 1";
-try {
-  const response = await db.query(sql);
-  res.json(response);
-} catch (error) {
-  console.log(error);
-}
-}
-const createExternal = async(req,res)=>{
+    "SELECT storages.*, (SELECT name FROM documents WHERE documents.code = storages.code) AS name, (SELECT name from params WHERE params.id = storages.last_move) AS last_move_name FROM storages WHERE storages.external = 1";
+  try {
+    const response = await db.query(sql);
+    res.json(response);
+  } catch (error) {
+    console.log(error);
+  }
+};
+const createExternal = async (req, res) => {
   const data = req.body;
 
   const sql = `INSERT INTO storages SET ? `;
@@ -101,7 +105,7 @@ const createExternal = async(req,res)=>{
     console.log(error);
     res.status(400).send("No pudimos realizar esa acción, intenta mas tarde");
   }
-}
+};
 module.exports = {
   createChange,
   getChangesFromOne,
