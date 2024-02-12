@@ -71,7 +71,7 @@ function AdminView({ children }) {
             </div>
           </div>
         </div>
-        <div className="flex-fill" id="secondChild">
+        <div className="flex-fill" id="secondChild" style={{overflowX:"hidden"}}>
           <div className="">{children}</div>
         </div>
       </div>

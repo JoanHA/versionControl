@@ -156,7 +156,7 @@ const createMasive = async (req, res) => {
         comments: dato.column10 ? dato.column10 : null,
         status: 1,
       };
-
+console.log(listData)
       const resList = await db.query("INSERT INTO documents SET ?", listData);
     }
     //Guardar cambios

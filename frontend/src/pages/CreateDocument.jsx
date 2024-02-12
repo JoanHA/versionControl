@@ -11,7 +11,7 @@ import {
 } from "../api/documentsAPI";
 import SelectInput from "../components/Select";
 import { getProcessTypologies } from "../api/documentsAPI";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import AddButton from "../components/AddButton";
 import { formatDate } from "../lib/helper";
 import HistoricTable from "../components/HistoricTable";
@@ -36,6 +36,7 @@ function CreateDocument() {
   const [showControl, setShowControl] = useState(false);
   const [doc, setDoc] = useState({});
   const params = useParams();
+  const navigate = useNavigate();
 
   const fillSelects = async () => {
     const res = await getAuxiliars();
@@ -76,8 +77,8 @@ function CreateDocument() {
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Si, hazlo!"
-    }).then(async(result) => {
+      confirmButtonText: "Si, hazlo!",
+    }).then(async (result) => {
       if (result.isConfirmed) {
         if (params.id) {
           values.process = values.processSelect;
@@ -97,10 +98,10 @@ function CreateDocument() {
             console.log(error);
             swal.fire("Tuvimos un error intenta mas tarde!", "", "error");
           }
-    
+
           return;
         }
-    
+
         if (!proValue) {
           return swal.fire("El campo proceso es obligatorio", "", "info");
         }
@@ -108,7 +109,8 @@ function CreateDocument() {
           return swal.fire("El campo tipologia es obligatorio", "", "info");
         }
         const data = {
-          code: values.codeLetter + values.processInitials + values.versionNumber,
+          code:
+            values.codeLetter + values.processInitials + values.versionNumber,
           comments: values.comments,
           last_revision: values.date,
           process: proValue,
@@ -132,7 +134,6 @@ function CreateDocument() {
         }
       }
     });
-   
   };
 
   const handleProcessChange = (event) => {
@@ -188,10 +189,9 @@ function CreateDocument() {
   const showCreateControl = (e) => {
     console.log();
     if (e.target.value === "R-") {
-      setShowControl(true)
-    }else{
-      setShowControl(false)
-
+      setShowControl(true);
+    } else {
+      setShowControl(false);
     }
   };
   return (
@@ -204,7 +204,9 @@ function CreateDocument() {
         <div>
           <button
             className="btn btn-dark btn-sm mx-3 py-1"
-            onClick={() => history.back()}
+            onClick={() => {
+              params.id ? navigate(`/document/${params.id}`) : history.back();
+            }}
           >
             Volver
           </button>
@@ -329,7 +331,7 @@ function CreateDocument() {
                         {...register("typologySelect")}
                       >
                         {typologies.map((e) => (
-                          <option  key={e.value} value={e.value} >
+                          <option key={e.value} value={e.value}>
                             {e.label.toUpperCase()}
                           </option>
                         ))}
@@ -380,7 +382,7 @@ function CreateDocument() {
                     style={{
                       maxHeight: "200px",
                     }}
-                    {...register("comments", { required: true })}
+                    {...register("comments")}
                     className="form-control  rounded w-100 "
                     cols="30"
                     rows="2"
@@ -426,10 +428,8 @@ function CreateDocument() {
           </div>
         </form>
       </div>
-      <div>
-      
-      </div>
-      <div>{ showControl && <CreateControl  desactivate={true}/>}</div>
+      <div></div>
+      <div>{showControl && <CreateControl desactivate={true} />}</div>
     </>
   );
 }

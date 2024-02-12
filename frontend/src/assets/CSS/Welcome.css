@@ -49,3 +49,11 @@
   font-weight: 400;
   font-size: 18px;
 }
+
+/* Cuadro de años sin modificar */
+#links-container{
+  max-height: 210px !important ;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  padding: 0;
+}

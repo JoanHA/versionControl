@@ -2,6 +2,7 @@
 .big-cards {
   height: 300px;
   max-width: 300px !important;
+ z-index: 99 !important;
   margin-top: -6rem;
 }
 .dashboard-background {

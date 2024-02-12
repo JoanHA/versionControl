@@ -41,6 +41,20 @@ const lastModified = async (req, res) => {
   }
 };
 
+//Los documentos que sin modificar hace 2 años atras 
+const lastRevision = async (req,res)=>{
+  const sql =
+  "SELECT name,code,last_revision FROM documents WHERE last_revision < CURRENT_TIMESTAMP - INTERVAL 1 YEAR ORDER BY updated_at DESC LIMIT 20 ;";
+try {
+  const response = await db.query(sql);
+
+  res.send(response);
+} catch (error) {
+  console.log(error);
+  res.status(500).send(error);
+}
+}
+
 //Los documentos con mas modificaciones
 const mostModified = async (req, res) => {
   const sql =
@@ -95,4 +109,5 @@ module.exports = {
   getParams,
   editParam,
   deleteParam,
+  lastRevision
 };

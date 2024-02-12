@@ -209,7 +209,7 @@ function CreateChange() {
                 <strong>Detalles</strong>{" "}
               </label>
               <textarea
-                {...register("details", { required: true })}
+                {...register("details")}
                 cols="30"
                 rows="3"
                 className="form-control"

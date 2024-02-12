@@ -45,7 +45,17 @@ function Table({
   window.onresize = (e) => {
     setPageSize(window.innerWidth);
   };
+  const saveFilter = (e)=>{
+    const valor = e.target.value;
+    sessionStorage.setItem("filtering",valor);
+  }
   const { isAuthenticated } = useAuth();
+  
+useEffect(()=>{
+const value = (sessionStorage.getItem("filtering"))
+setFilteting(value)
+},[])
+
   useEffect(() => {
     if (window.innerWidth < 1148) {
       table.setPageSize(Number(5));
@@ -67,6 +77,7 @@ function Table({
             value={filtering}
             onChange={(e) => {
               setFilteting(e.target.value);
+              saveFilter(e);
             }}
           />
         </div>

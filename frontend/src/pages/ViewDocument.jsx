@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getOneDocument } from "../api/documentsAPI";
 import { Link } from "react-router-dom";
 import Archived from "./control/Archived";
@@ -14,7 +14,7 @@ function ViewDocument() {
 
   const [data, setData] = useState({});
   const [changes, setChanges] = useState([]);
-
+const navigate = useNavigate()
   const { isAuthenticated } = useAuth();
   const getData = async () => {
     const res = await getOneDocument(params.id);
@@ -76,7 +76,7 @@ function ViewDocument() {
         <button
           type="button"
           onClick={() => {
-            history.back();
+            navigate("/")
           }}
           className="btn btn-dark rounded btn-sm"
         >
@@ -166,7 +166,7 @@ function ViewDocument() {
 
           <label className="inputLabel">
             <a href={data.link} target="blank">
-              {data.link ? "VISITAR LINK" : "NO HAY LINK"}
+              {data.link ? (<label className="doc-link">VISITAR LINK</label>) : ""}
             </a>
           </label>
         </div>
