@@ -254,7 +254,7 @@ setFilteting(value)
         </table>
       </div>
       <label htmlFor="">
-        <strong>Cantidad total: {data.length}</strong>{" "}
+        <strong>Cantidad total: {table.getPrePaginationRowModel().rows.length}</strong>{" "}
       </label>
     </div>
   );

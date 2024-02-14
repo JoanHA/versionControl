@@ -131,7 +131,7 @@ const Header = ({ children }) => {
 
       <div className=" d-flex flex-row ">
         <Sidebar></Sidebar>
-        <div className="flex-fill">{children}</div>
+        <div className="flex-fill table-responsive">{children}</div>
       </div>
     </div>
   );

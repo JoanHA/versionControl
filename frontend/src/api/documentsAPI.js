@@ -26,3 +26,6 @@ export const createControl = (data) =>axios.post(URI +"documents/control",data)
 
 //Masive saved
 export const saveMasive = (data)=>axios.post(URI + "auxiliars/masive",data)
+
+//Obtener el ultimo cambio de un documento
+export const lastChanges = (code)  =>axios.get(URI+`documents/lastchange/${code}`)

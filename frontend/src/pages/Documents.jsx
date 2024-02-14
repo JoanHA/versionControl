@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Table from "../components/Table";
 import { getAllDocuments } from "../api/documentsAPI";
 import { convertNumber } from "../lib/helper";
+import DocTable from "./DocTable";
 function Documents() {
   const [data, setData] = useState([]);
   useEffect(() => {
@@ -41,8 +42,9 @@ function Documents() {
   return (
     <div>
       <div className="titleHeader text-center py-1">Listado maestro</div>
-      <div>
-        <Table columns={columns} data={data} ></Table>
+      <div className="">
+        {/* <Table columns={columns} data={data} ></Table> */}
+        <DocTable ></DocTable>
       </div>
     </div>
   );

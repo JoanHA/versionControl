@@ -24,6 +24,7 @@ import { ProtectedRoute } from "./Auth/ProtectedRoute";
 import EditUser from "./pages/admin/EditUser";
 import External from "./pages/control/External";
 import CreateExternal from "./pages/control/CreateExternal";
+
 function App() {
   return (
     <div>
@@ -106,6 +107,7 @@ function App() {
         </BrowserRouter>
       </AuthProvider>
     </div>
+   
   );
 }
 
