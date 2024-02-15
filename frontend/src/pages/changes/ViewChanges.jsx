@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Table from "../../components/Table";
 import { getChanges } from "../../api/changes";
-import { convertChangesVersion, convertNumber } from "../../lib/helper";
+import { convertChangesVersion } from "../../lib/helper";
 
 function ViewChanges() {
   const columns = [
@@ -31,12 +31,13 @@ function ViewChanges() {
     },
   ];
   const [data, setData] = useState([]);
+  const getData = async () => {
+    const res = await getChanges();
+    const datos = convertChangesVersion(res.data);
+    setData(datos);
+  };
   useEffect(() => {
-    const getData = async () => {
-      const res = await getChanges();
-      const datos = convertChangesVersion(res.data);
-      setData(datos);
-    };
+    
     getData();
   }, []);
   return (
@@ -47,6 +48,7 @@ function ViewChanges() {
         data={data} 
         options={false} 
         details={true}
+        cb={getData}
         ></Table>
     </div>
   );

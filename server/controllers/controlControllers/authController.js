@@ -39,6 +39,7 @@ const login = async (req, res) => {
       username: userFound.username,
       email: userFound.email,
       token: token,
+      rol:userFound.rol
     });
   } catch (error) {
     console.log(error);
@@ -54,6 +55,7 @@ const register = async (req, res) => {
       password: hashPassword,
       username,
       status: 1,
+      rol:2
     };
     //Buscar si existe un usuario con ese correo
     const result = await db.query(
@@ -78,6 +80,7 @@ const register = async (req, res) => {
         username: usersaved.username,
         email: usersaved.email,
         token: token,
+        rol:usersaved.rol
       });
     }
   } catch (error) {

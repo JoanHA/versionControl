@@ -2,7 +2,7 @@ const db = require("../../dbControl");
 const express = require("express");
 const router = express.Router();
 const helper = require("../../lib/helpers");
-const { resolveContent } = require("nodemailer/lib/shared");
+
 const getDocuments = async (req, res) => {
   try {
     const response = await db.query(`SELECT  *,
@@ -45,11 +45,22 @@ const editDocument = async (req, res) => {
     res.status(500).send("Tuvimos un error, intenta mas tarde");
   }
 };
-const deleteDocument = (req, res) => {};
+const deleteDocument =async (req, res) => {
+  const id = req.params.id;
+  try {
+    const sql = "DELETE FROM documents WHERE id = ?"
+    const resp = await db.query(sql,[id]);
+    res.send("Documento Eliminado con exito!");
+  } catch (error) {
+    console.log(error)
+    res.status(500).send("Lo sentimos, tuvimos un problema");
+  }
+
+};
 
 const makeDocument = async (req, res) => {
   const data = req.body;
-  data.version = 1;
+  data.version ? data.version: data.version = 1;
   data.last_revision = new Date().toISOString();
   data.status = 1;
   const sql = `INSERT INTO documents SET ?`;

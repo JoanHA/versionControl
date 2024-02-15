@@ -17,6 +17,7 @@ import { formatDate } from "../lib/helper";
 import HistoricTable from "../components/HistoricTable";
 import Masived from "../components/Masived";
 import CreateControl from "./control/CreateControl";
+import { useAuth } from "../context/AuthContext";
 function CreateDocument() {
   const {
     reset,
@@ -37,6 +38,7 @@ function CreateDocument() {
   const [doc, setDoc] = useState({});
   const params = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const fillSelects = async () => {
     const res = await getAuxiliars();
@@ -166,6 +168,7 @@ function CreateDocument() {
           date: res.data[0].last_revision.replaceAll("/", "-"),
           comments: res.data[0].comments,
           link: res.data[0].link,
+          version: res.data[0].version < 10 ? `0${res.data[0].version}`: res.data[0].version  
         });
       } catch (error) {
         console.log(error);
@@ -382,6 +385,7 @@ function CreateDocument() {
                     style={{
                       maxHeight: "200px",
                     }}
+                    placeholder="Detalles del documento"
                     {...register("comments")}
                     className="form-control  rounded w-100 "
                     cols="30"
@@ -395,12 +399,31 @@ function CreateDocument() {
                 </div>
                 <div className="col-9 flex-fill">
                   <input
+                  placeholder="https://bioart.intranet.com"
                     type="text"
                     {...register("link")}
                     className="form-control  rounded  "
                   ></input>
                 </div>
               </div>
+              {user?.rol === 1 && (
+                <div className="row mt-2">
+                  <div className="col-3">
+                    <label htmlFor="">Versión</label>
+                  </div>
+                  <div className="col-9 flex-fill">
+                    <input
+                      type="number"
+                      placeholder="#01"
+                      {...register("version",{required:true})}
+                      className="form-control  rounded  "
+                    ></input>
+                    {errors.version?.type == "required" && (
+                      <p className="errorMsg">Este campo es obligatorio</p>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
             {/* last child Button */}
 

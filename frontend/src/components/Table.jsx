@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { GrNext, GrPrevious } from "react-icons/gr";
 import { BiLastPage, BiFirstPage } from "react-icons/bi";
 import DownloadButton from "./DownloadButton";
@@ -14,6 +14,7 @@ import {
 } from "@tanstack/react-table";
 import Archived from "../pages/control/Archived";
 import { useAuth } from "../context/AuthContext";
+import { deleteChanges, deleteControls } from "../api/changes";
 
 function Table({
   data,
@@ -22,6 +23,7 @@ function Table({
   btnDetails,
   details = false,
   editType,
+  cb = null,
 }) {
   const [sorting, setSorting] = useState([]);
   const [filtering, setFilteting] = useState("");
@@ -40,21 +42,21 @@ function Table({
     onSortingChange: setSorting,
     onGlobalFilterChange: setFilteting,
   });
+  const { isAuthenticated, user } = useAuth();
 
   //Ajustar la cantidad de datos con respecto al tamaño de la pantalla
   window.onresize = (e) => {
     setPageSize(window.innerWidth);
   };
-  const saveFilter = (e)=>{
+  const saveFilter = (e) => {
     const valor = e.target.value;
-    sessionStorage.setItem("filtering",valor);
-  }
-  const { isAuthenticated } = useAuth();
-  
-useEffect(()=>{
-const value = (sessionStorage.getItem("filtering"))
-setFilteting(value)
-},[])
+    sessionStorage.setItem("filtering", valor);
+  };
+
+  useEffect(() => {
+    const value = sessionStorage.getItem("filtering");
+    setFilteting(value);
+  }, []);
 
   useEffect(() => {
     if (window.innerWidth < 1148) {
@@ -63,6 +65,51 @@ setFilteting(value)
       table.setPageSize(Number(10));
     }
   }, [pageSize]);
+  const deleteChange = (id) => {
+    Swal.fire({
+      title: "Estas seguro de esta acción?",
+      text: "No serás capaz de revertir esta acción!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, hazlo!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const res = await deleteChanges(id);
+
+          swal.fire(res.data, "", "success").then(() => {
+            cb();
+          });
+        } catch (error) {
+          swal.fire(error.response.data, "", "error");
+        }
+      }
+    });
+  };
+  const deleteControl = (id) => {
+    Swal.fire({
+      title: "Estas seguro de esta acción?",
+      text: "No serás capaz de revertir esta acción!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, hazlo!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const res = await deleteControls(id);
+          swal.fire(res.data, "", "success").then(() => {
+            cb();
+          });
+        } catch (error) {
+          swal.fire(error.response.data, "", "error");
+        }
+      }
+    });
+  };
   return (
     <div>
       <div
@@ -234,17 +281,43 @@ setFilteting(value)
                 {btnDetails && (
                   <>
                     <td>
-                      <Archived
-                        doc={btnDetails.doc[row.id]}
-                        text={btnDetails.text}
-                      ></Archived>
+                      <div className="d-flex flex-wrap align-items-center justify-content-center gap-1">
+                        <Archived
+                          doc={btnDetails.doc[row.id]}
+                          text={btnDetails.text}
+                        ></Archived>
+                        {user?.rol === 1 && isAuthenticated ? (
+                          <button
+                            className="btn btn-danger btn-sm mt-2 "
+                            onClick={() => {
+                              deleteControl(row.original.id);
+                            }}
+                          >
+                            Eliminar
+                          </button>
+                        ) : (
+                          ""
+                        )}
+                      </div>
                     </td>
                   </>
                 )}
                 {details && (
                   <>
-                    <td>
+                    <td className="">
                       <ChangeDetails infor={data[row.id]}></ChangeDetails>
+                      {user?.rol === 1 && isAuthenticated ? (
+                        <button
+                          className="btn btn-danger btn-sm mt-1"
+                          onClick={() => {
+                            deleteChange(row.original.id);
+                          }}
+                        >
+                          Eliminar
+                        </button>
+                      ) : (
+                        ""
+                      )}
                     </td>
                   </>
                 )}
@@ -254,7 +327,9 @@ setFilteting(value)
         </table>
       </div>
       <label htmlFor="">
-        <strong>Cantidad total: {table.getPrePaginationRowModel().rows.length}</strong>{" "}
+        <strong>
+          Cantidad total: {table.getPrePaginationRowModel().rows.length}
+        </strong>{" "}
       </label>
     </div>
   );

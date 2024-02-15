@@ -27,13 +27,13 @@ function ViewControl() {
     },
   ];
   const [data, setData] = useState([]);
+  const getData = async () => {
+    const res = await getArchived();
+    setData(res.data);
 
+  };
   useEffect(() => {
-    const getData = async () => {
-      const res = await getArchived();
-      setData(res.data);
-
-    };
+    
     getData();
   }, []);
   return (
@@ -45,6 +45,7 @@ function ViewControl() {
         data={data}
         options={false}
         btnDetails={{doc:data,text:"Ver detalles"}}
+        cb={getData}
       ></Table>
     </div>
   );

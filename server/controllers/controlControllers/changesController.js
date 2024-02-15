@@ -36,6 +36,19 @@ const createChange = async (req, res) => {
     res.status(500).send("No podemos realizar esa acción");
   }
 };
+const deleteChange = async (req,res)=>{
+  const id = req.params.id;
+  try {
+    const sql = "DELETE FROM changes WHERE id = ?";
+    const response = await db.query(sql,[id]);
+    res.send("Cambio eliminado con exito!");
+    
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Lo sentimos, intenta mas tarde");
+  }
+}
+
 const getChangesFromOne = async (req, res) => {
   const code = req.params.code;
   try {
@@ -106,6 +119,18 @@ const createExternal = async (req, res) => {
     res.status(400).send("No pudimos realizar esa acción, intenta mas tarde");
   }
 };
+const deleteControl = async(req,res)=>{
+  const id = req.params.id;
+  try {
+    const sql = "DELETE FROM storages WHERE id = ?";
+    const response = await db.query(sql,[id]);
+      res.send("Eliminado con exito!");
+    
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Lo sentimos, intenta mas tarde");
+  }
+}
 module.exports = {
   createChange,
   getChangesFromOne,
@@ -114,4 +139,6 @@ module.exports = {
   getArchived,
   createExternal,
   getExternals,
+  deleteChange,
+  deleteControl,
 };

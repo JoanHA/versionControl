@@ -154,9 +154,13 @@ const createMasive = async (req, res) => {
             : new Date(dato.column9)
           : null,
         comments: dato.column10 ? dato.column10 : null,
-        status: 1,
+        status: dato.column8
+        ? isNaN(parseInt(dato.column8))
+          ? 3
+          : parseInt(dato.column8) > 0 ? 1: 3
+        : 3,
       };
-console.log(listData)
+
       const resList = await db.query("INSERT INTO documents SET ?", listData);
     }
     //Guardar cambios

@@ -8,5 +8,6 @@ router.get("/:id",getOneDocument);
 router.post("/control",createControl);
 router.post("/doc",makeDocument)
 router.put("/",editDocument)
+router.delete("/:id",deleteDocument)
 
 module.exports = router

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getOneDocument } from "../api/documentsAPI";
+import { deleteDocuments, getOneDocument } from "../api/documentsAPI";
 import { Link } from "react-router-dom";
 import Archived from "./control/Archived";
 
@@ -9,13 +9,34 @@ import { getChangesFromOne } from "../api/changes";
 import { useAuth } from "../context/AuthContext";
 import { formatTimeStamp } from "../lib/helper";
 function ViewDocument() {
-  const params = useParams();
   const [isRegister, setIsRegister] = useState(false);
-
   const [data, setData] = useState({});
   const [changes, setChanges] = useState([]);
-const navigate = useNavigate()
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
+  const params = useParams();
+  const navigate = useNavigate();
+  const columns = [
+    {
+      header: "Justificación",
+      accessorKey: "reason",
+    },
+    {
+      header: "Solicitante",
+      accessorKey: "claimant",
+    },
+    {
+      header: "Nueva version",
+      accessorKey: "new_version",
+    },
+    {
+      header: "Aprobado por",
+      accessorKey: "aproved_by",
+    },
+    {
+      header: "Detalles",
+      accessorKey: "details",
+    },
+  ];
   const getData = async () => {
     const res = await getOneDocument(params.id);
     //Informacion del documento
@@ -43,75 +64,89 @@ const navigate = useNavigate()
       setIsRegister(true);
     }
   };
+
+  const deleteDocument = () => {
+    Swal.fire({
+      title: "Estas seguro de esta acción?",
+      text: "No serás capaz de revertir esta acción!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, hazlo!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const res = await deleteDocuments(params.id);
+          swal.fire(res.data, "", "success").then(() => {
+            navigate("/");
+          });
+        } catch (error) {
+          swal.fire(error.response.data, "", "error");
+        }
+      }
+    });
+  };
+
   useEffect(() => {
     getData();
   }, []);
-
-  const columns = [
-    {
-      header: "Justificación",
-      accessorKey: "reason",
-    },
-    {
-      header: "Solicitante",
-      accessorKey: "claimant",
-    },
-    {
-      header: "Nueva version",
-      accessorKey: "new_version",
-    },
-    {
-      header: "Aprobado por",
-      accessorKey: "aproved_by",
-    },
-    {
-      header: "Detalles",
-      accessorKey: "details",
-    },
-  ];
-
   return (
     <div>
       <div className="w-100 d-flex align-items-center gap-2 flex-wrap my-1">
         <button
           type="button"
           onClick={() => {
-            navigate("/")
+            navigate("/");
           }}
           className="btn btn-dark rounded btn-sm"
         >
           Volver
         </button>
 
-  <>
-            {isAuthenticated && data.status === 1 ? (
-              <Link className="btn btn-sm btn-primary  " to={"/createChange/"+data.code}>
-                Agregar cambio
+        <>
+          {user?.rol === 1 && isAuthenticated ? (
+            <button className="btn btn-danger btn-sm" onClick={deleteDocument}>
+              Eliminar documento
+            </button>
+          ) : (
+            ""
+          )}
+
+          {isAuthenticated && data.status === 1 ? (
+            <Link
+              className="btn btn-sm btn-primary  "
+              to={"/createChange/" + data.code}
+            >
+              Agregar cambio
+            </Link>
+          ) : (
+            ""
+          )}
+
+          {isAuthenticated && data.status === 1 ? (
+            <>
+              <Link to={"/edit/" + data.id} className="btn btn-sm btn-warning ">
+                Editar archivo
               </Link>
-            ):""}
 
-            {isAuthenticated && data.status === 1 ? (
-              <>
-                <Link
-                  to={"/edit/" + data.id}
-                  className="btn btn-sm btn-warning "
-                >
-                  Editar archivo
-                </Link>
-
-                {isRegister && data.status === 1 ? (
-                  <>
-                    <Link
-                      to={"/createControl/" + data.code}
-                      className="btn btn-success mx-1  btn-sm "
-                    >
-                      Agregar control de archivo
-                    </Link>
-                  </>
-                ):""}
-              </>
-            ):""}
-          </>
+              {isRegister && data.status === 1 ? (
+                <>
+                  <Link
+                    to={"/createControl/" + data.code}
+                    className="btn btn-success mx-1  btn-sm "
+                  >
+                    Agregar control de archivo
+                  </Link>
+                </>
+              ) : (
+                ""
+              )}
+            </>
+          ) : (
+            ""
+          )}
+        </>
         {isRegister && (
           <div className="" style={{ marginBottom: "5px" }}>
             <Archived doc={data.code ? data : null} />
@@ -166,7 +201,11 @@ const navigate = useNavigate()
 
           <label className="inputLabel">
             <a href={data.link} target="blank">
-              {data.link ? (<label className="doc-link">VISITAR LINK</label>) : ""}
+              {data.link ? (
+                <label className="doc-link">VISITAR LINK</label>
+              ) : (
+                ""
+              )}
             </a>
           </label>
         </div>
@@ -176,7 +215,10 @@ const navigate = useNavigate()
         </div>
         <div className="col-12 col-md-5">
           <label className="titleLabel">Fecha de creación: </label>
-          <label className="inputLabel"> { formatTimeStamp(data.created_at)}</label>
+          <label className="inputLabel">
+            {" "}
+            {formatTimeStamp(data.created_at)}
+          </label>
         </div>
       </div>
       <div className="titleHeader text-center py-1 mt-3">

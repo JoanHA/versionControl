@@ -22,14 +22,14 @@ function External() {
         },
       ];
       const [data, setData] = useState([]);
-    
-      useEffect(() => {
-        const getData = async () => {
-          const res = await getExternal();
-          setData(res.data);
+      const getData = async () => {
+        const res = await getExternal();
+        setData(res.data);
 
-    
-        };
+  
+      };
+      useEffect(() => {
+       
         getData();
       }, []);
       return (
@@ -41,6 +41,7 @@ function External() {
             data={data}
             options={false}
             btnDetails={{doc:data,text:"Ver detalles"}}
+            cb={getData}
           ></Table>
         </div>
       );
