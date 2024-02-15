@@ -63,10 +63,21 @@ const makeDocument = async (req, res) => {
   data.version ? data.version: data.version = 1;
   data.last_revision = new Date().toISOString();
   data.status = 1;
-  const sql = `INSERT INTO documents SET ?`;
+
+  const sql = `INSERT INTO documents 
+  SET 
+    code = '${data.code}', 
+    comments = '${data.comments}', 
+    last_revision = STR_TO_DATE('${data.last_revision}', '%Y-%m-%dT%H:%i:%s.%fZ'), 
+    process = ${data.process}, 
+    typology = ${data.typology}, 
+    name = '${data.name}', 
+    link = '${data.link}', 
+    version = ${data.version}, 
+    status = ${data.status}`;
   try {
     const response = await db.query(sql, data);
-    res.send("Documento registrado correctamente!");
+res.send("Documento creado con exito!")
   } catch (error) {
     console.log(error);
     if (error.code === "ER_DUP_ENTRY") {
