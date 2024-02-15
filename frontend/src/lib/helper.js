@@ -156,7 +156,7 @@ export const downloadDocs = (data) => {
           code: e.code,
           name: e.name,
           process: e.process_name,
-          change: change.data.reason ? change.data.reason : "",
+          change: change.data.details ? change.data.details : "",
           date: e.last_revision,
           location: e.link ? e.link : "",
           version: e.version,

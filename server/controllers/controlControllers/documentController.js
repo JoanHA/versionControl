@@ -105,7 +105,7 @@ const createControl = async (req, res) => {
 const lastChange = async (req, res) => {
   const code = req.params.code;
 
-  const sql = `SELECT reason
+  const sql = `SELECT details
   FROM changes
   WHERE code = '${code}'
   AND created_at = (SELECT MAX(created_at) FROM changes WHERE code = '${code}')
