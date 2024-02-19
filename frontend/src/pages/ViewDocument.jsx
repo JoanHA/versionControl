@@ -197,16 +197,16 @@ function ViewDocument() {
         </div>
 
         <div className="col-12 col-md-4 ">
-          <label className="titleLabel">Link de sharePoint:</label>
+          <label className="titleLabel">Ruta de sharePoint:</label>
 
           <label className="inputLabel">
-            <a href={data.link} target="blank">
+        
               {data.link ? (
-                <label className="doc-link">VISITAR LINK</label>
+                <label className="doc-link">{data.link}</label>
               ) : (
                 ""
               )}
-            </a>
+        
           </label>
         </div>
         <div className="col-12 col-md-5">

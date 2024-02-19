@@ -61,7 +61,7 @@ const deleteDocument =async (req, res) => {
 const makeDocument = async (req, res) => {
   const data = req.body;
   data.version ? data.version: data.version = 1;
-  data.last_revision = new Date().toISOString();
+  data.last_revision = new Date(data.last_revision).toISOString();
   data.status = 1;
 
   const sql = `INSERT INTO documents 

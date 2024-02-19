@@ -101,11 +101,11 @@
   border-bottom: 1px solid lightgray;
 }
 
-.doc-link{
+/* .doc-link{
   cursor: pointer;
   color: blue;
   text-decoration: underline;
 }
 .doc-link:hover{
   filter: brightness(40%);
-}
+} */

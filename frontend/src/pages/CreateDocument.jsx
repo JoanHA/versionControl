@@ -395,11 +395,11 @@ function CreateDocument() {
               </div>
               <div className=" row">
                 <div className="col-3">
-                  <label htmlFor="">Link</label>
+                  <label htmlFor="">Ruta/ubicación</label>
                 </div>
                 <div className="col-9 flex-fill">
                   <input
-                  placeholder="https://bioart.intranet.com"
+                  placeholder="/intranet/folder/file"
                     type="text"
                     {...register("link")}
                     className="form-control  rounded  "
