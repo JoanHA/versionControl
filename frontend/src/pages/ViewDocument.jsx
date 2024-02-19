@@ -217,7 +217,7 @@ function ViewDocument() {
           <label className="titleLabel">Fecha de creación: </label>
           <label className="inputLabel">
             {" "}
-            {formatTimeStamp(data.created_at)}
+            {data.created_at?.toString().split("T")[0]}
           </label>
         </div>
       </div>
