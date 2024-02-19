@@ -111,11 +111,21 @@ const Header = ({ children }) => {
                          Documentos externos
                       </Link>
                     </li>
+                    <li>
+                      <Link to={"/control"} className="dropdown-item">
+                         Retención documental
+                      </Link>
+                    </li>
                     {isAuthenticated && (
                       <>
                         <li>
                           <Link to={"/createExternal"} className="dropdown-item">
                             Agregar documento externo
+                          </Link>
+                        </li>
+                        <li>
+                          <Link to={"/createControl"} className="dropdown-item">
+                            Agregar retencion documental
                           </Link>
                         </li>
                       </>
@@ -129,9 +139,9 @@ const Header = ({ children }) => {
         </nav>
       </header>
 
-      <div className=" d-flex flex-row ">
+      <div className=" d-flex flex-row " style={{minHeight:"560px "}}  >
         <Sidebar></Sidebar>
-        <div className="flex-fill table-responsive">{children}</div>
+        <div className="flex-fill " style={{overflowX:"auto"}}>{children}</div>
       </div>
     </div>
   );

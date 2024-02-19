@@ -40,8 +40,9 @@ function External() {
             columns={columns}
             data={data}
             options={false}
-            btnDetails={{doc:data,text:"Ver detalles"}}
+            btnDetails={{doc:data,text:"Detalles",external:true}}
             cb={getData}
+        
           ></Table>
         </div>
       );

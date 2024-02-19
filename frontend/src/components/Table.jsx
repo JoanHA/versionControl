@@ -285,6 +285,7 @@ function Table({
                         <Archived
                           doc={btnDetails.doc[row.id]}
                           text={btnDetails.text}
+                          external={btnDetails.external}
                         ></Archived>
                         {user?.rol === 1 && isAuthenticated ? (
                           <button
@@ -305,6 +306,7 @@ function Table({
                 {details && (
                   <>
                     <td className="">
+                      <div className="d-flex flex-column align-items-center justify-content-center">
                       <ChangeDetails infor={data[row.id]}></ChangeDetails>
                       {user?.rol === 1 && isAuthenticated ? (
                         <button
@@ -318,6 +320,8 @@ function Table({
                       ) : (
                         ""
                       )}
+                      </div>
+                     
                     </td>
                   </>
                 )}

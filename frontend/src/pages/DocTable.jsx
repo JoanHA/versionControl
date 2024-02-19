@@ -284,7 +284,7 @@ export default function DocTable() {
                             <>
                               <Link
                                 to={`/edit/${row.original.id}`}
-                                className="btn btn-primary btn-sm flex-fill"
+                                className="btn btn-warning btn-sm flex-fill"
                               >
                                 Editar
                               </Link>

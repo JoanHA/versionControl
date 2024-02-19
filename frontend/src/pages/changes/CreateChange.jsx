@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from "react";
-import SelectInput from "../../components/Select";
 import Select from "react-select";
 import { getAllDocuments } from "../../api/documentsAPI";
 import { useForm } from "react-hook-form";
-import { useParams } from "react-router-dom";
-import { createChange } from "../../api/changes";
+import { useNavigate, useParams } from "react-router-dom";
+import { createChange, editChange, getOneChange } from "../../api/changes";
 
 function CreateChange() {
   const [codigos, SetCodigos] = useState([]);
   const [data, setData] = useState([]);
   const [selectedDoc, setSelectedDoc] = useState({});
-
   const params = useParams();
   const {
     register,
@@ -18,7 +16,7 @@ function CreateChange() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-
+  const navigate = useNavigate();
   const onSubmit = async (values) => {
     Swal.fire({
       title: "Estas seguro de esto?",
@@ -29,11 +27,13 @@ function CreateChange() {
       cancelButtonColor: "#d33",
       confirmButtonText: "Si, guardar!",
     }).then(async (result) => {
+      values.status = values.status === true ? 3 : 1;
+      if (params.id) {
+        return editChanges(values);
+      }
+      values.new_version = values.status === 1 ? selectedDoc.version + 1 : 0;
       if (result.isConfirmed) {
-        values.status = values.status === true ? 3 : 1;
-        values.new_version = values.status === 1 ? selectedDoc.version + 1 : 0;
         values.code = params.code ? params.code : selectedDoc.code;
-     
         try {
           const res = await createChange(values);
           if (res.status === 200) {
@@ -49,6 +49,19 @@ function CreateChange() {
     });
   };
 
+  const editChanges = async (data) => {
+    try {
+      const res = await editChange(params.id, data);
+      if (res.status === 200) {
+        swal.fire(res.data, "", "success").then(() => {
+          navigate("/changes");
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      swal.fire(error.response.data, "", "error");
+    }
+  };
   const handleChange = (e) => {
     const selectedValue = data.filter((element) => element.id === e.value);
     setSelectedDoc(selectedValue[0]);
@@ -85,13 +98,32 @@ function CreateChange() {
       console.log(error);
     }
   };
+  const getInfo = async () => {
+    try {
+      const res = await getOneChange(params.id);
+
+      reset({
+        aproved_by: res.data.aproved_by,
+        claimant: res.data.claimant,
+        code: res.data.code,
+        details: res.data.details,
+        name: res.data.name,
+        reason: res.data.reason,
+      });
+    } catch (err) {
+      swal.fire(err.response.data, "", "error");
+    }
+  };
   useEffect(() => {
     getCodes();
+    if (params.id) {
+      getInfo();
+    }
   }, []);
 
   return (
     <div>
-      <div className="titleHeader  ">Registrar cambios</div>
+      <div className="titleHeader">Registrar cambios</div>
       <button
         className="mx-1 btn btn-dark rounded btn-sm mb-1"
         onClick={() => window.history.back()}
@@ -116,6 +148,18 @@ function CreateChange() {
                       {...register("code")}
                       value={params.code}
                       disabled
+                      className="form-control"
+                    />
+                  </div>
+                </>
+              ) : params.id ? (
+                <>
+                  <div className="col-8">
+                    <input
+                      type="text"
+                      {...register("code")}
+                      value={params.code}
+                      placeholder="Codigo"
                       className="form-control"
                     />
                   </div>

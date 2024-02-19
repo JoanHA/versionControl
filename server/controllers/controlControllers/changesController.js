@@ -17,13 +17,12 @@ const createChange = async (req, res) => {
   const dateWithoutMilliseconds = dateString.replace(/\.\d+Z$/, "Z");
   const date = new Date(dateWithoutMilliseconds);
   const formattedDate = date.toISOString().slice(0, 19).replace("T", " ");
- //sql para actualizar
+  //sql para actualizar
   const sql = `UPDATE documents SET
   version =${data.new_version},
   last_revision='${formattedDate}',
   status=${req.body.status} WHERE code = '${data.code}' `;
   try {
-  
     //Save change
     const response = await db.query("INSERT INTO changes SET ?", [data]);
 
@@ -36,18 +35,17 @@ const createChange = async (req, res) => {
     res.status(500).send("No podemos realizar esa acción");
   }
 };
-const deleteChange = async (req,res)=>{
+const deleteChange = async (req, res) => {
   const id = req.params.id;
   try {
     const sql = "DELETE FROM changes WHERE id = ?";
-    const response = await db.query(sql,[id]);
+    const response = await db.query(sql, [id]);
     res.send("Cambio eliminado con exito!");
-    
   } catch (error) {
     console.log(error);
     res.status(500).send("Lo sentimos, intenta mas tarde");
   }
-}
+};
 
 const getChangesFromOne = async (req, res) => {
   const code = req.params.code;
@@ -119,18 +117,48 @@ const createExternal = async (req, res) => {
     res.status(400).send("No pudimos realizar esa acción, intenta mas tarde");
   }
 };
-const deleteControl = async(req,res)=>{
+const deleteControl = async (req, res) => {
   const id = req.params.id;
   try {
     const sql = "DELETE FROM storages WHERE id = ?";
-    const response = await db.query(sql,[id]);
-      res.send("Eliminado con exito!");
-    
+    const response = await db.query(sql, [id]);
+    res.send("Eliminado con exito!");
   } catch (error) {
     console.log(error);
     res.status(500).send("Lo sentimos, intenta mas tarde");
   }
-}
+};
+
+const getOneChange = async (req, res) => {
+  const id = req.params.id;
+  const sql = `SELECT * FROM changes WHERE id =?`;
+  try {
+    const result = await db.query(sql, [id]);
+    if (result.length <= 0)
+      res.status(404).send("Ningún cambio fue encontrado");
+    res.send(result[0]);
+  } catch (error) {
+    res.status(500).send("Tuvimos un error, intenta mas tarde");
+    console.log(error);
+  }
+};
+const editChange = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const data = req.body;
+    const sql = `UPDATE changes SET ? WHERE id = ${id}`;
+
+    const result = await db.query(sql, [data]);
+    console.log(result)
+    if (result.affectedRows < 1)
+      return res.status(300).send("No se pudo editar,intenta mas tarde");
+
+    res.send("Cambio editado con exito");
+  } catch (error) {
+    res.status(500).send("Tuvimos un error, intenta mas tarde");
+    console.log(error);
+  }
+};
 module.exports = {
   createChange,
   getChangesFromOne,
@@ -141,4 +169,6 @@ module.exports = {
   getExternals,
   deleteChange,
   deleteControl,
+  getOneChange,
+  editChange,
 };

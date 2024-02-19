@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
 import uniqid from "uniqid";
+import { Link } from "react-router-dom";
 import { formatTimeStamp } from "../../lib/helper";
+import { useParams } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 function ChangeDetails({ infor }) {
   const [info, setInfo] = useState({});
-  const [id, setId] = useState("");
 
+  const [id, setId] = useState("");
+  const { isAuthenticated, user } = useAuth();
   useEffect(() => {
     setInfo(infor);
     setId(uniqid());
@@ -35,7 +39,10 @@ function ChangeDetails({ infor }) {
         id={id} //exampleModal
         tabIndex="-1"
       >
-        <div className="modal-dialog   modal-dialog-scrollable" style={{maxWidth:"670px"}}>
+        <div
+          className="modal-dialog   modal-dialog-scrollable"
+          style={{ maxWidth: "670px" }}
+        >
           <div className="modal-content mt-5">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="exampleModalLabel">
@@ -83,7 +90,7 @@ function ChangeDetails({ infor }) {
                   <label>
                     <strong>Realizado el:</strong>
                   </label>
-                  <label htmlFor="">{ formatTimeStamp(info.created_at)}</label>
+                  <label htmlFor="">{formatTimeStamp(info.created_at)}</label>
                 </div>
                 <div className="col-6 d-flex flex-column">
                   <label>
@@ -94,6 +101,17 @@ function ChangeDetails({ infor }) {
               </div>
             </div>
             <div className="modal-footer">
+              {
+                isAuthenticated && user.rol===1 ?(
+                  <Link
+                  className="btn btn-warning"
+                  to={`/createChange/edit/${info.id}`}
+                >
+                  Editar
+                </Link>
+                ):""
+              }
+            
               <button
                 type="button"
                 className="btn btn-secondary"

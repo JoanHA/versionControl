@@ -4,11 +4,15 @@ import { useForm } from "react-hook-form";
 import AddButton from "../../components/AddButton";
 import Select from "react-select";
 import { getLastMove } from "../../api/documentsAPI";
+import { editControl, getOneControl } from "../../api/controls";
+import { useNavigate, useParams } from "react-router-dom";
 
 function CreateExternal() {
   const { register, reset, handleSubmit } = useForm();
   const [lastMove, setLastMove] = useState([]);
   const [selectedMove, setSelectedMove] = useState(null);
+  const params = useParams();
+  const navigate = useNavigate()
   const onSubmit = (values) => {
     Swal.fire({
       title: "Estas seguro de esto?",
@@ -23,7 +27,10 @@ function CreateExternal() {
         values.last_move = selectedMove;
         values.external = 1;
         values.status = 1;
-        values.external = 1
+        values.external = 1;
+        if (params.id) {
+          return editControls(values)
+        }
         try {
           const res = await createExternal(values);
           if (res.status === 200) {
@@ -36,6 +43,17 @@ function CreateExternal() {
         }
       }
     });
+  };
+  const editControls = async (data) => {
+    try {
+      const res = await editControl(params.id, data);
+      swal.fire(res.data, "", "success").then(() => {
+      navigate("/external")
+      });
+    } catch (error) {
+      console.log(error);
+      swal.fire(error.response.data, "", "error");
+    }
   };
   const getLastMoves = async () => {
     try {
@@ -50,8 +68,28 @@ function CreateExternal() {
       setLastMove(moves);
     } catch (error) {}
   };
+  const getEditData = async () => {
+    try {
+      const res = await getOneControl(params.id);
+      reset({
+        documentName: res.data.documentName,
+        responsible: res.data.responsible,
+        saved_in: res.data.saved_in,
+        saved_format: res.data.saved_format,
+        actived_saved: res.data.actived_saved,
+        inactived_saved: res.data.inactived_saved,
+      });
+      setSelectedMove(res.data.last_move);
+    } catch (error) {
+      console.log(error);
+      swal.fire(error.response.data, "", "error");
+    }
+  };
   useEffect(() => {
     getLastMoves();
+    if (params.id) {
+      getEditData();
+    }
   }, []);
   return (
     <div>
@@ -161,17 +199,34 @@ function CreateExternal() {
                   <label htmlFor="">Disposición final</label>
                 </div>
                 <div className="col-8 d-flex flex-row">
-                  <Select
-                    options={lastMove}
-                    onChange={(e) => {
-                      e.value ? setSelectedMove(e.value) : "";
-                    }}
-                    className="w-75"
-                  ></Select>
-                  <AddButton
-                    param={{ name: "Disposición final", value: 1 }}
-                    cb={getLastMoves}
-                  ></AddButton>
+                  {params.id ? (
+                    <>
+                      <select
+                        className="form-select"
+                        value={selectedMove}
+                        onChange={(e) => setSelectedMove(e.target.value)}
+                      >
+                        {lastMove &&
+                          lastMove.map((e) => (
+                            <option value={e.value}>{e.label}</option>
+                          ))}
+                      </select>
+                    </>
+                  ) : (
+                    <>
+                      <Select
+                        options={lastMove}
+                        onChange={(e) => {
+                          e.value ? setSelectedMove(e.value) : "";
+                        }}
+                        className="w-75"
+                      ></Select>
+                      <AddButton
+                        param={{ name: "Disposición final", value: 1 }}
+                        cb={getLastMoves}
+                      ></AddButton>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

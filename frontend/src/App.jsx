@@ -40,16 +40,22 @@ function App() {
               <Route path="/" element={<Documents />}></Route>
               <Route path="/newDoc" element={<CreateDocument />}></Route>
               <Route path="document/:id" element={<ViewDocument />}></Route>
+              {/*----- Changes----- */}
               <Route path="/createChange" element={<CreateChange />}></Route>
-              <Route
-                path="/createChange/:code"
-                element={<CreateChange />}
-              ></Route>
+              <Route path="/createChange/:code" element={<CreateChange />}></Route>
+              <Route path="/createChange/edit/:id" element={<CreateChange />}></Route>
+
+              {/*----- Changes----- */}
+
+              
+              {/* ---Control--- */}
               <Route path="/createControl" element={<CreateControl />}></Route>
-              <Route
-                path="/createControl/:code"
-                element={<CreateControl />}
-              ></Route>
+              <Route path="/createControl/:code" element={<CreateControl />}></Route>
+              <Route path="/createControl/edit/:id" element={<CreateControl />}></Route>
+              {/* ---Control--- */}
+
+
+
               {/* Rutas protegidas (SOlO INGRESA LOGUEADO)*/}
               <Route element={<ProtectedRoute />}>
                 <Route path="/welcome" element={<Welcome />}></Route>
@@ -100,14 +106,14 @@ function App() {
               <Route path="/changes" element={<ViewChanges />}></Route>
               <Route path="/control" element={<ViewControl />}></Route>
               <Route path="/external" element={<External />}></Route>
-              <Route path="/CreateExternal" element={<CreateExternal />}></Route>
+              <Route path="/CreateExternal" element={<CreateExternal />} ></Route>
+              <Route path="/CreateExternal/edit/:id" element={<CreateExternal />} ></Route>
               <Route path="*" element={<Not_Found />}></Route>
             </Routes>
           </Header>
         </BrowserRouter>
       </AuthProvider>
     </div>
-   
   );
 }
 

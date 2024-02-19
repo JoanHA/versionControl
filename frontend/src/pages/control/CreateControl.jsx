@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import SelectInput from "../../components/Select";
 import Select from "react-select";
 import { useForm } from "react-hook-form";
 import {
@@ -9,7 +8,8 @@ import {
 } from "../../api/documentsAPI";
 import { getLastMove } from "../../api/documentsAPI";
 import AddButton from "../../components/AddButton";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { editControl, getOneControl } from "../../api/controls";
 function CreateControl({ desactivate = null }) {
   const {
     register,
@@ -25,10 +25,20 @@ function CreateControl({ desactivate = null }) {
   const [selectedMove, setSelectedMove] = useState(null);
 
   const params = useParams();
-
+const navigate = useNavigate()
   const [letterCode, setLetterCode] = useState([]);
   const [docType, setDoctype] = useState([]);
-
+  const editControls = async (data) => {
+    try {
+      const res = await editControl(params.id, data);
+      swal.fire(res.data, "", "success").then(() => {
+        navigate("/control")
+      });
+    } catch (error) {
+      console.log(error);
+      swal.fire(error.response.data, "", "error");
+    }
+  };
   //Funciones
   const onSubmit = async (values) => {
     Swal.fire({
@@ -43,6 +53,11 @@ function CreateControl({ desactivate = null }) {
       if (result.isConfirmed) {
         values.last_move = selectedMove;
         values.external = 2;
+
+        if (params.id) {
+          values.last_move = parseInt(values.last_move);
+          return editControls(values);
+        }
         values.code = params.code
           ? params.code
           : `${values.codeLetter}${values.processInitials}${values.versionNumber}`;
@@ -121,14 +136,37 @@ function CreateControl({ desactivate = null }) {
       console.log(error);
     }
   };
+
+  const getEditData = async () => {
+    try {
+      const res = await getOneControl(params.id);
+
+      reset({
+        code: res.data.code,
+        documentName: res.data.name,
+        responsible: res.data.responsible,
+        saved_in: res.data.saved_in,
+        saved_format: res.data.saved_format,
+        actived_saved: res.data.actived_saved,
+        inactived_saved: res.data.inactived_saved,
+      });
+      setSelectedMove(res.data.last_move);
+    } catch (error) {
+      console.log(error);
+      swal.fire(error.response.data, "", "error");
+    }
+  };
   //end funciones
   useEffect(() => {
     fillSelects();
     getCodes();
     getLastMoves();
+    if (params.id) {
+      getEditData();
+    }
   }, []);
   return (
-    <div>
+    <div style={{ overflowX: "hidden", height: "100% " }}>
       <div className="titleHeader">Control de registros</div>
       <div>
         {desactivate ? (
@@ -157,6 +195,19 @@ function CreateControl({ desactivate = null }) {
                         type="text"
                         {...register("code")}
                         disabled
+                        value={params.code}
+                        className="form-control"
+                      />
+                    </div>
+                  </>
+                ) : params.id ? (
+                  <>
+                    {" "}
+                    <div className="col-8 d-flex">
+                      <input
+                        type="text"
+                        {...register("code")}
+                        placeholder="Codigo"
                         value={params.code}
                         className="form-control"
                       />
@@ -297,17 +348,35 @@ function CreateControl({ desactivate = null }) {
                   <label htmlFor="">Disposición final</label>
                 </div>
                 <div className="col-8 d-flex flex-row">
-                  <Select
-                    options={lastMove}
-                    onChange={(e) => {
-                      e.value ? setSelectedMove(e.value) : "";
-                    }}
-                    className="w-75"
-                  ></Select>
-                  <AddButton
-                    param={{ name: "Disposición final", value: 1 }}
-                    cb={fillSelects}
-                  ></AddButton>
+                  {params.id ? (
+                    <>
+                      <select
+                        className="form-select"
+                        value={selectedMove}
+                        onChange={(e) => setSelectedMove(e.target.value)}
+                      >
+                        {lastMove &&
+                          lastMove.map((e) => (
+                            <option value={e.value}>{e.label}</option>
+                          ))}
+                      </select>
+                    </>
+                  ) : (
+                    <>
+                      {" "}
+                      <Select
+                        options={lastMove}
+                        onChange={(e) => {
+                          e.value ? setSelectedMove(e.value) : "";
+                        }}
+                        className="w-75"
+                      ></Select>
+                      <AddButton
+                        param={{ name: "Disposición final", value: 1 }}
+                        cb={fillSelects}
+                      ></AddButton>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { getInformation } from "../../api/changes";
 import uniqid from "uniqid";
-function Archived({ doc, text }) {
+import { Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+function Archived({ doc, text, external }) {
   const [info, setInfo] = useState({});
   const [isEmpty, setIsEmpty] = useState(false);
   const [id, setId] = useState("");
+  const { isAuthenticated, user } = useAuth();
 
   //This is for getting the data aboout where it's archived
   const getInfo = async () => {
@@ -12,6 +15,7 @@ function Archived({ doc, text }) {
       if (!doc) {
         return setIsEmpty(true);
       }
+
       if (doc.code) {
         const res = await getInformation(doc.code);
         if (res.data.status === 404) {
@@ -81,7 +85,6 @@ function Archived({ doc, text }) {
                   </h2>
                 </div>
               ) : (
-              
                 <div className="row">
                   <div className="col-6 d-flex flex-column">
                     <label>
@@ -143,6 +146,21 @@ function Archived({ doc, text }) {
               )}
             </div>
             <div className="modal-footer">
+              {isAuthenticated && user.rol === 1 ? (
+                <Link
+                  className="btn btn-warning"
+                  to={
+                    external
+                      ? `/createExternal/edit/${doc.id}`
+                      : `/createControl/edit/${doc.id}`
+                  }
+                >
+                  Editar
+                </Link>
+              ) : (
+                ""
+              )}
+
               <button
                 type="button"
                 className="btn btn-secondary"

@@ -44,7 +44,7 @@ function ViewControl() {
         columns={columns}
         data={data}
         options={false}
-        btnDetails={{doc:data,text:"Ver detalles"}}
+        btnDetails={{doc:data,text:"Detalles"}}
         cb={getData}
       ></Table>
     </div>
