@@ -26,7 +26,17 @@ const getOneDocument = async (req, res) => {
     FROM documents WHERE id= ?`;
   try {
     const response = await db.query(sql, [id]);
-    // response[0].last_revision = helper.convertTime(response[0].last_revision);
+    const fechaOriginal = new Date(response[0].last_revision);
+
+    const dia = String(fechaOriginal.getDate()).padStart(2, "0");
+    const mes = String(fechaOriginal.getMonth() + 1).padStart(2, "0"); // Los meses en JavaScript van de 0 a 11
+    const año = fechaOriginal.getFullYear();
+    const horas = String(fechaOriginal.getHours()).padStart(2, "0");
+    const minutos = String(fechaOriginal.getMinutes()).padStart(2, "0");
+    const segundos = String(fechaOriginal.getSeconds()).padStart(2, "0");
+
+    const fechaFormateada = `${año}-${mes}-${dia} ${horas}:${minutos}:${segundos}`;
+    response[0].last_revision = fechaFormateada
     res.send(response);
   } catch (error) {
     console.log(error);
@@ -45,22 +55,21 @@ const editDocument = async (req, res) => {
     res.status(500).send("Tuvimos un error, intenta mas tarde");
   }
 };
-const deleteDocument =async (req, res) => {
+const deleteDocument = async (req, res) => {
   const id = req.params.id;
   try {
-    const sql = "DELETE FROM documents WHERE id = ?"
-    const resp = await db.query(sql,[id]);
+    const sql = "DELETE FROM documents WHERE id = ?";
+    const resp = await db.query(sql, [id]);
     res.send("Documento Eliminado con exito!");
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).send("Lo sentimos, tuvimos un problema");
   }
-
 };
 
 const makeDocument = async (req, res) => {
   const data = req.body;
-  data.version ? data.version: data.version = 1;
+  data.version ? data.version : (data.version = 1);
   data.last_revision = new Date(data.last_revision).toISOString();
   data.status = 1;
 
@@ -77,7 +86,7 @@ const makeDocument = async (req, res) => {
     status = ${data.status}`;
   try {
     const response = await db.query(sql, data);
-res.send("Documento creado con exito!")
+    res.send("Documento creado con exito!");
   } catch (error) {
     console.log(error);
     if (error.code === "ER_DUP_ENTRY") {

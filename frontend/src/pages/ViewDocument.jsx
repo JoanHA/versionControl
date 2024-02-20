@@ -175,7 +175,7 @@ function ViewDocument() {
           <label className="titleLabel">
             Fecha de emisión / Ultima revisión:
           </label>
-          <label className="inputLabel">{data.last_revision?.split("T")[0]}</label>
+          <label className="inputLabel">{data.last_revision?.substring(0,10)}</label>
         </div>
         <div className="col-12 col-md-5">
           <label className="titleLabel">Tipologia:</label>
