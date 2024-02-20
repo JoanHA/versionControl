@@ -31,9 +31,14 @@ function CreateChange() {
       if (params.id) {
         return editChanges(values);
       }
-      values.new_version = values.status === 1 ? selectedDoc.version + 1 : 0;
+      if (values.change) {
+        values.new_version = selectedDoc.version;
+      } else {
+        values.new_version = values.status === 1 ? selectedDoc.version + 1 : 0;
+      }
       if (result.isConfirmed) {
         values.code = params.code ? params.code : selectedDoc.code;
+      
         try {
           const res = await createChange(values);
           if (res.status === 200) {
@@ -274,6 +279,15 @@ function CreateChange() {
                 {...register("status")}
               />
               <strong className="py-2">Estado obsoleto</strong>
+            </div>
+            <div className="d-flex gap-2 mt-2 ">
+              <input
+                type="checkbox"
+                style={{ width: "30px" }}
+                className="form-input"
+                {...register("change")}
+              />
+              <strong className="py-2">Revisión sin cambio de versión </strong>
             </div>
           </div>
           <div className="my-2">

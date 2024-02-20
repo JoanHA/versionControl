@@ -11,6 +11,8 @@ const createChange = async (req, res) => {
     details,
     name,
   } = req.body);
+  const isChanging = req.body.change;
+  delete data.change;
 
   const last_revision = new Date().toISOString();
   const dateString = last_revision;
@@ -22,12 +24,20 @@ const createChange = async (req, res) => {
   version =${data.new_version},
   last_revision='${formattedDate}',
   status=${req.body.status} WHERE code = '${data.code}' `;
+  const sql2 = `UPDATE documents SET
+  last_revision='${formattedDate}',
+  status=${req.body.status} WHERE code = '${data.code}' `;
   try {
     //Save change
     const response = await db.query("INSERT INTO changes SET ?", [data]);
 
-    //Update the last version of the doc
-    const respuesta = await db.query(sql);
+    if (!isChanging) {
+      //Update the last version of the doc
+      const respuesta = await db.query(sql);
+    } else {
+      //update without the version
+      const respuesta = await db.query(sql2);
+    }
 
     res.send("Datos Ingresados correctamente");
   } catch (error) {
@@ -149,7 +159,7 @@ const editChange = async (req, res) => {
     const sql = `UPDATE changes SET ? WHERE id = ${id}`;
 
     const result = await db.query(sql, [data]);
-    console.log(result)
+    console.log(result);
     if (result.affectedRows < 1)
       return res.status(300).send("No se pudo editar,intenta mas tarde");
 

@@ -165,7 +165,7 @@ function CreateDocument() {
           name: res.data[0].name,
           processSelect: res.data[0].process,
           typologySelect: res.data[0].typology,
-          date: res.data[0].last_revision.replaceAll("/", "-"),
+          date: res.data[0].last_revision.split("T")[0].replaceAll("/", "-"),
           comments: res.data[0].comments,
           link: res.data[0].link,
           version: res.data[0].version < 10 ? `0${res.data[0].version}`: res.data[0].version  

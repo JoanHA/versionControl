@@ -26,7 +26,7 @@ const getOneDocument = async (req, res) => {
     FROM documents WHERE id= ?`;
   try {
     const response = await db.query(sql, [id]);
-    response[0].last_revision = helper.convertTime(response[0].last_revision);
+    // response[0].last_revision = helper.convertTime(response[0].last_revision);
     res.send(response);
   } catch (error) {
     console.log(error);

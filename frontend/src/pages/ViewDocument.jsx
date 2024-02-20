@@ -175,7 +175,7 @@ function ViewDocument() {
           <label className="titleLabel">
             Fecha de emisión / Ultima revisión:
           </label>
-          <label className="inputLabel">{data.last_revision}</label>
+          <label className="inputLabel">{data.last_revision?.split("T")[0]}</label>
         </div>
         <div className="col-12 col-md-5">
           <label className="titleLabel">Tipologia:</label>
@@ -214,9 +214,8 @@ function ViewDocument() {
           <label className="inputLabel"> {data.status_name}</label>
         </div>
         <div className="col-12 col-md-5">
-          <label className="titleLabel">Fecha de creación: </label>
+          <label className="titleLabel">Carga al sistema: </label>
           <label className="inputLabel">
-            {" "}
             {data.created_at?.toString().split("T")[0]}
           </label>
         </div>
