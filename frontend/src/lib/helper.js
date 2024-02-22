@@ -126,6 +126,7 @@ try {
         },
         columnStyles: {
           6: { cellWidth: 90 }, 
+          5:{ cellWidth: 50 }
         },
       });
       //Guardar documento
