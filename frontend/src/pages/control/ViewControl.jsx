@@ -7,44 +7,65 @@ function ViewControl() {
   const columns = [
     {
       header: "Código",
+size:200,
       accessorKey: "code",
     },
     {
+      header: "Nombre documento",
+      size: 600,
+      accessorKey: "name",
+    },
+    {
       header: "Responsable",
+
       accessorKey: "responsible",
     },
     {
       header: "Guardado en",
+
       accessorKey: "saved_in",
     },
     {
       header: "Guardado como",
+
       accessorKey: "saved_format",
     },
     {
+      header: "Estado",
+
+      accessorKey: "version",
+    },
+    {
       header: "Disposición final",
+
       accessorKey: "last_move_name",
     },
   ];
   const [data, setData] = useState([]);
   const getData = async () => {
     const res = await getArchived();
-    setData(res.data);
-
+    const datos = res.data.map((doc) => {
+      if (doc.version === 0) {
+        doc.version = "OBSOLETO";
+      } else {
+        doc.version = "Activo";
+      }
+      return doc;
+    });
+    setData(datos);
   };
   useEffect(() => {
-    
     getData();
   }, []);
   return (
     <div>
-            <div className="titleHeader ">Retención documental</div>
+      <div className="titleHeader ">Retención documental</div>
 
       <Table
         columns={columns}
         data={data}
         options={false}
-        btnDetails={{doc:data,text:"Detalles"}}
+        btnDetails={{ doc: data, text: "Detalles" }}
         cb={getData}
       ></Table>
     </div>

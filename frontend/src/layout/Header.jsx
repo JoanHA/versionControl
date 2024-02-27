@@ -141,7 +141,7 @@ const Header = ({ children }) => {
 
       <div className=" d-flex flex-row " style={{minHeight:"560px "}}  >
         <Sidebar></Sidebar>
-        <div className="flex-fill " style={{overflowX:"auto"}}>{children}</div>
+        <div className="flex-fill " style={{overflowX:"auto",width:"1126.11px"}}>{children}</div>
       </div>
     </div>
   );

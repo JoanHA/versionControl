@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { getAllDocuments } from "../api/documentsAPI";
-import { convertNumber } from "../lib/helper";
+import { convertNumber, downloadExcels } from "../lib/helper";
 import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import {
@@ -81,6 +81,11 @@ export default function DocTable() {
     const originalData = filtered.map((e) => e.original);
     downloadDocs(originalData);
   };
+  const downloadExcel = () => {
+    const filtered = table.getFilteredRowModel().rows;
+    const originalData = filtered.map((e) => e.original);
+    downloadExcels(originalData);
+  };
 
   const getdata = async () => {
     const res = await getAllDocuments();
@@ -124,13 +129,11 @@ export default function DocTable() {
     }
   }, [table.getState().columnFilters[0]?.id]);
 
-  const [defaultVal,setDefaultVal] = useState("")
-  useEffect(()=>{
-    setDefaultVal(localStorage.getItem("allfilter"))
-    setGlobalFilter(defaultVal)
-  },[
-    defaultVal
-  ])
+  const [defaultVal, setDefaultVal] = useState("");
+  useEffect(() => {
+    setDefaultVal(localStorage.getItem("allfilter"));
+    setGlobalFilter(defaultVal);
+  }, [defaultVal]);
   return (
     <div className="">
       <div className="d-flex gap-2 justify-content-between mb-2">
@@ -149,7 +152,7 @@ export default function DocTable() {
             value={defaultVal}
             onChange={(e) => {
               setDefaultVal(localStorage.setItem("allfilter", e.target.value));
-              setGlobalFilter(e.target.value)
+              setGlobalFilter(e.target.value);
             }}
           />
         </div>
@@ -161,6 +164,14 @@ export default function DocTable() {
             onClick={downloadData}
           >
             DESCARGAR PDF
+          </button>
+          <button
+            className="btn btn-success"
+            style={{ borderRadius: "0", textTransform: "uppercase" }}
+            id="btnDownloandExcel"
+            onClick={downloadExcel}
+          >
+            Descargar excel
           </button>
         </div>
         <div className="flex  d-flex items-center gap-2 align-items-center">
@@ -222,10 +233,11 @@ export default function DocTable() {
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <th key={header.id} colSpan={header.colSpan} >
+                    <th key={header.id} colSpan={header.colSpan}>
                       {header.isPlaceholder ? null : (
                         <>
-                          <div style={{cursor:"pointer"}}
+                          <div
+                            style={{ cursor: "pointer", maxWidth: "200px" }}
                             {...{
                               className: header.column.getCanSort()
                                 ? "cursor-pointer select-none"

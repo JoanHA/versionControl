@@ -3,11 +3,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import { deleteDocuments, getOneDocument } from "../api/documentsAPI";
 import { Link } from "react-router-dom";
 import Archived from "./control/Archived";
-
+import { FILES_URL } from "../config";
 import HistoricTable from "../components/HistoricTable";
 import { getChangesFromOne } from "../api/changes";
 import { useAuth } from "../context/AuthContext";
 import { formatTimeStamp } from "../lib/helper";
+
 function ViewDocument() {
   const [isRegister, setIsRegister] = useState(false);
   const [data, setData] = useState({});
@@ -16,10 +17,7 @@ function ViewDocument() {
   const params = useParams();
   const navigate = useNavigate();
   const columns = [
-    {
-      header: "Justificación",
-      accessorKey: "reason",
-    },
+    
     {
       header: "Solicitante",
       accessorKey: "claimant",
@@ -33,12 +31,18 @@ function ViewDocument() {
       accessorKey: "aproved_by",
     },
     {
+      header: "Fecha de cambio",
+      accessorKey: "created_at",
+    },
+    {
       header: "Detalles",
       accessorKey: "details",
     },
+    
   ];
   const getData = async () => {
     const res = await getOneDocument(params.id);
+   
     //Informacion del documento
 
     const changeResponse = await getChangesFromOne(res.data[0].code); // Cambios que tiene el equipo
@@ -52,6 +56,7 @@ function ViewDocument() {
             ? "OBSOLETO"
             : `0${e.new_version}`
           : e.new_version;
+          e.created_at =e.created_at.split("T")[0]
       return e;
     });
 
@@ -120,6 +125,7 @@ function ViewDocument() {
             >
               Agregar cambio
             </Link>
+            
           ) : (
             ""
           )}
@@ -195,6 +201,7 @@ function ViewDocument() {
               : `0${data.version}`}
           </label>
         </div>
+      
 
         <div className="col-12 col-md-4 ">
           <label className="titleLabel">Ruta de sharePoint:</label>
@@ -217,6 +224,17 @@ function ViewDocument() {
           <label className="titleLabel">Carga al sistema: </label>
           <label className="inputLabel">
             {data.created_at?.toString().split("T")[0]}
+          </label>
+        </div>
+        <div className="col-12 col-md-5">
+          <label className="titleLabel">Documento: </label>
+          <label className="inputLabel">
+            {
+              data.file_name ? (<>
+               <a href={`${FILES_URL}files/${data.file_name}` } target="_blank" style={{color:"blue",textDecoration:"underline"}}>{data.file_name  }</a>
+              </>):("NO HAY ARCHIVO AÚN")
+            }
+           
           </label>
         </div>
       </div>

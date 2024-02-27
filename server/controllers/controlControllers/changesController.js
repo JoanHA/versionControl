@@ -1,6 +1,13 @@
 const db = require("../../dbControl");
 const helper = require("../../lib/helpers");
 
+const FormatDate= (fechaString)=>{
+  const dateString = fechaString;
+  const dateWithoutMilliseconds = dateString.replace(/\.\d+Z$/, "Z");
+  const date = new Date(dateWithoutMilliseconds);
+  const formattedDate = date.toISOString().slice(0, 19).replace("T", " ");
+return formattedDate
+}
 const createChange = async (req, res) => {
   const data = ({
     aproved_by,
@@ -10,23 +17,25 @@ const createChange = async (req, res) => {
     new_version,
     details,
     name,
+    created_at
   } = req.body);
   const isChanging = req.body.change;
   delete data.change;
 
   const last_revision = new Date().toISOString();
-  const dateString = last_revision;
-  const dateWithoutMilliseconds = dateString.replace(/\.\d+Z$/, "Z");
-  const date = new Date(dateWithoutMilliseconds);
-  const formattedDate = date.toISOString().slice(0, 19).replace("T", " ");
+  const formattedDate = FormatDate(last_revision)
+  data.created_at = FormatDate(new Date(data.created_at).toISOString())
+
   //sql para actualizar
   const sql = `UPDATE documents SET
   version =${data.new_version},
   last_revision='${formattedDate}',
   status=${req.body.status} WHERE code = '${data.code}' `;
+  //sql para actualizar sin cambio de version
   const sql2 = `UPDATE documents SET
   last_revision='${formattedDate}',
   status=${req.body.status} WHERE code = '${data.code}' `;
+
   try {
     //Save change
     const response = await db.query("INSERT INTO changes SET ?", [data]);
@@ -35,7 +44,7 @@ const createChange = async (req, res) => {
       //Update the last version of the doc
       const respuesta = await db.query(sql);
     } else {
-      //update without the version
+      //update without the version MF-lo08
       const respuesta = await db.query(sql2);
     }
 
@@ -97,7 +106,11 @@ const getChanges = async (req, res) => {
 };
 const getArchived = async (req, res) => {
   const sql =
-    "SELECT storages.*, (SELECT name FROM documents WHERE documents.code = storages.code) AS name, (SELECT name from params WHERE params.id = storages.last_move) AS last_move_name FROM storages WHERE external = 2";
+    `SELECT storages.*, 
+    (SELECT name FROM documents WHERE documents.code = storages.code) AS name,
+    (SELECT name from params WHERE params.id = storages.last_move) AS last_move_name,
+    (SELECT version FROM documents WHERE documents.code = storages.code) AS version 
+    FROM storages WHERE external = 2`;
   try {
     const response = await db.query(sql);
     res.json(response);
@@ -156,6 +169,7 @@ const editChange = async (req, res) => {
   try {
     const id = req.params.id;
     const data = req.body;
+    delete data.change
     const sql = `UPDATE changes SET ? WHERE id = ${id}`;
 
     const result = await db.query(sql, [data]);

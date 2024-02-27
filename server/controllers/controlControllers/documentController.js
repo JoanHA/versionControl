@@ -22,7 +22,8 @@ const getOneDocument = async (req, res) => {
   const sql = `SELECT *, 
     (SELECT name FROM params WHERE params.id = documents.typology) AS typology_name,
     (SELECT name FROM params WHERE params.id = documents.process) AS process_name,
-    (SELECT name FROM params WHERE params.id = documents.status) AS status_name
+    (SELECT name FROM params WHERE params.id = documents.status) AS status_name,
+    (SELECT file_name FROM files WHERE files.document = documents.code) AS file_name
     FROM documents WHERE id= ?`;
   try {
     const response = await db.query(sql, [id]);
@@ -36,19 +37,30 @@ const getOneDocument = async (req, res) => {
     const segundos = String(fechaOriginal.getSeconds()).padStart(2, "0");
 
     const fechaFormateada = `${año}-${mes}-${dia} ${horas}:${minutos}:${segundos}`;
-    response[0].last_revision = fechaFormateada
+    response[0].last_revision = fechaFormateada;
     res.send(response);
   } catch (error) {
     console.log(error);
   }
 };
 const editDocument = async (req, res) => {
+  const file = req.file
   const code = req.body.code;
   const datos = req.body;
   delete datos.code;
+  
   const sql = `UPDATE documents SET ? WHERE code='${code}'`;
   try {
     const result = await db.query(sql, [datos]);
+    if (result.affectedRows > 0) {
+      if(file){
+        //Eliminar el documento que este en la base de datos 
+        //Eliminar el documento  de los archivos del sistema 
+        //Guardar el nuevo Documento  
+      }
+    
+    }
+
     res.send("Actualizado con exito!");
   } catch (error) {
     console.log(error);
@@ -69,10 +81,10 @@ const deleteDocument = async (req, res) => {
 
 const makeDocument = async (req, res) => {
   const data = req.body;
+  const file = req.file;
   data.version ? data.version : (data.version = 1);
   data.last_revision = new Date(data.last_revision).toISOString();
   data.status = 1;
-
   const sql = `INSERT INTO documents 
   SET 
     code = '${data.code}', 
@@ -86,7 +98,20 @@ const makeDocument = async (req, res) => {
     status = ${data.status}`;
   try {
     const response = await db.query(sql, data);
-    res.send("Documento creado con exito!");
+    if (response.affectedRows > 0) {
+      if(file){
+        const rows = await db.query(`INSERT INTO files SET 
+        file_name = '${file.filename}',
+        file_type = '${file.mimetype}',
+        document = '${data.code}',
+        original_name = '${file.inalname}',
+        status = 1
+        `);
+      }
+    
+    }
+
+    return res.send("Documento creado con exito!");
   } catch (error) {
     console.log(error);
     if (error.code === "ER_DUP_ENTRY") {
@@ -114,11 +139,11 @@ const createControl = async (req, res) => {
 const lastChange = async (req, res) => {
   const code = req.params.code;
 
-  const sql = `SELECT details
+  const sql = `SELECT *
   FROM changes
-  WHERE code = '${code}'
+  WHERE code =  '${code}'
   AND created_at = (SELECT MAX(created_at) FROM changes WHERE code = '${code}')
-  AND new_version = (SELECT MAX(new_version) FROM changes WHERE code = '${code}');`;
+  AND new_version = (SELECT MAX(new_version) FROM changes WHERE code =  '${code}')`;
 
   try {
     const row = await db.query(sql);

@@ -10,16 +10,17 @@ function ViewChanges() {
       accessorKey: "code",
     },
     {
-      header: "Solicitante",
-      accessorKey: "claimant",
-    },
-    {
-      header: "Documento",
+      header: "Nombre del documento",
       accessorKey: "name",
     },
     {
-      header: "Justificación",
-      accessorKey: "reason",
+      header: "Solicitante",
+      accessorKey: "claimant",
+    },
+   
+    {
+      header: "Fecha de cambio",
+      accessorKey: "created_at",
     },
     {
       header: "Nueva versión",

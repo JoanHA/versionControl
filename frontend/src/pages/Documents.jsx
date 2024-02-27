@@ -41,7 +41,7 @@ function Documents() {
   ];
   return (
     <div>
-      <div className="titleHeader text-center py-1">Listado maestro</div>
+      <div className="titleHeader text-center " style={{textTransform:"uppercase"}}>Listado maestro de documentos </div>
       <div className="">
         {/* <Table columns={columns} data={data} ></Table> */}
         <DocTable ></DocTable>

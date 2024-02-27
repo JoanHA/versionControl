@@ -9,6 +9,10 @@ function External() {
           accessorKey: "responsible",
         },
         {
+          header: "Nombre documento",
+          accessorKey: "documentName",
+        },
+        {
           header: "Guardado en",
           accessorKey: "saved_in",
         },

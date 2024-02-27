@@ -28,7 +28,12 @@ function Table({
   const [sorting, setSorting] = useState([]);
   const [filtering, setFilteting] = useState("");
   const [pageSize, setPageSize] = useState(window.innerWidth);
+  const [columnResizeDirection, setColumnResizeDirection] =
+    React.useState("ltr");
+  const [columnResizeMode, setColumnResizeMode] = React.useState("onChange");
+  const rerender = React.useReducer(() => ({}), {})[1];
   const table = useReactTable({
+
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
@@ -43,7 +48,6 @@ function Table({
     onGlobalFilterChange: setFilteting,
   });
   const { isAuthenticated, user } = useAuth();
-
   //Ajustar la cantidad de datos con respecto al tamaño de la pantalla
   window.onresize = (e) => {
     setPageSize(window.innerWidth);
@@ -110,6 +114,7 @@ function Table({
       }
     });
   };
+
   return (
     <div>
       <div
@@ -198,11 +203,18 @@ function Table({
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <th
-                    key={header.id}
-                    onClick={header.column.getToggleSortingHandler()}
+                    onDoubleClick={header.column.getToggleSortingHandler()}
+                    {...{
+                      key: header.id,
+                      colSpan: header.colSpan,
+                      style: {
+                        width: header.getSize(),
+                        cursor:"pointer"
+                      },
+                    }}
                   >
                     {header.isPlaceholder ? null : (
-                      <div>
+                      <div  >
                         {flexRender(
                           header.column.columnDef.header,
                           header.getContext()
@@ -213,14 +225,55 @@ function Table({
                             header.column.getIsSorted() ?? null
                           ]
                         }
+                        <div {...{
+                        onDoubleClick: () => header.column.resetSize(),
+                        onMouseDown: header.getResizeHandler(),
+                        onTouchStart: header.getResizeHandler(),
+                        className: `resizer ${
+                          table.options.columnResizeDirection
+                        } ${
+                          header.column.getIsResizing() ? "isResizing" : ""
+                        }`,
+                        style: {
+                          transform:
+                            columnResizeMode === "onChange" &&
+                            header.column.getIsResizing()
+                              ? `translateX(${
+                                  (table.options.columnResizeDirection ===
+                                  "rtl"
+                                    ? -1
+                                    : 1) *
+                                  (table.getState().columnSizingInfo
+                                    .deltaOffset ?? 0)
+                                }px)`
+                              : "",
+                        },
+                      }}></div>
+                      
                       </div>
                     )}
                   </th>
                 ))}
-                {options && <th colSpan={1}>Opciones</th>}
-                {editType && <th colSpan={1}>Opciones</th>}
-                {btnDetails && <th colSpan={1}>Detalles</th>}
-                {details && <th colSpan={1}>Detalles</th>}
+                {options && (
+                  <th colSpan={1} style={{width:"70px"}}>
+                    Opciones
+                  </th>
+                )}
+                {editType && (
+                  <th colSpan={1} style={{width:"70px"}}>
+                    Opciones
+                  </th>
+                )}
+                {btnDetails && (
+                  <th colSpan={1} style={{width:"70px"}}>
+                    Detalles
+                  </th>
+                )}
+                {details && (
+                  <th colSpan={1} style={{width:"70px"}}>
+                    Detalles
+                  </th>
+                )}
               </tr>
             ))}
           </thead>
@@ -228,7 +281,9 @@ function Table({
             {table.getRowModel().rows.map((row) => (
               <tr key={row.id} id={row.id}>
                 {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id}>
+                  <td key={cell.id}  style= {{
+                    width: cell.column.getSize()
+                  }}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
                 ))}
@@ -307,21 +362,20 @@ function Table({
                   <>
                     <td className="">
                       <div className="d-flex flex-column align-items-center justify-content-center">
-                      <ChangeDetails infor={data[row.id]}></ChangeDetails>
-                      {user?.rol === 1 && isAuthenticated ? (
-                        <button
-                          className="btn btn-danger btn-sm mt-1"
-                          onClick={() => {
-                            deleteChange(row.original.id);
-                          }}
-                        >
-                          Eliminar
-                        </button>
-                      ) : (
-                        ""
-                      )}
+                        <ChangeDetails infor={data[row.id]}></ChangeDetails>
+                        {user?.rol === 1 && isAuthenticated ? (
+                          <button
+                            className="btn btn-danger btn-sm mt-1"
+                            onClick={() => {
+                              deleteChange(row.original.id);
+                            }}
+                          >
+                            Eliminar
+                          </button>
+                        ) : (
+                          ""
+                        )}
                       </div>
-                     
                     </td>
                   </>
                 )}

@@ -7,24 +7,22 @@ function Sidebar() {
 
   useEffect(() => {
     setPathname(history.pathname);
-     changeSize()
+    changeSize();
   }, [history]);
 
-  const changeSize = ()=>{
-    
+  const changeSize = () => {
     if (window.outerWidth <= 1271) {
-      
       if (
         pathname.split("/")[1] != "admin" &&
         pathname.split("/")[1] != "editUser"
       ) {
-        console.log("cambia")
+        console.log("cambia");
         document.querySelector("#navHeader")?.classList?.add("navClose");
-        return
-      }else{
+        return;
+      } else {
         document.querySelector("#navHeader")?.classList?.remove("navClose");
         document.querySelector("#navHeader")?.classList?.remove("navOpen");
-        return
+        return;
       }
     }
     if (
@@ -32,14 +30,13 @@ function Sidebar() {
       pathname.split("/")[1] != "editUser"
     ) {
       document.querySelector("#navHeader")?.classList?.add("navClose");
-    }else{
+    } else {
       document.querySelector("#navHeader")?.classList?.remove("navClose");
-      return
+      return;
     }
-
-  }
+  };
   window.addEventListener("resize", () => {
-     changeSize()
+    changeSize();
   });
   const classNameRender = () => {
     if (
@@ -59,105 +56,124 @@ function Sidebar() {
   return (
     <div id="sidebar" className={classNameRender()}>
       <div className="list-group px-1">
-        <div className="dropdown">
-          <button
-            type="button"
-            className="list-group-item list-group-item-action dropdown-toggle"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <Link to={"/"}> Maestro documental</Link>
-          </button>
-          <ul className="dropdown-menu">
-            <li>
-              <Link className="dropdown-item" to="/">
+        {isAuthenticated ? (
+          <>
+            <div className="dropdown">
+              <button
+                type="button"
+                className="list-group-item list-group-item-action dropdown-toggle"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <Link to={"/"}> Listado maestro</Link>
+              </button>
+              <ul className="dropdown-menu">
+                <li>
+                  <Link className="dropdown-item" to="/">
+                    Ver listado maestro
+                  </Link>
+                </li>
+
+                <li>
+                  <Link className="dropdown-item" to="/newDoc">
+                    Crear documento
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div className="dropdown">
+              <button
+                type="button"
+                className="list-group-item list-group-item-action dropdown-toggle"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <Link to={"/changes"}>Control de cambios </Link>
+              </button>
+              <ul className="dropdown-menu">
+                <li>
+                  <Link className="dropdown-item" to="/changes">
+                    Ver cambios
+                  </Link>
+                </li>
+
+                <li>
+                  <Link className="dropdown-item" to="/createChange">
+                    Crear cambio a documento
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div className="dropdown">
+              <button
+                type="button"
+                className="list-group-item list-group-item-action dropdown-toggle"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <Link to={"/control"}>Retención documental </Link>
+              </button>
+              <ul className="dropdown-menu">
+                <li>
+                  <Link className="dropdown-item" to="/control">
+                    Retencion documental
+                  </Link>
+                </li>
+
+                <li>
+                  <Link className="dropdown-item" to="/createControl">
+                    Crear control documental
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div className="dropdown">
+              <button
+                type="button"
+                className="list-group-item list-group-item-action dropdown-toggle"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <Link>Documentos externos </Link>
+              </button>
+              <ul className="dropdown-menu">
+                <li>
+                  <Link className="dropdown-item" to="/external">
+                    Documentos externos
+                  </Link>
+                </li>
+
+                <li>
+                  <Link className="dropdown-item" to="/createExternal">
+                    Agregar documento externo
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="list-group">
+              <Link
+                to="/"
+                className="list-group-item list-group-item-action "
+                aria-current="true"
+              >
                 Ver listado maestro
               </Link>
-            </li>
-            {isAuthenticated && (
-              <li>
-                <Link className="dropdown-item" to="/newDoc">
-                  Crear documento
-                </Link>
-              </li>
-            )}
-          </ul>
-        </div>
-        <div className="dropdown">
-          <button
-            type="button"
-            className="list-group-item list-group-item-action dropdown-toggle"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <Link to={"/changes"}>Control de cambios </Link>
-          </button>
-          <ul className="dropdown-menu">
-            <li>
-              <Link className="dropdown-item" to="/changes">
-                Ver cambios
-              </Link>
-            </li>
 
-            {isAuthenticated && (
-              <li>
-                <Link className="dropdown-item" to="/createChange">
-                  Crear cambio a documento
-                </Link>
-              </li>
-            )}
-          </ul>
-        </div>
-
-        <div className="dropdown">
-          <button
-            type="button"
-            className="list-group-item list-group-item-action dropdown-toggle"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <Link to={"/control"}>Retención documental </Link>
-          </button>
-          <ul className="dropdown-menu">
-            <li>
-              <Link className="dropdown-item" to="/control">
-                Retencion documental
+              <Link
+                to="/external"
+                className="list-group-item list-group-item-action"
+              >
+                Documentos externos
               </Link>
-            </li>
-         
-            {isAuthenticated && (
-              <li>
-                <Link className="dropdown-item" to="/createControl">
-                  Crear control documental
-                </Link>
-              </li>
-            )}
-          </ul>
-        </div>
-        <div className="dropdown">
-          <button
-            type="button"
-            className="list-group-item list-group-item-action dropdown-toggle"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <Link >Documentos externos </Link>
-          </button>
-          <ul className="dropdown-menu">
-            <li>
-              <Link className="dropdown-item" to="/external">
-                  Documentos externos
-              </Link>
-            </li>
-            {isAuthenticated && (
-              <li>
-                <Link className="dropdown-item" to="/createExternal">
-                  Agregar documento externo
-                </Link>
-              </li>
-            )}
-          </ul>
-        </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

@@ -38,7 +38,7 @@ function CreateChange() {
       }
       if (result.isConfirmed) {
         values.code = params.code ? params.code : selectedDoc.code;
-      
+
         try {
           const res = await createChange(values);
           if (res.status === 200) {
@@ -106,7 +106,6 @@ function CreateChange() {
   const getInfo = async () => {
     try {
       const res = await getOneChange(params.id);
-
       reset({
         aproved_by: res.data.aproved_by,
         claimant: res.data.claimant,
@@ -114,6 +113,11 @@ function CreateChange() {
         details: res.data.details,
         name: res.data.name,
         reason: res.data.reason,
+        created_at: res.data.created_at.split("T")[0],
+        new_version:
+          res.data.new_version < 10
+            ? `0${res.data.new_version}`
+            : res.data.new_version,
       });
     } catch (err) {
       swal.fire(err.response.data, "", "error");
@@ -251,8 +255,50 @@ function CreateChange() {
                 )}
               </div>
             </div>
+            {params.id && (
+              <>
+                <div className="row mb-2">
+                  <div className="col-4">
+                    <label htmlFor="">
+                      {" "}
+                      <strong>Nueva versión</strong>{" "}
+                    </label>
+                  </div>
+                  <div className="col-8">
+                    <input
+                      {...register("new_version", { required: true })}
+                      type="number"
+                      className="form-control"
+                      placeholder="Isabel Gomez..."
+                    />
+                    {errors.aproved_by?.type === "required" && (
+                      <p className="errorMsg">Este campo es obligatorio</p>
+                    )}
+                  </div>
+                </div>
+              </>
+            )}
           </div>
+
           <div className="col-12 col-sm-6 ">
+            <div className="col-12 row align-items-center">
+              <div className="col-4">
+                <strong>
+                  <label htmlFor="">Fecha de cambio</label>
+                </strong>
+              </div>
+              <div className="col-8">
+                <input
+                  {...register("created_at", { required: true })}
+                  type="date"
+                  className="form-control"
+                />
+                {errors.created_at?.type === "required" && (
+                  <p className="errorMsg">Este campo es obligatorio</p>
+                )}
+              </div>
+            </div>
+
             <div>
               <label htmlFor="">
                 <strong>Detalles</strong>{" "}
@@ -292,7 +338,7 @@ function CreateChange() {
           </div>
           <div className="my-2">
             <button className="btn btn-success shadow rounded">
-              Registrar cambio
+              {params.id ? "Editar cambio" : " Registrar cambio"}
             </button>
           </div>
         </div>

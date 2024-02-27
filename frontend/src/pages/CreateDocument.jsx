@@ -89,17 +89,71 @@ function CreateDocument() {
           delete values.typologySelect;
           delete values.processSelect;
           delete values.date;
-          try {
-            const res = await updateDocument(values);
-            if (res.status === 200) {
-              swal.fire(res.data, "", "success").then(() => {
-                reset();
-              });
+       
+          if (doc.file_name) {
+            Swal.fire({
+              title: "Espera!",
+              text: "Este documento  ya tiene un archivo adjunto, estas seguro de agregar otro?  \n Borrarás el archivo anterior ",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonColor: "#3085d6",
+              cancelButtonColor: "#d33",
+              confirmButtonText: "Si, Reemplazalo!",
+            }).then(async (result) => {
+              if (result.isConfirmed) {
+           
+                const formData = new FormData();
+                if (values.files.length > 0)
+                  formData.append("file", values.files[0]);
+                formData.append("code", values.code);
+                formData.append("comments", values.comments);
+                formData.append("last_revision", values.last_revision);
+                formData.append("name", values.name);
+                formData.append("process", values.process);
+                formData.append("typology", values.typology);
+                formData.append("version", values.version);
+                formData.append("link", values.link);
+                try {
+                  const res = await updateDocument(formData);
+                  if (res.status === 200) {
+                    swal.fire(res.data, "", "success").then(() => {
+                      reset();
+                    });
+                  }
+                } catch (error) {
+                  console.log(error);
+                  swal.fire("Tuvimos un error intenta mas tarde!", "", "error");
+                }
+              }
+            });
+          }else{
+            
+            const formData = new FormData();
+            if (values.files.length > 0)
+              formData.append("file", values.files[0]);
+            formData.append("code", values.code);
+            formData.append("comments", values.comments);
+            formData.append("last_revision", values.last_revision);
+            formData.append("name", values.name);
+            formData.append("process", values.process);
+            formData.append("typology", values.typology);
+            formData.append("version", values.version);
+            formData.append("link", values.link);
+            try {
+              const res = await updateDocument(formData);
+              if (res.status === 200) {
+                swal.fire(res.data, "", "success").then(() => {
+                  reset();
+                });
+              }
+            } catch (error) {
+              console.log(error);
+              swal.fire("Tuvimos un error intenta mas tarde!", "", "error");
             }
-          } catch (error) {
-            console.log(error);
-            swal.fire("Tuvimos un error intenta mas tarde!", "", "error");
           }
+
+          
+          
 
           return;
         }
@@ -122,7 +176,18 @@ function CreateDocument() {
           version: 1,
         };
         try {
-          const response = await createDocument(data);
+          const formData = new FormData();
+          if (values.files.length > 0) formData.append("file", values.files[0]);
+          formData.append("code", data.code);
+          formData.append("comments", data.comments);
+          formData.append("last_revision", data.last_revision);
+          formData.append("name", data.name);
+          formData.append("process", data.process);
+          formData.append("typology", data.typology);
+          formData.append("version", data.version);
+          formData.append("link", data.link);
+
+          const response = await createDocument(formData);
           if (response.status === 200) {
             swal.fire(response.data, "", "success").then(() => {
               reset();
@@ -165,10 +230,13 @@ function CreateDocument() {
           name: res.data[0].name,
           processSelect: res.data[0].process,
           typologySelect: res.data[0].typology,
-          date: res.data[0].last_revision.substring(0,10),
+          date: res.data[0].last_revision.substring(0, 10),
           comments: res.data[0].comments,
           link: res.data[0].link,
-          version: res.data[0].version < 10 ? `0${res.data[0].version}`: res.data[0].version  
+          version:
+            res.data[0].version < 10
+              ? `0${res.data[0].version}`
+              : res.data[0].version,
         });
       } catch (error) {
         console.log(error);
@@ -399,7 +467,7 @@ function CreateDocument() {
                 </div>
                 <div className="col-9 flex-fill">
                   <input
-                  placeholder="/intranet/folder/file"
+                    placeholder="/intranet/folder/file"
                     type="text"
                     {...register("link")}
                     className="form-control  rounded  "
@@ -415,7 +483,7 @@ function CreateDocument() {
                     <input
                       type="number"
                       placeholder="#01"
-                      {...register("version",{required:true})}
+                      {...register("version", { required: true })}
                       className="form-control  rounded  "
                     ></input>
                     {errors.version?.type == "required" && (
@@ -424,6 +492,19 @@ function CreateDocument() {
                   </div>
                 </div>
               )}
+              <div className="row mt-2">
+                <div className="col-3">
+                  <label htmlFor="">Documento</label>
+                </div>
+                <div className="col-9 flex-fill">
+                  <input
+                    type="file"
+                    placeholder="#01"
+                    {...register("files")}
+                    className="form-control  rounded  "
+                  ></input>
+                </div>
+              </div>
             </div>
             {/* last child Button */}
 
