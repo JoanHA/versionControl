@@ -2,7 +2,8 @@ const db = require("../../dbControl");
 const express = require("express");
 const router = express.Router();
 const helper = require("../../lib/helpers");
-
+const fs = require("fs");
+const path = require("path");
 const getDocuments = async (req, res) => {
   try {
     const response = await db.query(`SELECT  *,
@@ -44,21 +45,56 @@ const getOneDocument = async (req, res) => {
   }
 };
 const editDocument = async (req, res) => {
-  const file = req.file
+  const file = req.file;
   const code = req.body.code;
   const datos = req.body;
   delete datos.code;
-  
+
   const sql = `UPDATE documents SET ? WHERE code='${code}'`;
   try {
     const result = await db.query(sql, [datos]);
+
     if (result.affectedRows > 0) {
-      if(file){
-        //Eliminar el documento que este en la base de datos 
-        //Eliminar el documento  de los archivos del sistema 
-        //Guardar el nuevo Documento  
+      if (file) {
+        try {
+          const rowResult = await db.query(
+            `SELECT * FROM  files WHERE document = '${code}'`
+          );
+
+          //Si hay archivos para ese codigo eliminarlo de la base de datos y del servidor
+          if (rowResult.length > 0) {
+            rowResult.forEach(async (doc) => {
+              const FileRoute = path.join(
+                __dirname +"../../../public/files/"+doc.file_name
+              );
+              fs.unlinkSync(`${FileRoute}`);
+              //eliminar archivo anterior
+              await db.query("DELETE FROM files WHERE id =?", [doc.id]);
+             //Guardar nuevo archivo
+             const rows = await db.query(`INSERT INTO files SET 
+             file_name = '${file.filename}',
+             file_type = '${file.mimetype}',
+             document = '${code}',
+             original_name = '${file.originalname}',
+             status = 1
+             `);
+            });
+
+            //Si no tiene documento previo, guardar el nuevo
+          }else{
+            const rows = await db.query(`INSERT INTO files SET 
+            file_name = '${file.filename}',
+            file_type = '${file.mimetype}',
+            document = '${code}',
+            original_name = '${file.originalname}',
+            status = 1
+            `);
+          }
+        } catch (error) {
+          console.log(error)
+          throw new Error(error)
+        }
       }
-    
     }
 
     res.send("Actualizado con exito!");
@@ -99,16 +135,15 @@ const makeDocument = async (req, res) => {
   try {
     const response = await db.query(sql, data);
     if (response.affectedRows > 0) {
-      if(file){
+      if (file) {
         const rows = await db.query(`INSERT INTO files SET 
         file_name = '${file.filename}',
         file_type = '${file.mimetype}',
         document = '${data.code}',
-        original_name = '${file.inalname}',
+        original_name = '${file.originalname}',
         status = 1
         `);
       }
-    
     }
 
     return res.send("Documento creado con exito!");
