@@ -160,6 +160,7 @@ const createMasive = async (req, res) => {
           : parseInt(dato.column8) > 0 ? 1: 3
         : 3,
       };
+      console.log(listData)
 
       const resList = await db.query("INSERT INTO documents SET ?", listData);
     }

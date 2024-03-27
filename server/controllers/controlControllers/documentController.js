@@ -28,17 +28,17 @@ const getOneDocument = async (req, res) => {
     FROM documents WHERE id= ?`;
   try {
     const response = await db.query(sql, [id]);
-    const fechaOriginal = new Date(response[0].last_revision);
+    // const fechaOriginal = new Date(response[0].last_revision);
 
-    const dia = String(fechaOriginal.getDate()).padStart(2, "0");
-    const mes = String(fechaOriginal.getMonth() + 1).padStart(2, "0"); // Los meses en JavaScript van de 0 a 11
-    const año = fechaOriginal.getFullYear();
-    const horas = String(fechaOriginal.getHours()).padStart(2, "0");
-    const minutos = String(fechaOriginal.getMinutes()).padStart(2, "0");
-    const segundos = String(fechaOriginal.getSeconds()).padStart(2, "0");
+    // const dia = String(fechaOriginal.getDate()).padStart(2, "0");
+    // const mes = String(fechaOriginal.getMonth() + 1).padStart(2, "0"); // Los meses en JavaScript van de 0 a 11
+    // const año = fechaOriginal.getFullYear();
+    // const horas = String(fechaOriginal.getHours()).padStart(2, "0");
+    // const minutos = String(fechaOriginal.getMinutes()).padStart(2, "0");
+    // const segundos = String(fechaOriginal.getSeconds()).padStart(2, "0");
 
-    const fechaFormateada = `${año}-${mes}-${dia} ${horas}:${minutos}:${segundos}`;
-    response[0].last_revision = fechaFormateada;
+    // const fechaFormateada = `${año}-${mes}-${dia} ${horas}:${minutos}:${segundos}`;
+    // response[0].last_revision = fechaFormateada;
     res.send(response);
   } catch (error) {
     console.log(error);

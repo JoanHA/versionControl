@@ -31,7 +31,7 @@ function Login() {
             showConfirmButton: false,
             timer: 2000,
           }).then(() => {
-            navigate("/welcome");
+            navigate("/");
             // location.reload();
           });
           return;

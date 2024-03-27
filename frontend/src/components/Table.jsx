@@ -16,7 +16,7 @@ import Archived from "../pages/control/Archived";
 import { useAuth } from "../context/AuthContext";
 import { deleteChanges, deleteControls } from "../api/changes";
 
-function Table({
+function  Table({
   data,
   columns,
   options = true,
@@ -153,6 +153,8 @@ function Table({
             ))}
           </select>
           <button
+          type="button"
+          
             className="btn"
             onClick={() => {
               table.setPageIndex(0);
@@ -161,6 +163,7 @@ function Table({
             <BiFirstPage />
           </button>
           <button
+          type="button"
             className="btn"
             onClick={() => {
               if (table.getCanPreviousPage()) {
@@ -176,6 +179,7 @@ function Table({
             <span> {table.getPageCount()}</span>
           </span>
           <button
+          type="button"
             className="btn"
             onClick={() => {
               if (table.getCanNextPage()) {
@@ -186,6 +190,7 @@ function Table({
             <GrNext />
           </button>
           <button
+          type="button"
             className="btn"
             onClick={() => {
               table.setPageIndex(table.getPageCount() - 1);
@@ -281,7 +286,7 @@ function Table({
             {table.getRowModel().rows.map((row) => (
               <tr key={row.id} id={row.id}>
                 {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id}  style= {{
+                  <td key={cell.id} className="text-center"  style= {{
                     width: cell.column.getSize()
                   }}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -289,8 +294,8 @@ function Table({
                 ))}
                 {editType && (
                   <>
-                    <td className="" colSpan={2}>
-                      <div className="d-flex flex-wrap gap-1 ">
+                    <td className="text-center" colSpan={2}>
+                      <div className="d-flex flex-wrap gap-1 text-center ">
                         <Link
                           to={`/${editType ? editType : "edit"}/${
                             row.original.id
@@ -344,6 +349,7 @@ function Table({
                         ></Archived>
                         {user?.rol === 1 && isAuthenticated ? (
                           <button
+                          type="button"
                             className="btn btn-danger btn-sm mt-2 "
                             onClick={() => {
                               deleteControl(row.original.id);
@@ -365,6 +371,7 @@ function Table({
                         <ChangeDetails infor={data[row.id]}></ChangeDetails>
                         {user?.rol === 1 && isAuthenticated ? (
                           <button
+                          type="button"
                             className="btn btn-danger btn-sm mt-1"
                             onClick={() => {
                               deleteChange(row.original.id);

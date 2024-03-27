@@ -24,9 +24,9 @@ function AdminView({ children }) {
       <div className="d-flex flex-row  w-100 h-100vh">
         <div id="adminSidebarContainer">
           <div className="AdminSidebar">
-            <div className="d-flex flex-column  " style={{ height: "90%" }}>
-              <div className="d-flex flex-column admin-info ">
-                <div className="admin-box">
+            <div className="d-flex flex-column  top-0" style={{ height: "100%" }}>
+              <div className="d-flex flex-column admin-info flex-fill ">
+                <div className="admin-box ">
                   <li>{user ? user.username.toUpperCase() : "ADMIN"}</li>
                   <Link to={`/editUser/${user?.id}`}>
                     <AiTwotoneEdit size={35} />
@@ -54,7 +54,7 @@ function AdminView({ children }) {
                   </div>
                 </Link>
 
-                <Link className="mx-1" to={"/"}>
+                <Link className="mx-1" to={"/docs"}>
                   <div className="side-links">
                     <FaList size={25} />
                     <li>VOLVER</li>

@@ -4,6 +4,7 @@ import { getAllDocuments } from "../../api/documentsAPI";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { createChange, editChange, getOneChange } from "../../api/changes";
+import Header from "../../layout/Header";
 
 function CreateChange() {
   const [codigos, SetCodigos] = useState([]);
@@ -131,219 +132,220 @@ function CreateChange() {
   }, []);
 
   return (
-    <div>
-      <div className="titleHeader">Registrar cambios</div>
-      <button
-        className="mx-1 btn btn-dark rounded btn-sm mb-1"
-        onClick={() => window.history.back()}
-      >
-        Volver
-      </button>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="mx-auto row ">
-          <div className="col-12 col-sm-6 ">
-            <div className="row mb-2">
-              <div className="col-4">
-                <label htmlFor="">
-                  {" "}
-                  <strong>Código</strong>{" "}
-                </label>
-              </div>
-              {params.code ? (
-                <>
-                  <div className="col-8">
-                    <input
-                      type="text"
-                      {...register("code")}
-                      value={params.code}
-                      disabled
-                      className="form-control"
-                    />
-                  </div>
-                </>
-              ) : params.id ? (
-                <>
-                  <div className="col-8">
-                    <input
-                      type="text"
-                      {...register("code")}
-                      value={params.code}
-                      placeholder="Codigo"
-                      className="form-control"
-                    />
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="col-8">
-                    <Select
-                      options={codigos}
-                      required
-                      onChange={handleChange}
-                    ></Select>
-                  </div>
-                </>
-              )}
-            </div>
-            <div className="row mb-2">
-              <div className="col-4">
-                <label htmlFor="">
-                  {" "}
-                  <strong>Titulo del documento</strong>{" "}
-                </label>
-              </div>
-              <div className="col-8">
-                <input
-                  {...register("name", { required: true })}
-                  type="text"
-                  className="form-control"
-                  placeholder="Registro..."
-                />
-              </div>
-            </div>
-            <div className="row mb-2">
-              <div className="col-4">
-                <label htmlFor="">
-                  {" "}
-                  <strong>Solicitante</strong>{" "}
-                </label>
-              </div>
-              <div className="col-8">
-                <input
-                  {...register("claimant", { required: true })}
-                  type="text"
-                  className="form-control"
-                  placeholder="Solicitante..."
-                />
-                {errors.claimant?.type === "required" && (
-                  <p className="errorMsg">Este campo es obligatorio</p>
-                )}
-              </div>
-            </div>
-            <div className="row mb-2">
-              <div className="col-4">
-                <label htmlFor="">
-                  {" "}
-                  <strong>Justificación</strong>{" "}
-                </label>
-              </div>
-              <div className="col-8">
-                <input
-                  {...register("reason")}
-                  type="text"
-                  className="form-control"
-                  placeholder="Razon del cambio..."
-                />
-              </div>
-            </div>
-            <div className="row mb-2">
-              <div className="col-4">
-                <label htmlFor="">
-                  {" "}
-                  <strong>Aprobado por</strong>{" "}
-                </label>
-              </div>
-              <div className="col-8">
-                <input
-                  {...register("aproved_by", { required: true })}
-                  type="text"
-                  className="form-control"
-                  placeholder="Isabel Gomez..."
-                />
-                {errors.aproved_by?.type === "required" && (
-                  <p className="errorMsg">Este campo es obligatorio</p>
-                )}
-              </div>
-            </div>
-            {params.id && (
-              <>
-                <div className="row mb-2">
-                  <div className="col-4">
-                    <label htmlFor="">
-                      {" "}
-                      <strong>Nueva versión</strong>{" "}
-                    </label>
-                  </div>
-                  <div className="col-8">
-                    <input
-                      {...register("new_version", { required: true })}
-                      type="number"
-                      className="form-control"
-                      placeholder="Isabel Gomez..."
-                    />
-                    {errors.aproved_by?.type === "required" && (
-                      <p className="errorMsg">Este campo es obligatorio</p>
-                    )}
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
+   < Header> <div>
+   <div className="titleHeader">Registrar cambios</div>
+   <button
+     className="mx-1 btn btn-dark rounded btn-sm mb-1"
+     onClick={() => window.history.back()}
+   >
+     Volver
+   </button>
+   <form onSubmit={handleSubmit(onSubmit)}>
+     <div className="mx-auto row ">
+       <div className="col-12 col-sm-6 ">
+         <div className="row mb-2">
+           <div className="col-4">
+             <label htmlFor="">
+               {" "}
+               <strong>Código</strong>{" "}
+             </label>
+           </div>
+           {params.code ? (
+             <>
+               <div className="col-8">
+                 <input
+                   type="text"
+                   {...register("code")}
+                   value={params.code}
+                   disabled
+                   className="form-control"
+                 />
+               </div>
+             </>
+           ) : params.id ? (
+             <>
+               <div className="col-8">
+                 <input
+                   type="text"
+                   {...register("code")}
+                   value={params.code}
+                   placeholder="Codigo"
+                   className="form-control"
+                 />
+               </div>
+             </>
+           ) : (
+             <>
+               <div className="col-8">
+                 <Select
+                   options={codigos}
+                   required
+                   onChange={handleChange}
+                 ></Select>
+               </div>
+             </>
+           )}
+         </div>
+         <div className="row mb-2">
+           <div className="col-4">
+             <label htmlFor="">
+               {" "}
+               <strong>Titulo del documento</strong>{" "}
+             </label>
+           </div>
+           <div className="col-8">
+             <input
+               {...register("name", { required: true })}
+               type="text"
+               className="form-control"
+               placeholder="Registro..."
+             />
+           </div>
+         </div>
+         <div className="row mb-2">
+           <div className="col-4">
+             <label htmlFor="">
+               {" "}
+               <strong>Solicitante</strong>{" "}
+             </label>
+           </div>
+           <div className="col-8">
+             <input
+               {...register("claimant", { required: true })}
+               type="text"
+               className="form-control"
+               placeholder="Solicitante..."
+             />
+             {errors.claimant?.type === "required" && (
+               <p className="errorMsg">Este campo es obligatorio</p>
+             )}
+           </div>
+         </div>
+         <div className="row mb-2">
+           <div className="col-4">
+             <label htmlFor="">
+               {" "}
+               <strong>Justificación</strong>{" "}
+             </label>
+           </div>
+           <div className="col-8">
+             <input
+               {...register("reason")}
+               type="text"
+               className="form-control"
+               placeholder="Razon del cambio..."
+             />
+           </div>
+         </div>
+         <div className="row mb-2">
+           <div className="col-4">
+             <label htmlFor="">
+               {" "}
+               <strong>Aprobado por</strong>{" "}
+             </label>
+           </div>
+           <div className="col-8">
+             <input
+               {...register("aproved_by", { required: true })}
+               type="text"
+               className="form-control"
+               placeholder="Isabel Gomez..."
+             />
+             {errors.aproved_by?.type === "required" && (
+               <p className="errorMsg">Este campo es obligatorio</p>
+             )}
+           </div>
+         </div>
+         {params.id && (
+           <>
+             <div className="row mb-2">
+               <div className="col-4">
+                 <label htmlFor="">
+                   {" "}
+                   <strong>Nueva versión</strong>{" "}
+                 </label>
+               </div>
+               <div className="col-8">
+                 <input
+                   {...register("new_version", { required: true })}
+                   type="number"
+                   className="form-control"
+                   placeholder="Isabel Gomez..."
+                 />
+                 {errors.aproved_by?.type === "required" && (
+                   <p className="errorMsg">Este campo es obligatorio</p>
+                 )}
+               </div>
+             </div>
+           </>
+         )}
+       </div>
 
-          <div className="col-12 col-sm-6 ">
-            <div className="col-12 row align-items-center">
-              <div className="col-4">
-                <strong>
-                  <label htmlFor="">Fecha de cambio</label>
-                </strong>
-              </div>
-              <div className="col-8">
-                <input
-                  {...register("created_at", { required: true })}
-                  type="date"
-                  className="form-control"
-                />
-                {errors.created_at?.type === "required" && (
-                  <p className="errorMsg">Este campo es obligatorio</p>
-                )}
-              </div>
-            </div>
+       <div className="col-12 col-sm-6 ">
+         <div className="col-12 row align-items-center">
+           <div className="col-4">
+             <strong>
+               <label htmlFor="">Fecha de cambio</label>
+             </strong>
+           </div>
+           <div className="col-8">
+             <input
+               {...register("created_at", { required: true })}
+               type="date"
+               className="form-control"
+             />
+             {errors.created_at?.type === "required" && (
+               <p className="errorMsg">Este campo es obligatorio</p>
+             )}
+           </div>
+         </div>
 
-            <div>
-              <label htmlFor="">
-                <strong>Detalles</strong>{" "}
-              </label>
-              <textarea
-                {...register("details")}
-                cols="30"
-                rows="3"
-                className="form-control"
-                placeholder="Comentarios..."
-                style={{ maxHeight: "200px" }}
-              ></textarea>
-              {errors.details?.type === "required" && (
-                <p className="errorMsg">Este campo es obligatorio</p>
-              )}
-            </div>
-            <div className="d-flex gap-2 mt-2 ">
-              <input
-                type="checkbox"
-                name=""
-                id=""
-                style={{ width: "30px" }}
-                className="form-input"
-                {...register("status")}
-              />
-              <strong className="py-2">Estado obsoleto</strong>
-            </div>
-            <div className="d-flex gap-2 mt-2 ">
-              <input
-                type="checkbox"
-                style={{ width: "30px" }}
-                className="form-input"
-                {...register("change")}
-              />
-              <strong className="py-2">Revisión sin cambio de versión </strong>
-            </div>
-          </div>
-          <div className="my-2">
-            <button className="btn btn-success shadow rounded">
-              {params.id ? "Editar cambio" : " Registrar cambio"}
-            </button>
-          </div>
-        </div>
-      </form>
-    </div>
+         <div>
+           <label htmlFor="">
+             <strong>Detalles</strong>{" "}
+           </label>
+           <textarea
+             {...register("details")}
+             cols="30"
+             rows="3"
+             className="form-control"
+             placeholder="Comentarios..."
+             style={{ maxHeight: "200px" }}
+           ></textarea>
+           {errors.details?.type === "required" && (
+             <p className="errorMsg">Este campo es obligatorio</p>
+           )}
+         </div>
+         <div className="d-flex gap-2 mt-2 ">
+           <input
+             type="checkbox"
+             name=""
+             id=""
+             style={{ width: "30px" }}
+             className="form-input"
+             {...register("status")}
+           />
+           <strong className="py-2">Estado obsoleto</strong>
+         </div>
+         <div className="d-flex gap-2 mt-2 ">
+           <input
+             type="checkbox"
+             style={{ width: "30px" }}
+             className="form-input"
+             {...register("change")}
+           />
+           <strong className="py-2">Revisión sin cambio de versión </strong>
+         </div>
+       </div>
+       <div className="my-2">
+         <button className="btn btn-success shadow rounded">
+           {params.id ? "Editar cambio" : " Registrar cambio"}
+         </button>
+       </div>
+     </div>
+   </form>
+ </div></Header>
+   
   );
 }
 

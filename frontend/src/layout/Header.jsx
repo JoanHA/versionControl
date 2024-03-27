@@ -8,7 +8,7 @@ const Header = ({ children }) => {
 
   return (
     <div className="d-flex flex-column ">
-      <header className="" id="navHeader">
+      <header className="" id="">
         <nav className="navbar navbar-expand-lg  bg-body-tertiary">
           <div className="container-fluid">
             <div className="d-flex align-items-center pt-1 me-2">
@@ -40,6 +40,11 @@ const Header = ({ children }) => {
                         Administrador
                       </Link>
                     </li>
+                    <li className="nav-item nav-link p-1">
+                      <Link to="/audits" className="nav-link">
+                        Auditorias
+                      </Link>
+                    </li>
                   </>
                 ) : (
                   <>
@@ -61,7 +66,7 @@ const Header = ({ children }) => {
                   </button>
                   <ul className="dropdown-menu ">
                     <li>
-                      <Link to={"/"} className="dropdown-item">
+                      <Link to={"/docs"} className="dropdown-item">
                         Ver listado
                       </Link>
                     </li>

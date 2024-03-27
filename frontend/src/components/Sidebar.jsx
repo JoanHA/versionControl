@@ -1,60 +1,48 @@
-import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import React from "react";
+import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 function Sidebar() {
-  const history = useLocation();
-  const [pathname, setPathname] = useState(history.pathname);
+  // const history = useLocation();
+  // const [pathname, setPathname] = useState(history.pathname);
 
-  useEffect(() => {
-    setPathname(history.pathname);
-    changeSize();
-  }, [history]);
+  // useEffect(() => {
+  //   setPathname(history.pathname);
+  //   changeSize();
+  // }, [history]);
 
-  const changeSize = () => {
-    if (window.outerWidth <= 1271) {
-      if (
-        pathname.split("/")[1] != "admin" &&
-        pathname.split("/")[1] != "editUser"
-      ) {
-        console.log("cambia");
-        document.querySelector("#navHeader")?.classList?.add("navClose");
-        return;
-      } else {
-        document.querySelector("#navHeader")?.classList?.remove("navClose");
-        document.querySelector("#navHeader")?.classList?.remove("navOpen");
-        return;
-      }
-    }
-    if (
-      pathname.split("/")[1] != "admin" &&
-      pathname.split("/")[1] != "editUser"
-    ) {
-      document.querySelector("#navHeader")?.classList?.add("navClose");
-    } else {
-      document.querySelector("#navHeader")?.classList?.remove("navClose");
-      return;
-    }
-  };
-  window.addEventListener("resize", () => {
-    changeSize();
-  });
-  const classNameRender = () => {
-    if (
-      pathname === "/welcome" ||
-      pathname === "/login" ||
-      pathname === "/admin" ||
-      pathname === "/admin/users" ||
-      pathname === "/admin/parameters" ||
-      pathname === "/admin/newUser" ||
-      pathname.split("/")[1] === "editUser"
-    ) {
-      return "d-none";
-    }
-    return "";
-  };
+  // const changeSize = () => {
+  //   if (window.outerWidth <= 1271) {
+  //     if (
+  //       pathname.split("/")[1] != "admin" &&
+  //       pathname.split("/")[1] != "editUser"
+  //     ) {
+  //       console.log("cambia");
+  //       document.querySelector("#navHeader")?.classList?.add("navClose");
+  //       return;
+  //     } else {
+  //       document.querySelector("#navHeader")?.classList?.remove("navClose");
+  //       document.querySelector("#navHeader")?.classList?.remove("navOpen");
+  //       return;
+  //     }
+  //   }
+  //   if (
+  //     pathname.split("/")[1] != "admin" &&
+  //     pathname.split("/")[1] != "editUser"
+  //   ) {
+  //     document.querySelector("#navHeader")?.classList?.add("navClose");
+  //   } else {
+  //     document.querySelector("#navHeader")?.classList?.remove("navClose");
+  //     return;
+  //   }
+  // };
+  // window.addEventListener("resize", () => {
+  //   changeSize();
+  // });
+ 
+ 
   const { isAuthenticated } = useAuth();
   return (
-    <div id="sidebar" className={classNameRender()}>
+    <div id="sidebar" >
       <div className="list-group px-1">
         {isAuthenticated ? (
           <>
@@ -65,11 +53,11 @@ function Sidebar() {
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                <Link to={"/"}> Listado maestro</Link>
+                <Link to={"/docs"}> Listado maestro</Link>
               </button>
               <ul className="dropdown-menu">
                 <li>
-                  <Link className="dropdown-item" to="/">
+                  <Link className="dropdown-item" to="/docs">
                     Ver listado maestro
                   </Link>
                 </li>
@@ -158,7 +146,7 @@ function Sidebar() {
           <>
             <div className="list-group">
               <Link
-                to="/"
+                to="/docs"
                 className="list-group-item list-group-item-action "
                 aria-current="true"
               >

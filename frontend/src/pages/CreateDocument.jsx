@@ -18,6 +18,7 @@ import HistoricTable from "../components/HistoricTable";
 import Masived from "../components/Masived";
 import CreateControl from "./control/CreateControl";
 import { useAuth } from "../context/AuthContext";
+import Header from "../layout/Header";
 function CreateDocument() {
   const {
     reset,
@@ -266,8 +267,11 @@ function CreateDocument() {
     }
   };
   return (
+   
+ 
     <>
-      <div>
+       <Header>
+       <div>
         <Masived></Masived>
         <div className="titleHeader text-center ">
           {params.id ? "Edición" : "Registro"} de documentos
@@ -534,6 +538,8 @@ function CreateDocument() {
       </div>
       <div></div>
       <div>{showControl && <CreateControl desactivate={true} />}</div>
+       </Header>
+     
     </>
   );
 }

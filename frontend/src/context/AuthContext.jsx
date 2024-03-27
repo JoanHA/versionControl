@@ -20,7 +20,7 @@ function AuthProvider({ children }) {
   const [Errores, setErrores] = useState(null);
   const [otp, setOtp] = useState(null);
   const [email, setEmail] = useState("");
-
+  const [audit_plan, setAuditPlan] = useState(null);
   const logOut = () => {
     Cookies.remove("token");
     setUser(null);
@@ -35,7 +35,6 @@ function AuthProvider({ children }) {
       clearTimeout(time);
     };
   }, [Errores]);
-
 
   const GetIn = async (data) => {
     try {
@@ -55,7 +54,6 @@ function AuthProvider({ children }) {
     }
   };
 
- 
   const signup = async (user) => {
     try {
       const res = await SignUp(user);
@@ -128,6 +126,8 @@ function AuthProvider({ children }) {
         otp,
         setOtp,
         setErrores,
+        setAuditPlan,
+        audit_plan,
       }}
     >
       {children}

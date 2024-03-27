@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Table from "../../components/Table";
 import Archived from "./Archived";
 import { getArchived } from "../../api/changes";
+import Header from "../../layout/Header";
 
 function ViewControl() {
   const columns = [
@@ -58,17 +59,18 @@ size:200,
     getData();
   }, []);
   return (
-    <div>
-      <div className="titleHeader ">Retención documental</div>
+    <Header>   <div>
+    <div className="titleHeader ">Retención documental</div>
 
-      <Table
-        columns={columns}
-        data={data}
-        options={false}
-        btnDetails={{ doc: data, text: "Detalles" }}
-        cb={getData}
-      ></Table>
-    </div>
+    <Table
+      columns={columns}
+      data={data}
+      options={false}
+      btnDetails={{ doc: data, text: "Detalles" }}
+      cb={getData}
+    ></Table>
+  </div></Header>
+ 
   );
 }
 

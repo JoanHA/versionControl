@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Table from "../../components/Table";
 import { getChanges } from "../../api/changes";
 import { convertChangesVersion } from "../../lib/helper";
+import Header from "../../layout/Header";
 
 function ViewChanges() {
   const columns = [
@@ -42,16 +43,17 @@ function ViewChanges() {
     getData();
   }, []);
   return (
-    <div>
-      <div className="titleHeader ">Cambios realizados</div>
-      <Table 
-        columns={columns}
-        data={data} 
-        options={false} 
-        details={true}
-        cb={getData}
-        ></Table>
-    </div>
+    <Header><div>
+    <div className="titleHeader ">Cambios realizados</div>
+    <Table 
+      columns={columns}
+      data={data} 
+      options={false} 
+      details={true}
+      cb={getData}
+      ></Table>
+  </div></Header>
+    
   );
 }
 

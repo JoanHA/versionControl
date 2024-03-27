@@ -6,6 +6,7 @@ import Select from "react-select";
 import { getLastMove } from "../../api/documentsAPI";
 import { editControl, getOneControl } from "../../api/controls";
 import { useNavigate, useParams } from "react-router-dom";
+import Header from "../../layout/Header";
 
 function CreateExternal() {
   const { register, reset, handleSubmit } = useForm();
@@ -92,155 +93,156 @@ function CreateExternal() {
     }
   }, []);
   return (
+    <Header><div>
+    <div className="titleHeader"> Agregar Documento Externo</div>
     <div>
-      <div className="titleHeader"> Agregar Documento Externo</div>
-      <div>
-        <button
-          className="btn btn-dark btn-sm mx-3"
-          onClick={() => history.back()}
-        >
-          Volver
-        </button>
-      </div>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="row px-3">
-          <div className="col-12 col-md-6">
-            <div className="row gap-3">
-              <div className="row mb-2"></div>
-              <div className="col-12 row">
-                <div className="col-4">
-                  <label>Nombre del registro </label>
-                </div>
-                <div className="col-8">
-                  <input
-                    type="text"
-                    {...register("documentName", { required: true })}
-                    className="form-control"
-                    placeholder="Nombre del registro..."
-                  />
-                </div>
+      <button
+        className="btn btn-dark btn-sm mx-3"
+        onClick={() => history.back()}
+      >
+        Volver
+      </button>
+    </div>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <div className="row px-3">
+        <div className="col-12 col-md-6">
+          <div className="row gap-3">
+            <div className="row mb-2"></div>
+            <div className="col-12 row">
+              <div className="col-4">
+                <label>Nombre del registro </label>
               </div>
-              <div className="col-12 row">
-                <div className="col-4">
-                  <label>Responsable de archivo</label>
-                </div>
-                <div className="col-8">
-                  <input
-                    type="text"
-                    {...register("responsible", { required: true })}
-                    className="form-control"
-                    placeholder="Nombre de responsable..."
-                  />
-                </div>
-              </div>
-              <div className="col-12 row">
-                <div className="col-4">
-                  <label>Donde se archiva</label>
-                </div>
-                <div className="col-8">
-                  <input
-                    type="text"
-                    {...register("saved_in", { required: true })}
-                    className="form-control"
-                    placeholder="Digital, Fisico..."
-                  />
-                </div>
-              </div>
-              <div className="col-12 row">
-                <div className="col-4">
-                  <label>Como se archiva</label>
-                </div>
-                <div className="col-8">
-                  <input
-                    type="text"
-                    {...register("saved_format", { required: true })}
-                    className="form-control"
-                    placeholder="Alfabetico, Consecutivo etc..."
-                  />
-                </div>
+              <div className="col-8">
+                <input
+                  type="text"
+                  {...register("documentName", { required: true })}
+                  className="form-control"
+                  placeholder="Nombre del registro..."
+                />
               </div>
             </div>
-          </div>
-          <div className="col-12 col-md-6">
-            <div className="row gap-3">
-              <div className="col-12 row gap-3">
-                <div className="col-12 ">
-                  <label htmlFor="">Tiempo de retención</label>
-                </div>
-                <div className="col-12 row  ">
-                  <div className="col-4 me-2">
-                    <label htmlFor="">Archivo activo</label>
-                  </div>
-                  <div className="col-7">
-                    <input
-                      placeholder="# años"
-                      className="form-control"
-                      type="text"
-                      {...register("actived_saved", { required: true })}
-                    />
-                  </div>
-                </div>
-                <div className="col-12 row">
-                  <div className="col-4 me-2">
-                    <label htmlFor="">Archivo Inactivo</label>
-                  </div>
-                  <div className="col-7">
-                    <input
-                      className="form-control"
-                      type="text"
-                      placeholder="# años"
-                      {...register("inactived_saved", { required: true })}
-                    />
-                  </div>
-                </div>
+            <div className="col-12 row">
+              <div className="col-4">
+                <label>Responsable de archivo</label>
               </div>
-              <div className="col-12 row">
-                <div className="col-4">
-                  <label htmlFor="">Disposición final</label>
-                </div>
-                <div className="col-8 d-flex flex-row">
-                  {params.id ? (
-                    <>
-                      <select
-                        className="form-select"
-                        value={selectedMove}
-                        onChange={(e) => setSelectedMove(e.target.value)}
-                      >
-                        {lastMove &&
-                          lastMove.map((e) => (
-                            <option value={e.value}>{e.label}</option>
-                          ))}
-                      </select>
-                    </>
-                  ) : (
-                    <>
-                      <Select
-                        options={lastMove}
-                        onChange={(e) => {
-                          e.value ? setSelectedMove(e.value) : "";
-                        }}
-                        className="w-75"
-                      ></Select>
-                      <AddButton
-                        param={{ name: "Disposición final", value: 1 }}
-                        cb={getLastMoves}
-                      ></AddButton>
-                    </>
-                  )}
-                </div>
+              <div className="col-8">
+                <input
+                  type="text"
+                  {...register("responsible", { required: true })}
+                  className="form-control"
+                  placeholder="Nombre de responsable..."
+                />
               </div>
             </div>
-          </div>
-          <div className="col-12 col-md-6 mt-3">
-            <div>
-              <button className="btn btn-success rounded shadow">
-                Registrar documento
-              </button>
+            <div className="col-12 row">
+              <div className="col-4">
+                <label>Donde se archiva</label>
+              </div>
+              <div className="col-8">
+                <input
+                  type="text"
+                  {...register("saved_in", { required: true })}
+                  className="form-control"
+                  placeholder="Digital, Fisico..."
+                />
+              </div>
+            </div>
+            <div className="col-12 row">
+              <div className="col-4">
+                <label>Como se archiva</label>
+              </div>
+              <div className="col-8">
+                <input
+                  type="text"
+                  {...register("saved_format", { required: true })}
+                  className="form-control"
+                  placeholder="Alfabetico, Consecutivo etc..."
+                />
+              </div>
             </div>
           </div>
         </div>
-      </form>
-    </div>
+        <div className="col-12 col-md-6">
+          <div className="row gap-3">
+            <div className="col-12 row gap-3">
+              <div className="col-12 ">
+                <label htmlFor="">Tiempo de retención</label>
+              </div>
+              <div className="col-12 row  ">
+                <div className="col-4 me-2">
+                  <label htmlFor="">Archivo activo</label>
+                </div>
+                <div className="col-7">
+                  <input
+                    placeholder="# años"
+                    className="form-control"
+                    type="text"
+                    {...register("actived_saved", { required: true })}
+                  />
+                </div>
+              </div>
+              <div className="col-12 row">
+                <div className="col-4 me-2">
+                  <label htmlFor="">Archivo Inactivo</label>
+                </div>
+                <div className="col-7">
+                  <input
+                    className="form-control"
+                    type="text"
+                    placeholder="# años"
+                    {...register("inactived_saved", { required: true })}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="col-12 row">
+              <div className="col-4">
+                <label htmlFor="">Disposición final</label>
+              </div>
+              <div className="col-8 d-flex flex-row">
+                {params.id ? (
+                  <>
+                    <select
+                      className="form-select"
+                      value={selectedMove}
+                      onChange={(e) => setSelectedMove(e.target.value)}
+                    >
+                      {lastMove &&
+                        lastMove.map((e) => (
+                          <option value={e.value}>{e.label}</option>
+                        ))}
+                    </select>
+                  </>
+                ) : (
+                  <>
+                    <Select
+                      options={lastMove}
+                      onChange={(e) => {
+                        e.value ? setSelectedMove(e.value) : "";
+                      }}
+                      className="w-75"
+                    ></Select>
+                    <AddButton
+                      param={{ name: "Disposición final", value: 1 }}
+                      cb={getLastMoves}
+                    ></AddButton>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="col-12 col-md-6 mt-3">
+          <div>
+            <button className="btn btn-success rounded shadow">
+              Registrar documento
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div></Header>
+    
   );
 }
 

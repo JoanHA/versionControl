@@ -184,7 +184,7 @@ INSERT INTO `changes` (`id`, `code`, `name`, `new_version`, `reason`, `aproved_b
 (1827, 'P-ME02', 'ANALISIS INTEGRAL DE MERCADO', 4, 'Actualización en el procedimiento', 'CECILIA SANTAMARIA', 'CECILIA SANTAMARIA', 'Se corrige el nombre del formato R-ME01 Análisis de Viabilidad de Producto ya que en el procedimiento aparecía con un nombre diferente (Análisis integral del mercado)', 1, '2024-02-19 12:49:16', '2024-02-19 12:49:16'),
 (1828, 'P-CO01', 'CONSECUCION O MANTENIMIENTO DE CLIENTE Y/O DISTRIBUIDOR NUEVO', 4, 'Actualización del procedimiento ', 'GLORIA OSORIO ', 'GLORIA OSORIO', 'Se actualiza la política del punto 5.1 haciendo énfasis en las consultas de antecedentes de clientes que hace el equipo comercial y las que hace cartera', 1, '2024-02-19 12:49:16', '2024-02-19 12:49:16'),
 (1829, 'I-GH06', 'CONTROL DE PLAGAS', 2, 'Actualización del instructivo ', 'PAOLA MANCILLA', 'PAOLA MANCILLA', 'Se hacen cambios en el alcance de aplicación haciendo énfasis que aplica no solo a las áreas de la planta de almacenamiento sino a todas las áreas de Bioart', 1, '2024-02-19 12:49:16', '2024-02-19 12:49:16'),
-(1830, 'I-GH07', 'MANEJO DE LOS ELEMENTOS DE PROTECCIÓN ', 2, 'Actualización del instructivo ', 'PAOLA MANCILLA', 'PAOLA MANCILLA', 'Se quita el párrafo que hacia referencia a la frecuencia, se hacen cambios en las generalidades incluyendo los epp\'s de seguridad vial para los mensajeros', 1, '2024-02-19 12:49:16', '2024-02-19 12:49:16'),
+(1830, 'I-GH07', 'MANEJO DE LOS ELEMENTOS DE PROTECCIÓN ', 2, 'Actualización del instructivo ', 'PAOLA MANCILLA', 'PAOLA MANCILLA', 'Se quita el párrafo que hacia referencia a la frecuencia, se hacen cambios en las generalidades incluyendo los epp\s de seguridad vial para los mensajeros', 1, '2024-02-19 12:49:16', '2024-02-19 12:49:16'),
 (1831, 'I-GH10', 'INVESTIGACIÓN DE ACCIDENTES E INCIDENTES DE TRABAJO ', 2, 'Actualización del instructivo ', 'PAOLA MANCILLA', 'PAOLA MANCILLA', 'Se incluyen responsabilidades del COPASST en la etapa 2 del procedimiento ', 1, '2024-02-19 12:49:16', '2024-02-19 12:49:16'),
 (1832, 'I-GH11', 'NOTIFICACIÓN, REPORTE DE ACCIDENTES E INCIDENTES DE TRABAJO ', 2, 'Actualización del instructivo ', 'PAOLA MANCILLA', 'PAOLA MANCILLA', 'Se quitan los datos de contacto de la ARL SURA ya que se cambio de entidad, se deja sin datos específicos para que aplique sin importar que volvamos a cambiar de ARL', 1, '2024-02-19 12:49:16', '2024-02-19 12:49:16'),
 (1833, 'P-GH04', 'EVALUACION MEDICA OCUPACIONAL', 4, 'Actualización del instructivo ', 'PAOLA MANCILLA', 'PAOLA MANCILLA', 'Se quita el subtitulo Reintegro laboral, reubicación o restricciones medicas para incluir todo en las políticas y se quita el punto donde se aclaraba que los exámenes médicos son contratados externamente. \nSe modifica en la etapa 1 la actividad E ', 1, '2024-02-19 12:49:16', '2024-02-19 12:49:16'),
@@ -1954,7 +1954,7 @@ ALTER TABLE `documents`
 -- AUTO_INCREMENT de la tabla `files`
 --
 ALTER TABLE `files`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- AUTO_INCREMENT de la tabla `param_types`

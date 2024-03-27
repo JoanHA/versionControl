@@ -15,7 +15,8 @@ function AdminWelcome() {
     const getData = async () => {
       const lastModifiedRes = await LastModified();
       const mostModifiedRes = await MostModified();
-      const lastRevision = await getLastRevision();
+      const lastRevisions = await getLastRevision();
+   
 
       var color = "green";
       const modified = mostModifiedRes.data.map((m) => {
@@ -30,14 +31,16 @@ function AdminWelcome() {
         color = color === "green" ? "blue" : "green";
         return m;
       });
+  
       setLast(last);
 
-      const lastRev = lastRevision.data.map((m) => {
+      const lastRev = lastRevisions.data.map((m) => {
         m.color = color;
         m.last_revision = m.last_revision.split("T")[0];
         color = color === "green" ? "blue" : "green";
         return m;
       });
+ 
       setLastRevision(lastRev);
     };
     getData();

@@ -64,11 +64,13 @@ function DownloadButton({ data = [], filter, info }) {
             x + 40
           );
           doc.text(
-            `FECHA DE EMISIÓN / ULTIMA REVISIÓN: ${info?.last_revision}`,
+            `FECHA DE EMISIÓN / ULTIMA REVISIÓN: ${
+              info?.last_revision.split("T")[0]
+            }`,
             10,
             x + 60
           );
-          const VALORCOMMENTS = info?.comments ? info.comments:""
+          const VALORCOMMENTS = info?.comments ? info.comments : "";
           const Options = { maxWidth: 180 };
           const observacionHeight = doc.getTextDimensions(
             VALORCOMMENTS,
@@ -80,7 +82,7 @@ function DownloadButton({ data = [], filter, info }) {
           const nextTextY = x + 80 + observacionHeight + 5;
 
           doc.text(
-            `LINK INTRANET: ${info?.link ? info?.link : ""}`,
+            `RUTA INTRANET: ${info?.link ? info?.link : ""}`,
             10,
             nextTextY + 1,
             { maxWidth: 180 }
@@ -92,14 +94,14 @@ function DownloadButton({ data = [], filter, info }) {
 
           doc.autoTable({
             body: body,
-            startY: y ,
+            startY: y,
             head: [headers],
             theme: "striped",
-            styles: {fonSize:8},
+            styles: { fonSize: 8 },
             headStyles: {
               fillColor: [240, 248, 255],
               textColor: [0, 0, 0],
-              fonSize:10
+              fonSize: 10,
             },
           });
           //Guardar documento
