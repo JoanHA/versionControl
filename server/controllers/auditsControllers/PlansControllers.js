@@ -97,11 +97,11 @@ const createPlan = async (req, res) => {
 
 const getPlan = async (req, res) => {
   try {
-    const plan = await db.query("SELECT *,(SELECT username FROM users WHERE users.id = audit_plans.created_by) AS created_by_name FROM audit_plans");
+    const plan = await db.query(
+      "SELECT *,(SELECT username FROM users WHERE users.id = audit_plans.created_by) AS created_by_name FROM audit_plans"
+    );
     const callback = (data) => {
       res.send(data);
-      
-
     };
     await getPlanData(plan, callback);
   } catch (error) {
@@ -113,10 +113,12 @@ const getPlan = async (req, res) => {
 const getOnePlan = async (req, res) => {
   try {
     const id = req.params.id;
-    const plan = await db.query("SELECT audit_plans.* FROM audit_plans INNER JOIN audit_program_fields ON audit_program_fields.audit_plan_id = audit_plans.id WHERE audit_program_fields.id = ? OR audit_plans.id= ? ", [id,id]);
+    const plan = await db.query(
+      `SELECT audit_plans.* FROM audit_plans INNER JOIN audit_program_fields ON audit_program_fields.audit_plan_id = audit_plans.id WHERE audit_program_fields.id = ? OR audit_plans.id= ? `,
+      [id, id]
+    );
     const callback = (data) => {
       res.send(data);
-      console.log(data)
     };
     await getPlanData(plan, callback);
   } catch (error) {
@@ -129,11 +131,16 @@ const getOnePlan = async (req, res) => {
 //Esta funcion es para traer todos los datos del plan de auditoria, auditores,riesgos y planes de contingencia ,los proceesos a auditar con sus auditores y criterios
 const getPlanData = async (plan, callback) => {
   const res = plan.map(async (e) => {
+
     //buscar el grupo de auditores
     const inspectors = await db.query(
-      `SELECT i.* FROM audit_plan_has_inspectors JOIN inspectors i ON i.id = audit_plan_has_inspectors.inspectors_id WHERE audit_plan_has_inspectors.audit_plan_id =?`,
+      `SELECT i.* 
+      FROM audit_plan_has_inspectors 
+      JOIN inspectors i ON i.id = audit_plan_has_inspectors.inspectors_id 
+      WHERE audit_plan_has_inspectors.audit_plan_id = ?`,
       [e.id]
     );
+ 
     e.audit_group = inspectors;
     //buscar pplanes y riesgos
     const riskAndPlan = await db.query(
@@ -144,16 +151,28 @@ const getPlanData = async (plan, callback) => {
 
     //Buscar los procesos a auditatr
     const fields = await db.query(
-      `SELECT *,(SELECT name  FROM processes WHERE processes.id = audit_plan_fields.processes_id) AS process_name FROM  audit_plan_fields WHERE audit_plan_id = ?`,
+      `SELECT *, 
+      (SELECT name  FROM processes WHERE processes.id = audit_plan_fields.processes_id) AS process_name ,
+      (SELECT count(*) FROM check_lists WHERE audit_plan = audit_plan_fields.id ) AS check_count,
+      (SELECT id FROM check_lists WHERE audit_plan = audit_plan_fields.id ) AS check_list_id
+      FROM  audit_plan_fields WHERE audit_plan_id = ?`,
       [e.id]
     );
 
     //de cada procesos buscar su auditor y su criterios
     const campos = fields.map(async (field) => {
       //auditores del procesos
+      
       const field_inspectors = db.query(
-        "SELECT insf.*, inspectors.full_name, inspectors_rols.initials,inspectors_rols.name FROM inspectors_has_audit_plan_fields insf INNER JOIN inspectors ON inspectors.id = insf.inspectors_id INNER JOIN inspectors_rols ON inspectors_rols.id = insf.inspectors_rols_id WHERE audit_plan_id = ?",
-        [field.id]
+        `SELECT insf.*,
+        inspectors.full_name,
+        inspectors_rols.initials,
+        inspectors_rols.name
+        FROM inspectors_has_audit_plan_fields insf
+        INNER JOIN inspectors ON inspectors.id = insf.inspectors_id 
+        INNER JOIN inspectors_rols ON inspectors_rols.id = insf.inspectors_rols_id 
+        WHERE audit_plan_id = ? AND audit_plan_fields_id = ?`,
+        [field.audit_plan_id,field.id]
       );
 
       //Criterios del proceso
@@ -171,8 +190,10 @@ const getPlanData = async (plan, callback) => {
       );
       return f;
     });
- 
-    await Promise.all(campos).then((camp) => {(e.fields = camp) ; });
+
+    await Promise.all(campos).then((camp) => {
+      e.fields = camp;
+    });
 
     return e;
   });

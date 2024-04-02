@@ -205,3 +205,8 @@
   display: flex;
   align-items: center;
 }
+
+.check-list-box{
+  
+  border-right: 1px solid lightgray;
+}

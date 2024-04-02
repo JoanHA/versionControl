@@ -33,6 +33,7 @@
     "react-select": "^5.8.0",
     "react-table": "^7.8.0",
     "react-time-ago": "^7.2.1",
+    "rsuite": "^5.58.1",
     "uniqid": "^5.4.0",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.19.3/xlsx-0.19.3.tgz"
   },

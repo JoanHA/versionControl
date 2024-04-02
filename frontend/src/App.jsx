@@ -37,7 +37,9 @@ import ViewPrograms from "./pages/audits/ViewPrograms";
 import ViewPlan from "./pages/audits/plans/ViewPlan";
 import CreateProcess from "./pages/audits/process/CreateProcess";
 import Process from "./pages/audits/process/Process";
-import CheckList from "./pages/audits/checklists/CheckList";
+import CreateCheckLists from "./pages/audits/checklists/CreateCheckLists";
+import CheckLists from "./pages/audits/checklists/ViewCheckLists";
+import ViewOneList from "./pages/audits/checklists/ViewOneList";
 function App() {
   return (
     <div>
@@ -238,15 +240,31 @@ function App() {
                 }
               />
               {/* End procesos de auditoria*/}
+              <Route
+                path="/audits/checklist/"
+                element={
+                  <AuditLayout>
+                 <CheckLists></CheckLists>
+                  </AuditLayout>
+                }
+              />  <Route
+              path="/audits/checklist/:id"
+              element={
+                <AuditLayout>
+                 <ViewOneList></ViewOneList>
+                </AuditLayout>
+              }
+            />
               {/* Lista de chequeo */}
               <Route
                 path="/audits/createcheck/:id"
                 element={
                   <AuditLayout>
-                 <CheckList></CheckList>
+                 <CreateCheckLists></CreateCheckLists>
                   </AuditLayout>
                 }
               />
+          
             </Route>
 
             <Route path="/edit/:id" element={<CreateDocument />}></Route>

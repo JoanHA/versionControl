@@ -11,11 +11,10 @@ function ViewPlan() {
   const [iso9, setIso9] = useState([]);
   const [iso4, setIso4] = useState([]);
   const [decreto, setDecreto] = useState([]);
-  const navigate = useNavigate()
-  const {setAuditPlan}= useAuth()
+  const navigate = useNavigate();
+  const { setAuditPlan } = useAuth();
   const getPlan = async () => {
     const res = await getOneAuditPlan(params.id);
-
     const iso40 = [];
     const iso90 = [];
     const decreto0 = [];
@@ -34,10 +33,10 @@ function ViewPlan() {
   useEffect(() => {
     getPlan();
   }, []);
-const saveAndnavigate = (datos,id)=>{
-  setAuditPlan(datos)
-  navigate(`/audits/createcheck/${id}`);
-}
+  const saveAndnavigate = (datos, id) => {
+    setAuditPlan(datos);
+    navigate(`/audits/createcheck/${id}`);
+  };
   return (
     <div className="">
       <div className="titleHeader">Plan de auditoria interna</div>
@@ -85,8 +84,11 @@ const saveAndnavigate = (datos,id)=>{
             <div className="col-10">
               <div className="d-flex flex-wrap gap-2">
                 {data?.riskAndPlan?.length > 0 &&
-                  data.riskAndPlan.map((e,index) => (
-                    <p className="m-0" key={index}> * {e.risk_name} </p>
+                  data.riskAndPlan.map((e, index) => (
+                    <p className="m-0" key={index}>
+                      {" "}
+                      * {e.risk_name}{" "}
+                    </p>
                   ))}
               </div>
             </div>
@@ -104,8 +106,11 @@ const saveAndnavigate = (datos,id)=>{
             <div className="col-10">
               <div className="d-flex flex-wrap gap-2">
                 {data?.riskAndPlan?.length > 0 &&
-                  data.riskAndPlan.map((e,index) => (
-                    <p className="m-0" key={index}> * {e.plan_name} </p>
+                  data.riskAndPlan.map((e, index) => (
+                    <p className="m-0" key={index}>
+                      {" "}
+                      * {e.plan_name}{" "}
+                    </p>
                   ))}
               </div>
             </div>
@@ -160,17 +165,35 @@ const saveAndnavigate = (datos,id)=>{
                     <td>
                       {f.field_inspector.length < 1
                         ? "No tiene auditor"
-                        : f.field_inspector.map((e) => `${e.full_name} (${e.initials})`)}
+                        : f.field_inspector.map(
+                            (e) => `- ${e.full_name} (${e.initials}) `
+                          )}
                     </td>
                     <td>{f.to_audit}</td>
                     <td>{f.resources}</td>
                     <td>{f.digital_info}</td>
                     <td className=" text-center">
-                    
-                        <button className="btn btn-sm btn-warning text-center" type="button"onClick={()=>{saveAndnavigate(f,f.id)}}>
+                      {
+                        f.check_count > 0 ?
+                        (<Link
+                        to={`/audits/viewlist/${f.check_list_id}`}
+                          className="btn btn-sm btn-warning text-center"
+                          
+
+                        >
+                          Ver lista chequeo
+                        </Link>):
+                        ( <button
+                          className="btn btn-sm btn-warning text-center"
+                          type="button"
+                          onClick={() => {
+                            saveAndnavigate(f, f.id);
+                          }}
+                        >
                           Crear lista chequeo
-                        </button>
-                  
+                        </button>)
+                      }
+                     
                     </td>
                   </tr>
                 </tbody>

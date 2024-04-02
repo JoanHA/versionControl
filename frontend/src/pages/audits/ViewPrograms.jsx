@@ -22,7 +22,6 @@ export default function ViewPrograms() {
       }
 
       setProgram(res.data.program[0]);
-
       setFields(res.data.fields);
     } catch (error) {
       swal.fire(error.response.data, "", "error");

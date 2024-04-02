@@ -17,6 +17,8 @@ export default function AuditTable({
   columns,
   options = true,
   callback,
+  view = false,
+  editName,
 }) {
   const [sorting, setSorting] = useState([]);
   const [filtering, setFilteting] = useState("");
@@ -50,52 +52,6 @@ export default function AuditTable({
     const value = sessionStorage.getItem("filtering");
     setFilteting(value);
   }, []);
-
-  //   const deleteChange = (id) => {
-  //     Swal.fire({
-  //       title: "Estas seguro de esta acción?",
-  //       text: "No serás capaz de revertir esta acción!",
-  //       icon: "warning",
-  //       showCancelButton: true,
-  //       confirmButtonColor: "#3085d6",
-  //       cancelButtonColor: "#d33",
-  //       confirmButtonText: "Si, hazlo!",
-  //     }).then(async (result) => {
-  //       if (result.isConfirmed) {
-  //         try {
-  //           const res = await deleteChanges(id);
-
-  //           swal.fire(res.data, "", "success").then(() => {
-  //             cb();
-  //           });
-  //         } catch (error) {
-  //           swal.fire(error.response.data, "", "error");
-  //         }
-  //       }
-  //     });
-  //   };
-  //   const deleteControl = (id) => {
-  //     Swal.fire({
-  //       title: "Estas seguro de esta acción?",
-  //       text: "No serás capaz de revertir esta acción!",
-  //       icon: "warning",
-  //       showCancelButton: true,
-  //       confirmButtonColor: "#3085d6",
-  //       cancelButtonColor: "#d33",
-  //       confirmButtonText: "Si, hazlo!",
-  //     }).then(async (result) => {
-  //       if (result.isConfirmed) {
-  //         try {
-  //           const res = await deleteControls(id);
-  //           swal.fire(res.data, "", "success").then(() => {
-  //             cb();
-  //           });
-  //         } catch (error) {
-  //           swal.fire(error.response.data, "", "error");
-  //         }
-  //       }
-  //     });
-  //   };
 
   return (
     <div>
@@ -241,6 +197,11 @@ export default function AuditTable({
                     Opciones
                   </th>
                 )}
+                {view && (
+                  <th colSpan={1} style={{ width: "30px" }}>
+                    Opciones
+                  </th>
+                )}
               </tr>
             ))}
           </thead>
@@ -258,7 +219,22 @@ export default function AuditTable({
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
                 ))}
-
+                {view && (
+                  <>
+                    <td>
+                      <Link
+                        to={
+                          editName
+                            ? `/audits/${editName}/${row.original.id}`
+                            : ``
+                        }
+                        className="btn btn-primary btn-sm w-100"
+                      >
+                        Ver
+                      </Link>
+                    </td>
+                  </>
+                )}
                 {options && (
                   <>
                     <td className="" colSpan={2}>
@@ -267,7 +243,6 @@ export default function AuditTable({
                           className="btn btn-primary btn-sm  flex-fill "
                           onClick={() => {
                             callback(row.original.id);
-
                           }}
                         >
                           Ver

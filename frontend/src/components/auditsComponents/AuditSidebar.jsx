@@ -106,9 +106,9 @@ function AuditSidebar() {
               {plans && (
                 <>
                   <div className="px-3" id="audit-box">
-                    <div className="">
-                      <Link className="text-dark">Listas de chequeo</Link>
-                    </div>
+                    <Link className="" to={"/audits/checklist/"}>
+                      <div className="text-dark" >Listas de chequeo</div>
+                    </Link>
                   </div>
                   <div className="px-3" id="audit-box">
                     <div className="">

@@ -127,9 +127,32 @@ const addProgram = async(req,res)=>{
     res.status(500).send("Tuvimos un error, intenta mas tarde");
   }
 }
+const getByDate = async(req,res)=>{
+  try {
+    const date = req.body.date
+
+     const programs = await db.query(`SELECT *,(SELECT name FROM processes WHERE processes.id = processes_id) AS process_name,(SELECT leader FROM audit_plans WHERE audit_plans.id =audit_plan_fields.audit_plan_id) AS leader FROM audit_plan_fields WHERE date ='${date}'`);
+    res.send(programs)
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Tuvimos un error obteniendo los programas para esa fecha, intenta mas tarde");
+  }
+}
+const getProgramFields = async(req,res)=>{
+  try {
+
+     const programs = await db.query(`SELECT *,(SELECT name FROM processes WHERE processes.id = processes_id) AS process_name,(SELECT leader FROM audit_plans WHERE audit_plans.id =audit_plan_fields.audit_plan_id) AS leader FROM audit_plan_fields `);
+    res.send(programs)
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Tuvimos un error obteniendo los programas para esa fecha, intenta mas tarde");
+  }
+}
 module.exports = {
   createProgram,
   getProgramsAndFields,
   getOneProgram,
-  addProgram 
+  addProgram,
+  getByDate,
+  getProgramFields
 };
