@@ -23,6 +23,7 @@ const processes = require("./routes/auditsRoutes/processes.js");
 const programRoute = require("./routes/auditsRoutes/ProgramRoute.js");
 const planRoute = require("./routes/auditsRoutes/plansRoute.js")
 const checkRoute = require("./routes/auditsRoutes/checklist.route.js")
+const reportsRoute = require("./routes/auditsRoutes/reports.route.js")
 //------------------------------API v3 -------------------------
 
 //initialize
@@ -57,6 +58,7 @@ app.use(`${APIV3ENPOINT}/process`, processes);
 app.use(`${APIV3ENPOINT}/programs`, programRoute);
 app.use(`${APIV3ENPOINT}/plans`, planRoute);
 app.use(`${APIV3ENPOINT}/checklist`, checkRoute);
+app.use(`${APIV3ENPOINT}/reports`, reportsRoute);
 
 //AUDITS API v3--------------------------------
 

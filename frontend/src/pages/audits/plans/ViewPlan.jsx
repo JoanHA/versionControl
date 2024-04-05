@@ -176,11 +176,8 @@ function ViewPlan() {
                       {
                         f.check_count > 0 ?
                         (<Link
-                        to={`/audits/viewlist/${f.check_list_id}`}
-                          className="btn btn-sm btn-warning text-center"
-                          
-
-                        >
+                        to={`/audits/checklist/${f.check_list_id}`}
+                          className="btn btn-sm btn-warning text-center">
                           Ver lista chequeo
                         </Link>):
                         ( <button

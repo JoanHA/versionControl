@@ -15,6 +15,7 @@ background-color: black;
   position: relative ;
   left: 250px ;
 }
+
 .navClose{
   width: 100% !important;
   position: relative !important;
@@ -135,4 +136,10 @@ second child */
   width: 100% ;
   position: fixed;
   z-index: 999;
+}
+
+#signature-pad{
+  width: 350px;
+  height: 100px;
+  border: 2px dotted black;
 }

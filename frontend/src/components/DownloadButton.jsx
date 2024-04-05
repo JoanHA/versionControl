@@ -47,7 +47,7 @@ function DownloadButton({ data = [], filter, info }) {
           // Imprimir info del equipo
           doc.addImage(logo, "PNG", 10, 1, 75, 27);
 
-          doc.addImage(logoIcontent, "PNG", 170, 5, 30, 25);
+          doc.addImage(logoIcontent, "PNG", 340, 5, 30, 25);
 
           doc.text(
             `NOMBRE DEL DOCUMENTO:  ${info?.code} ${info?.name}`,

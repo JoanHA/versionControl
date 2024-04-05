@@ -31,9 +31,8 @@ function EditCheckList() {
 
   const saveCheck = async (values) => {
     try {
-    
       const res = await editChecklist(params.id,values);
-      swal.fire(res.data, "", "success");
+      swal.fire(res.data, "", "success").then(()=>history.back());
     } catch (error) {
       swal.fire(error.response.data, "", "error");
     }
@@ -67,7 +66,7 @@ function EditCheckList() {
                 get_better: datos[i + 3][1] === "get_better" ? 1 : 0,
                 observations: datos[i + 4][1],
                 id: parseInt(datos[i + 5][1]),
-                status: 4,
+                status: 5,
                 audit_plan: parseInt(params.id),
               });
             }
@@ -76,7 +75,7 @@ function EditCheckList() {
         const send = {
           checkList: {
             id: data.id,
-            status: 4,
+            status: 5,
           },
           fields: valores,
         };
@@ -140,14 +139,14 @@ function EditCheckList() {
         {/* Campos  */}
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="d-flex gap-2 my-2">
+            <button className="btn btn-primary btn-sm">Guardado permanente</button>
             <button
               className="btn btn-success btn-sm"
               type="button"
               onClick={archive}
             >
-              Guardar
+              Guardar borrador
             </button>
-            <button className="btn btn-primary btn-sm">Archivar</button>
           </div>
           <div className="mb-2">
             <div className="row p-0 m-0 gap-2 ">
@@ -203,7 +202,7 @@ function EditCheckList() {
                       <label htmlFor="">
                         <textarea
                           className="form-control"
-                          defaultValue={req.question}
+                          defaultValue={req.question ? req.question: "" }
                           {...register(`pregunta${index}`, { required: true })}
                         ></textarea>
                       </label>
@@ -215,7 +214,7 @@ function EditCheckList() {
                             type="hidden"
                             {...register(`iso9001${index}`)}
                             className="text-center "
-                            value={req.iso9001_type === 801 ? req.iso_9001 : null}
+                            value={req.iso9001_type === 801 ? req.iso_9001 : ""}
                           />
                           {req.iso9001_type === 801
                             ? req.iso9001_article
@@ -226,7 +225,7 @@ function EditCheckList() {
                             type="hidden"
                             className="text-center "
                             {...register(`iso45001${index}`)}
-                            value={req.iso45001_type === 802 ? req.iso_45001 : null}
+                            value={req.iso45001_type === 802 ? req.iso_45001 : ""}
                           />
                           {req.iso45001_type === 802
                             ? req.iso45001_article
@@ -267,7 +266,7 @@ function EditCheckList() {
                     <div className="col-3  text-center check-form">
                       <label htmlFor="">
                         <textarea
-                          defaultValue={req.observations}
+                          defaultValue={req.observations ? req.observations: ""}
                           className="form-control"
                           {...register(`observacion${index}`, {
                             required: true,

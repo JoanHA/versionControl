@@ -21,6 +21,7 @@ function CreateCheckLists() {
   const getReqs = async () => {
     try {
       const res = await getProcessReq(data.processes_id);
+   
       setReqs(res.data);
     } catch (error) {
       swal.fire(error.response.data, "", "error");
@@ -150,11 +151,11 @@ function CreateCheckLists() {
           </div>
           <div className="d-flex flex-row gap-3">
             <label>
-              <strong>Auditor:</strong>
+              <strong>Auditor(es):</strong>
             </label>
             <label>
               {data?.field_inspector.length > 0
-                ? data.field_inspector.map((ins) => `${ins.full_name}`)
+                ? data.field_inspector.map((ins) => `- ${ins.full_name} `)
                 : "N/A"}
             </label>
           </div>
@@ -241,7 +242,7 @@ function CreateCheckLists() {
                       </label>
                     </div>
                     <div className="col-2  text-center check-form">
-                      <div className="d-flex gap-3 align-items-center justify-content-between">
+                    <div className="d-flex gap-3 align-items-center justify-content-between">
                         <label htmlFor="">
                           <input
                             type="hidden"

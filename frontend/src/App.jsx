@@ -40,6 +40,7 @@ import Process from "./pages/audits/process/Process";
 import CreateCheckLists from "./pages/audits/checklists/CreateCheckLists";
 import CheckLists from "./pages/audits/checklists/ViewCheckLists";
 import ViewOneList from "./pages/audits/checklists/ViewOneList";
+import CreateReport from "./pages/audits/reports/CreateReport";
 function App() {
   return (
     <div>
@@ -264,6 +265,15 @@ function App() {
                   </AuditLayout>
                 }
               />
+              {/* Reportes */}
+              <Route
+              path="/audits/createReport/:id"
+              element={
+                <AuditLayout>
+                 <CreateReport></CreateReport>
+                </AuditLayout>
+              }
+            />
           
             </Route>
 

@@ -6,3 +6,4 @@ export const getCheckLists = async () => axios.get(URI + "checklist");
 export const getOneList = async (id) => axios.get(URI + `checklist/${id}`);
 export const editChecklist = async (id,data) => axios.put(URI + `checklist/${id}`,data);
 
+

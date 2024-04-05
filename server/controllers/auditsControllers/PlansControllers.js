@@ -152,9 +152,9 @@ const getPlanData = async (plan, callback) => {
     //Buscar los procesos a auditatr
     const fields = await db.query(
       `SELECT *, 
-      (SELECT name  FROM processes WHERE processes.id = audit_plan_fields.processes_id) AS process_name ,
-      (SELECT count(*) FROM check_lists WHERE audit_plan = audit_plan_fields.id ) AS check_count,
-      (SELECT id FROM check_lists WHERE audit_plan = audit_plan_fields.id ) AS check_list_id
+      (SELECT name  FROM processes WHERE processes.id = audit_plan_fields.processes_id LIMIT 1) AS process_name ,
+      (SELECT count(*) FROM check_lists WHERE audit_plan = audit_plan_fields.id LIMIT 1  ) AS check_count,
+      (SELECT id FROM check_lists WHERE audit_plan = audit_plan_fields.id LIMIT 1 ) AS check_list_id
       FROM  audit_plan_fields WHERE audit_plan_id = ?`,
       [e.id]
     );

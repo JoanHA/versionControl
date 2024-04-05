@@ -1,5 +1,4 @@
 import React from "react";
-import { useAuth } from "../context/AuthContext";
 import AuditSidebar from "../components/auditsComponents/auditSidebar";
 import logo from "../assets/IMG/grupo-carval-Logo-Bioart.png";
 import { Link } from "react-router-dom";
@@ -49,11 +48,11 @@ function AuditLayout({ children }) {
 
       <div
         className="d-flex flex-row relative flex-fill flex-grow-1 h-100 flex-shrink-1"
-        style={{overflowX:"hidden"}}
+        style={{ overflowX: "hidden", overflowY: "hidden" }}
       >
         <AuditSidebar></AuditSidebar>
-        <div className="flex-fill " >
-          <div id="childrenContainer"  >{children}</div>
+        <div className="flex-fill ">
+          <div id="childrenContainer">{children}</div>
         </div>
       </div>
     </div>

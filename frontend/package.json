@@ -31,6 +31,7 @@
     "react-icons": "^4.11.0",
     "react-router-dom": "^6.17.0",
     "react-select": "^5.8.0",
+    "react-signature-pad-wrapper": "^3.3.4",
     "react-table": "^7.8.0",
     "react-time-ago": "^7.2.1",
     "rsuite": "^5.58.1",
