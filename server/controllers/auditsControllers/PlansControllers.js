@@ -114,8 +114,8 @@ const getOnePlan = async (req, res) => {
   try {
     const id = req.params.id;
     const plan = await db.query(
-      `SELECT audit_plans.* FROM audit_plans INNER JOIN audit_program_fields ON audit_program_fields.audit_plan_id = audit_plans.id WHERE audit_program_fields.id = ? OR audit_plans.id= ? `,
-      [id, id]
+      `SELECT audit_plans.* FROM audit_plans INNER JOIN audit_program_fields ON audit_program_fields.audit_plan_id = audit_plans.id WHERE  audit_plans.id= ? `,
+      [id]
     );
     const callback = (data) => {
       res.send(data);
@@ -177,7 +177,7 @@ const getPlanData = async (plan, callback) => {
 
       //Criterios del proceso
       const requirements = db.query(
-        "SELECT p.* FROM process_has_requisites pr INNER JOIN processes p ON p.id = pr.process_id WHERE p.id = ?",
+        "SELECT r.* FROM process_has_requisites pr INNER JOIN processes p ON p.id = pr.process_id LEFT JOIN requirements r ON r.id = pr.requisite_id WHERE p.id  = ?",
         [field.processes_id]
       );
 

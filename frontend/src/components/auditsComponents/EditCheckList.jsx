@@ -7,20 +7,15 @@ function EditCheckList() {
   const [data, setData] = useState({});
   const [reqs, setReqs] = useState([]);
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-  } = useForm();
+  const { register, handleSubmit, watch } = useForm();
   const params = useParams();
 
   const getCheckData = async () => {
     try {
       const res = await getOneList(params.id);
       setData(res.data.checklist[0]);
-
+console.log(res.data.fields)
       setReqs(res.data.fields);
-
     } catch (error) {
       swal.fire(error.response.data, "", "error");
     }
@@ -31,8 +26,8 @@ function EditCheckList() {
 
   const saveCheck = async (values) => {
     try {
-      const res = await editChecklist(params.id,values);
-      swal.fire(res.data, "", "success").then(()=>history.back());
+      const res = await editChecklist(params.id, values);
+      swal.fire(res.data, "", "success").then(() => history.back());
     } catch (error) {
       swal.fire(error.response.data, "", "error");
     }
@@ -100,11 +95,9 @@ function EditCheckList() {
         const datos = Object.entries(watch());
 
         //recorrer el array creado para encontrar los campos que van en la base de datos y guardarlos en un objeto para enviarlos a un array
-        
 
         for (let j = 0; j < reqs.length; j++) {
           for (let i = 0; i < datos.length; i++) {
-
             if (datos[i][0] === `pregunta${j}`) {
               valores.push({
                 question: datos[i][1],
@@ -139,7 +132,9 @@ function EditCheckList() {
         {/* Campos  */}
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="d-flex gap-2 my-2">
-            <button className="btn btn-primary btn-sm">Guardado permanente</button>
+            <button className="btn btn-primary btn-sm">
+              Guardado permanente
+            </button>
             <button
               className="btn btn-success btn-sm"
               type="button"
@@ -193,7 +188,6 @@ function EditCheckList() {
                   </label>
                 </div>
               </div>
-        
             </div>
             {reqs?.length > 0
               ? reqs.map((req, index) => (
@@ -202,7 +196,7 @@ function EditCheckList() {
                       <label htmlFor="">
                         <textarea
                           className="form-control"
-                          defaultValue={req.question ? req.question: "" }
+                          defaultValue={req.question ? req.question : ""}
                           {...register(`pregunta${index}`, { required: true })}
                         ></textarea>
                       </label>
@@ -225,11 +219,15 @@ function EditCheckList() {
                             type="hidden"
                             className="text-center "
                             {...register(`iso45001${index}`)}
-                            value={req.iso45001_type === 802 ? req.iso_45001 : ""}
+                            value={
+                              req.iso45001_type === 802 ? req.iso_45001 : ""
+                            }
                           />
                           {req.iso45001_type === 802
-                            ? req.iso45001_article
+                            ? req.iso45001_article :req.decreto_type === 803 ?
+                            `-Decreto 1072- (${req.decreto_article})`
                             : "N/A"}
+                            
                         </label>
                       </div>
                     </div>
@@ -266,14 +264,19 @@ function EditCheckList() {
                     <div className="col-3  text-center check-form">
                       <label htmlFor="">
                         <textarea
-                          defaultValue={req.observations ? req.observations: ""}
+                          defaultValue={
+                            req.observations ? req.observations : ""
+                          }
                           className="form-control"
                           {...register(`observacion${index}`, {
                             required: true,
                           })}
                         ></textarea>
-                    <input type="hidden" value={req.id}  {...register(`id${index}`)} />
-
+                        <input
+                          type="hidden"
+                          value={req.id}
+                          {...register(`id${index}`)}
+                        />
                       </label>
                     </div>
                   </div>

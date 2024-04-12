@@ -165,7 +165,6 @@
   height: 100%;
   background-color: #1111119e;
   z-index: 100;
- 
   display: none;
   justify-content: center;
 }
@@ -201,12 +200,28 @@
 }
 .first-column{
   border-right: 1px solid lightgray;
-  
   display: flex;
   align-items: center;
 }
 
 .check-list-box{
-  
   border-right: 1px solid lightgray;
+}
+
+#sign-box{
+  border-bottom: 2px dotted gray;
+  margin-bottom: 3px;
+}
+#card-errors{
+  position: absolute;
+  top:90px;
+  right: 200px;
+  background-color: rgba(240, 96, 96, 0.651);
+  width: 400px;
+  border-radius: 20px;
+  box-shadow: 0px 0px 2px  1px gray;
+  padding: 10px;
+  font-weight: 500;
+  max-height: 200px;
+  overflow-y: auto;
 }

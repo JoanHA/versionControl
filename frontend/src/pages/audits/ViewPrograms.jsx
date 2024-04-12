@@ -10,6 +10,7 @@ export default function ViewPrograms() {
   const getdata = async () => {
     try {
       const res = await getOneProgram(params.id);
+     
       for (let i = 0; i < res?.data.fields.length; i++) {
         const field = res?.data.fields[i];
         var names = "";
@@ -78,7 +79,7 @@ export default function ViewPrograms() {
           <table className="table table-hover table-striped">
             <thead>
               <tr>
-                <th>Fecha</th>
+                <th>Rango fecha</th>
                 <th>Tipo</th>
                 <th>Lugar</th>
                 <th>Proceso</th>
@@ -92,7 +93,7 @@ export default function ViewPrograms() {
               {fields?.length > 0 ? (
                 fields.map((e) => (
                   <tr>
-                    <td className="text-center"> {e.date?.split("T")[0]}</td>
+                    <td className="text-center"> {e.type === 500 ? `${e.date} hasta ${e.end_date}` :e.date} </td>
                     <td className="text-center"> {e.type_name}</td>
                     <td className="text-center"> {e.place}</td>
                     <td className="text-center">{e.process_name} </td>
@@ -118,7 +119,7 @@ export default function ViewPrograms() {
                         <td className="text-center">
                           <Link
                             className="btn btn-success btn-sm"
-                            to={`/audits/plans/view/${e.id}`}
+                            to={`/audits/plans/view/${e.audit_plan_id}`}
                           >
                             Ver plan
                           </Link>

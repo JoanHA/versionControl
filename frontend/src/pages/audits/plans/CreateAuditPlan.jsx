@@ -16,6 +16,7 @@ function CreateAuditPlan() {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
   } = useForm();
   const [addRisk, setAddRisk] = useState(false);
@@ -52,7 +53,11 @@ function CreateAuditPlan() {
     setPlan_fields(deletedArray);
   };
   const clean = () => {
+    const saveddate = watch("date")
     reset();
+    reset({
+      date:saveddate
+    })
     setInspectRol([]);
     setProcess(null);
     setIso4([]);
@@ -573,7 +578,7 @@ function CreateAuditPlan() {
               )}
             </div>
           </div>
-          <div className="col-12 col-md-12  m-0">
+          {/* <div className="col-12 col-md-12  m-0">
             <div className="text-center fw-bold mt-1">
               <h4 className="m-0">Criterios</h4>
             </div>
@@ -614,7 +619,7 @@ function CreateAuditPlan() {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
           <div>
             <button className="btn btn-primary my-2">Agregar</button>
           </div>
@@ -652,7 +657,7 @@ function CreateAuditPlan() {
               {plan_fields.length > 0 ? (
                 plan_fields.map((p, index) => (
                   <tr key={index}>
-                    <td className="text-center"> {p.date}</td>
+                    <td className="text-center"> {p.date} </td>
                     <td className="text-center">
                       {p.init_time} - {p.end_time}{" "}
                     </td>

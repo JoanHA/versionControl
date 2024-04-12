@@ -8,7 +8,6 @@ const getInspectors = async (req, res) => {
 };
 const createInspectors = async (req, res) => {
   const datos = req.body;
-  datos.enroll_date = new Date(datos.enroll_date);
   datos.status = 1;
   const files = req.files;
   try {
@@ -46,10 +45,8 @@ const createInspectors = async (req, res) => {
 };
 const editInspectors = async (req, res) => {
   const datos = req.body;
-  datos.enroll_date = new Date(datos.enroll_date);
   datos.status = 1;
   const id = req.params.id;
-  console.log(id);
   const files = req.files;
   try {
     const result = await db.query("UPDATE inspectors SET ? WHERE id= ? ", [

@@ -22,8 +22,10 @@ const inspectors = require("./routes/auditsRoutes/inspectors.js");
 const processes = require("./routes/auditsRoutes/processes.js");
 const programRoute = require("./routes/auditsRoutes/ProgramRoute.js");
 const planRoute = require("./routes/auditsRoutes/plansRoute.js")
-const checkRoute = require("./routes/auditsRoutes/checklist.route.js")
-const reportsRoute = require("./routes/auditsRoutes/reports.route.js")
+const checkRoute = require("./routes/auditsRoutes/checklist.route.js");
+const reportsRoute = require("./routes/auditsRoutes/reports.route.js");
+const filesRoute = require("./routes/auditsRoutes/files.route.js");
+const final_report = require("./routes/auditsRoutes/final_report.route.js");
 //------------------------------API v3 -------------------------
 
 //initialize
@@ -59,6 +61,8 @@ app.use(`${APIV3ENPOINT}/programs`, programRoute);
 app.use(`${APIV3ENPOINT}/plans`, planRoute);
 app.use(`${APIV3ENPOINT}/checklist`, checkRoute);
 app.use(`${APIV3ENPOINT}/reports`, reportsRoute);
+app.use(`${APIV3ENPOINT}/files`, filesRoute);
+app.use(`${APIV3ENPOINT}/final_report`, final_report);
 
 //AUDITS API v3--------------------------------
 

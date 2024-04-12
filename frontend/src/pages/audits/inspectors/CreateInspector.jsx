@@ -38,6 +38,7 @@ function CreateInspector() {
       confirmButtonText: "Si, guardar!",
     }).then(async (result) => {
       if (result.isConfirmed) {
+       
         if (params.id) {
           try {
             const res = await updateInspector(params.id, formData);

@@ -15,7 +15,9 @@ function ViewOneList() {
       setCheckList(res.data.checklist[0]); 
       setFields(res.data.fields);
 
-    } catch (error) {}
+    } catch (error) {
+      swal.fire("Tuvimos un error, intenta mas tarde","","error")
+    }
   };
   useEffect(() => {
     getData();

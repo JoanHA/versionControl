@@ -14,7 +14,7 @@ const {
 
 //Configuracion del storage
 const storage = multer.diskStorage({
-  destination: path.join(__dirname, "../public/uploads/"),
+  destination: path.join(__dirname, "../../public/uploads/documents/"),
   filename: function (req, file, cb) {
     cb(null, Date.now() + "-" + file.originalname);
   },

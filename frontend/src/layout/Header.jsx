@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import logo from "../assets/IMG/grupo-carval-Logo-Bioart.png";
 import { useAuth } from "../context/AuthContext";
+
 const Header = ({ children }) => {
   const { isAuthenticated } = useAuth();
 

@@ -36,7 +36,7 @@ function AuditPlans() {
     <div>
       <div className="titleHeader">Planes de auditorias</div>
       <div className="px-4">
-        <table className="table table-primary table-striped">
+        <table className="table  table-striped">
           <thead>
             <tr>
               <th>Vigencia</th>

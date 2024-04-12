@@ -15,7 +15,7 @@ import {
 import Archived from "../pages/control/Archived";
 import { useAuth } from "../context/AuthContext";
 import { deleteChanges, deleteControls } from "../api/changes";
-
+import DownloadFile from "./auditsComponents/DownloadFile";
 function  Table({
   data,
   columns,
@@ -24,6 +24,7 @@ function  Table({
   details = false,
   editType,
   cb = null,
+  download,
 }) {
   const [sorting, setSorting] = useState([]);
   const [filtering, setFilteting] = useState("");
@@ -276,9 +277,16 @@ function  Table({
                 )}
                 {details && (
                   <th colSpan={1} style={{width:"70px"}}>
-                    Detalles
-                  </th>
+                  Detalles
+                </th>
                 )}
+                {
+                  download && (
+                    <th colSpan={1} style={{width:"70px"} }className='text-center'>
+                    Descargar
+                  </th>
+                  )
+                }
               </tr>
             ))}
           </thead>
@@ -338,6 +346,12 @@ function  Table({
                     </td>
                   </>
                 )}
+
+                {
+                  download && (
+                    <DownloadFile file ={download}/>
+                  )
+                }
                 {btnDetails && (
                   <>
                     <td>

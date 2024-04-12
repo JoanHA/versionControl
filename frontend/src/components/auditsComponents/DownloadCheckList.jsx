@@ -15,6 +15,8 @@ function DownloadCheckList() {
   const getCheckData = async () => {
     try {
       const res = await getOneList(params.id);
+      
+console.log(res.data)
       setData(res.data.checklist[0]);
       setReqs(res.data.fields);
     } catch (error) {
@@ -33,7 +35,21 @@ function DownloadCheckList() {
             data={{ data, reqs }}
           ></DownloadCheckListButton>
           <div>
-            <Link className="btn btn-primary text-light" to={`/audits/createReport/${params.id}`}>Generar Reporte </Link>
+            {data?.finding_id ? (
+              <Link
+                className="btn btn-primary text-light"
+                to={`/audits/viewReport/${data.finding_id }`}
+              >
+                Ver reporte
+              </Link>
+            ) : (
+              <Link
+                className="btn btn-primary text-light"
+                to={`/audits/createReport/${params.id}`}
+              >
+                Generar Reporte{" "}
+              </Link>
+            )}
           </div>
         </div>
         <table className="table table-striped table-hover table-bordered ">

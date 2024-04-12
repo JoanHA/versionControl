@@ -32,7 +32,7 @@ const createCheckList = async (req, res) => {
 };
 const getChecklists = async (req, res) => {
   try {
-    const lists = await db.query(`SELECT au.date, cl.status,cl.id,
+    const lists = await db.query(`SELECT au.date, cl.finding_id,cl.status,cl.id,
     (SELECT leader FROM audit_plans WHERE  audit_plans.id = au.audit_plan_id) AS leader,
     (SELECT name FROM processes WHERE id = au.processes_id) AS process_name,
     (SELECT name FROM params WHERE params.id =cl.status ) AS status_name

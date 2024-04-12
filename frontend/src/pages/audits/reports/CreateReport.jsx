@@ -32,6 +32,7 @@ function CreateReport() {
         objective: data.objective,
         inspector: data.leader,
         check_list_id: data.check_list_id,
+        audit_plan: data.audit_plan_id,
       });
       const filteredRequisites = res.data.filter(
         (r) => r.not_filled === 1 || r.get_better === 1
@@ -81,14 +82,18 @@ function CreateReport() {
 
   const save = async (values) => {
     const datos = Object.entries(values);
+
     const requisitesIds = requistes.map((r) => r.id);
+
     const findings = [];
+    console.log(requisitesIds);
     for (let j = 0; j < requisitesIds.length; j++) {
       const id = requisitesIds[j];
+
       for (let i = 0; i < datos.length; i++) {
         if (datos[i][0] === `finding-${id}`) {
           findings.push({
-            id: i,
+            id,
             valor: datos[i][1],
           });
         }
@@ -102,10 +107,13 @@ function CreateReport() {
       weakness: values.weakness,
       findings: findings,
       img: url,
+      audit_plan: plan.audit_plan,
+      check_list_id: plan.check_list_id,
     };
+
     try {
       const res = await createReports(data);
-      console.log(res);
+      swal.fire(res.data, "", "success");
     } catch (error) {
       swal.fire(error.response.data, "", "error");
     }
@@ -143,7 +151,7 @@ function CreateReport() {
   };
   return (
     <div className="px-3">
-      <div className="titleHeader">Creación de reportes</div>
+      <div className="titleHeader">Creación de reportes de hallazgos</div>
       <button
         className="btn"
         onClick={() => {
@@ -332,10 +340,10 @@ function CreateReport() {
             </div>
             <div>
               <textarea
-placeholder="Oportunidad de mejora..."
-className={"form-control"}
+                placeholder="Oportunidad de mejora..."
+                className={"form-control"}
                 cols="20"
-                {...register("get_better ")}
+                {...register("get_better")}
                 rows="5"
                 style={{ maxHeight: "120px" }}
               ></textarea>
@@ -367,7 +375,7 @@ className={"form-control"}
             </div>
             <div>
               <div id="signature-pad">
-                <SignaturePad redrawOnResize ref={signatureRef} height={100} />
+                <SignaturePad redrawOnResize ref={signatureRef} height={98} />
               </div>
 
               <div className="my-2 d-flex ">

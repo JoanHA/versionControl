@@ -3,6 +3,7 @@ import AuditSidebar from "../components/auditsComponents/auditSidebar";
 import logo from "../assets/IMG/grupo-carval-Logo-Bioart.png";
 import { Link } from "react-router-dom";
 import "../assets/CSS/audits.css";
+import "./../assets/CSS/Welcome.css"
 function AuditLayout({ children }) {
   return (
     <div className="d-flex flex-column ">

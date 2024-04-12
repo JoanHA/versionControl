@@ -8,7 +8,7 @@ import {
 import { Link } from "react-router-dom";
 import React, { useEffect } from "react";
 
-export default function ProcessTable({ data, columns }) {
+export default function ProcessTable({ data, columns, edit,name }) {
   const table = useReactTable({
     data,
     columns,
@@ -66,9 +66,9 @@ export default function ProcessTable({ data, columns }) {
                   );
                 })}
                 <td className="" style={{width:"130px"}}>
-                  <Link to={`/audits/programs/${row.original.id}`}>
+                  <Link to={`/audits/${edit? edit: "programs"}/${row.original.id}`}>
                   <button className="btn btn-primary btn-sm w-100 fw-bold">
-                    Ver Programa
+                    {name ? name : "Ver Programa"}
                   </button>
                   </Link>
                  

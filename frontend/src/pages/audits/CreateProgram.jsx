@@ -91,7 +91,7 @@ function CreateProgram() {
     }
     values.inspectors_id = inspectors_id;
     values.inspectors = texto;
-
+console.log(values)
     const array = process_audit;
     array.push(values);
     setProcess_audit(array);
@@ -150,7 +150,7 @@ function CreateProgram() {
         try {
           const res = await createProgram(dataToSend);
           swal.fire(res.data, "", "success");
-          console.log(res.data);
+       
           reset();
           clean();
           setProcess_audit([]);
@@ -166,7 +166,6 @@ function CreateProgram() {
   const deleteAuditProcess = (id) => {
     const deletedArray = process_audit.filter((p, index) => index !== id);
     setProcess_audit(deletedArray);
-   
   };
 
   return (
@@ -222,18 +221,50 @@ function CreateProgram() {
             <strong>Proceso a auditar</strong>
           </h5>
           <div className="row m-0">
-            <div className="col-12 col-md-6">
-              <div>
-                <label>Fecha de auditoria</label>
-              </div>
-              <div>
-                <input
-                  type="date"
-                  className="form-control"
-                  {...register("date", { required: true })}
-                />
-              </div>
-            </div>
+            {auditType?.value == 500 ? (
+              <>
+                <div className="col-12 col-md-3">
+                  <div>
+                    <label>Fecha de inicio</label>
+                  </div>
+                  <div>
+                    <input
+                      type="date"
+                      className="form-control"
+                      {...register("date", { required: true })}
+                    />
+                  </div>
+                </div>
+                <div className="col-12 col-md-3">
+                  <div>
+                    <label>Fecha de fin</label>
+                  </div>
+                  <div>
+                    <input
+                      type="date"
+                      className="form-control"
+                      {...register("end_date", { required: true })}
+                    />
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                {" "}
+                <div className="col-12 col-md-6">
+                  <div>
+                    <label>Fecha de auditoria</label>
+                  </div>
+                  <div>
+                    <input
+                      type="date"
+                      className="form-control"
+                      {...register("date", { required: true })}
+                    />
+                  </div>
+                </div>
+              </>
+            )}
             <div className="col-12 col-md-6">
               <div>
                 <label>Tipo de auditoria</label>
@@ -343,7 +374,7 @@ function CreateProgram() {
             <table className="table table-responsive table-striped table-hover">
               <thead className="table-dark">
                 <tr>
-                  <th>Fecha Auditoria</th>
+                  <th>Rango de fecha</th>
                   <th>Tipo de auditoria</th>
                   <th>Lugar de auditoria</th>
                   <th>Proceso</th>
@@ -356,7 +387,7 @@ function CreateProgram() {
                 {process_audit.length > 0 ? (
                   process_audit.map((p, index) => (
                     <tr key={index}>
-                      <td className="text-center"> {p.date}</td>
+                      <td className="text-center"> {p.date} - {p.end_date}</td>
                       <td className="text-center">{p.type_name} </td>
                       <td className="text-center">{p.place} </td>
                       <td className="text-center">{p.process_name} </td>

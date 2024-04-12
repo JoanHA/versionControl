@@ -20,7 +20,7 @@ const FilesView = ({ files }) => {
   ];
   useEffect(() => {
     setFile(files);
-    
+    console.log(files)
   }, [files]);
   return (
     <div className="" id="list-container">
@@ -38,7 +38,7 @@ const FilesView = ({ files }) => {
           ></button>
         </div>
         <div style={{ maxHeight: "500px", overflowY: "auto" }}>
-          <Table columns={colums} data={file}></Table>
+          <Table columns={colums} data={file} options={false} download={files}></Table>
         </div>
       </div>
     </div>

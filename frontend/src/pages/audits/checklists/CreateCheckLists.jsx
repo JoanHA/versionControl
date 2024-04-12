@@ -21,7 +21,7 @@ function CreateCheckLists() {
   const getReqs = async () => {
     try {
       const res = await getProcessReq(data.processes_id);
-   
+      console.log(res.data);
       setReqs(res.data);
     } catch (error) {
       swal.fire(error.response.data, "", "error");
@@ -40,7 +40,7 @@ function CreateCheckLists() {
       swal.fire(error.response.data, "", "error");
     }
   };
-  //Guardarlo temporal
+  //Guardarlo permanente
   const onSubmit = async (values) => {
     Swal.fire({
       title: "Estas seguro?",
@@ -52,6 +52,7 @@ function CreateCheckLists() {
       confirmButtonText: "Si!",
     }).then((result) => {
       if (result.isConfirmed) {
+        const valores = [];
         //Convertir los datos del values en un array
         const datos = Object.entries(values);
         //recorrer el array creado para encontrar los campos que van en la base de datos y guardarlos en un objeto para enviarlos a un array
@@ -83,7 +84,7 @@ function CreateCheckLists() {
       }
     });
   };
-  //Guardarlo permanente
+  //Guardarlo borradr
   const archive = () => {
     Swal.fire({
       title: "Esta seguro?",
@@ -170,14 +171,16 @@ function CreateCheckLists() {
         {/* Campos  */}
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="d-flex gap-2 my-2">
+            <button className="btn btn-success btn-sm">
+              Guardado permanente
+            </button>
             <button
-              className="btn btn-success btn-sm"
+              className="btn btn-primary btn-sm"
               type="button"
               onClick={archive}
             >
-              Guardar
+              Guardar borrador
             </button>
-            <button className="btn btn-primary btn-sm">Archivar</button>
           </div>
           <div className="mb-2">
             <div className="row p-0 m-0 gap-2 ">
@@ -242,7 +245,7 @@ function CreateCheckLists() {
                       </label>
                     </div>
                     <div className="col-2  text-center check-form">
-                    <div className="d-flex gap-3 align-items-center justify-content-between">
+                      <div className="d-flex gap-3 align-items-center justify-content-between ">
                         <label htmlFor="">
                           <input
                             type="hidden"
@@ -252,14 +255,18 @@ function CreateCheckLists() {
                           />
                           {req.type === 801 ? req.article : "N/A"}
                         </label>
-                        <label htmlFor="" className="my-3">
+                        <label htmlFor="" className="my-3 ">
                           <input
                             type="hidden"
                             className="text-center "
                             {...register(`iso45001${index}`)}
                             value={req.type === 802 ? req.id : null}
                           />
-                          {req.type === 802 ? req.article : "N/A"}
+                          {req.type === 802
+                            ? req.article
+                            : req.type === 803
+                            ? `-Decreto 1072- (${req.article})`
+                            : "N/A"}
                         </label>
                       </div>
                     </div>

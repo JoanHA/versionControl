@@ -16,14 +16,17 @@ import { TbProgress } from "react-icons/tb";
 
 const size = 25;
 function AuditSidebar() {
-
   const [plans, setPlans] = useState(false);
   const [reports, setReports] = useState(false);
-  const path = useLocation()
-
+  const path = useLocation();
 
   return (
-    <div className={path.pathname.substring(0,18) === '/audits/plans/view' ?  "d-none" :""} id="audit-side">
+    <div
+      className={
+        path.pathname.substring(0, 18) === "/audits/plans/view" ? "d-none" : ""
+      }
+      id="audit-side"
+    >
       <div id="audit-side-container ">
         <ul className="p-0">
           <Link className="text-light" to={"/audits"}>
@@ -86,7 +89,10 @@ function AuditSidebar() {
             <li className="nav-link flex flex-column ">
               <div className="d-flex flex-row w-100">
                 {" "}
-                <Link className="audit-link row m-0 flex-shrink-1 flex-grow-1 text-light "  to={"/audits/plans"}>
+                <Link
+                  className="audit-link row m-0 flex-shrink-1 flex-grow-1 text-light "
+                  to={"/audits/plans"}
+                >
                   <div className="col-1">
                     <GrPlan size={size} />
                   </div>
@@ -107,97 +113,67 @@ function AuditSidebar() {
                 <>
                   <div className="px-3" id="audit-box">
                     <Link className="" to={"/audits/checklist/"}>
-                      <div className="text-dark" >Listas de chequeo</div>
+                      <div className="text-dark">Listas de chequeo</div>
                     </Link>
                   </div>
-                  <div className="px-3" id="audit-box">
+                  {/* <div className="px-3" id="audit-box">
                     <div className="">
                       <Link className="text-dark">Momentos de reunión</Link>
                     </div>
-                  </div>
+                  </div> */}
                 </>
               )}
             </li>
           </div>
-       
-          <li className="nav-link flex flex-column ">
-            <div className="d-flex flex-row w-100">
-              {" "}
-              <div className="audit-link row m-0 flex-shrink-1 flex-grow-1  ">
-                <div className="col-1">
+     
+          <Link className="text-light"   to={"/audits/findings"}>
+            <li className="nav-link flex flex-column ">
+              <div className="d-flex flex-row w-100">
+                {" "}
+                <div className="audit-link row m-0 flex-shrink-1 flex-grow-1  ">
+                  <div className="col-1">
                   <GoReport size={size} />
-                </div>
-                <div className="col-8">
-                  <Link className="text-light" to={"/audits/programs"}>
-                   Reporte Hallazgos
-                  </Link>
+                  </div>
+                  <div className="col-8">Reporte Hallazgos</div>
+                  <div className="col-1">
+                    <IoIosArrowForward />
+                  </div>
                 </div>
               </div>
-              <div
-                className="flex-shrink col-2 dropInspector"
-                id=""
-                onClick={() => {
-                  var au = reports ? false : true;
+            </li>
+          </Link>
 
-                  setReports(au);
-                }}
-              >
-                {reports ? <IoIosArrowUp /> : <IoIosArrowDown />}
-              </div>
-            </div>
-            {reports && (
-              <>
-                <div className="px-3" id="audit-box">
-                  <div className="">
-                    <Link className="text-dark">Reportes</Link>
+          <Link className="text-light" to={"/audits/finalReports/"}>
+            <li className="nav-link flex flex-column ">
+              <div className="d-flex flex-row w-100">
+                {" "}
+                <div className="audit-link row m-0 flex-shrink-1 flex-grow-1  ">
+                  <div className="col-1">
+                    <FaFileSignature size={size} />
+                  </div>
+                  <div className="col-8">Informes finales</div>
+                  <div className="col-1">
+                    <IoIosArrowForward />
                   </div>
                 </div>
-                <div className="px-3" id="audit-box">
-                  <div className="">
-                    <Link className="text-dark">Planes de acción</Link>
-                  </div>
-                </div>
-              </>
-            )}
-          </li>
-          <li className="nav-link flex flex-column ">
-            <div className="d-flex flex-row w-100">
-              {" "}
-              <div className="audit-link row m-0 flex-shrink-1 flex-grow-1  ">
-                <div className="col-1">
-                  <FaFileSignature size={size} />
-                </div>
-                <div className="col-8">
-                  <Link className="text-light" to={"/audits/programs"}>
-                    Informes
-                  </Link>
-                </div>
-                <div className="col-1">
-                  <IoIosArrowForward />
-                </div>
               </div>
-            </div>
-          </li>
-          <li className="nav-link flex flex-column ">
+            </li>
+          </Link>
+          <Link className="nav-link flex flex-column " to={"/audits/files"}>
             <div className="d-flex flex-row w-100">
-              {" "}
               <div className="audit-link row m-0 flex-shrink-1 flex-grow-1  ">
                 <div className="col-1">
                   <RiListCheck2 size={size} />
                 </div>
-                <div className="col-8">
-                  <Link className="text-light" to={"/audits/programs"}>
-                    Archivos de consulta
-                  </Link>
-                </div>
+                <div className="col-8">Archivos de consulta</div>
                 <div className="col-1">
                   <IoIosArrowForward />
                 </div>
               </div>
             </div>
-          </li>
+          </Link>
 
-          <li className="nav-link flex flex-column ">
+          {/* <li className="nav-link flex flex-column ">
             <div className="d-flex flex-row w-100">
               {" "}
               <div className="audit-link row m-0 flex-shrink-1 flex-grow-1  ">
@@ -214,8 +190,8 @@ function AuditSidebar() {
                 </div>
               </div>
             </div>
-          </li>
-          <li className="nav-link flex flex-column ">
+          </li> */}
+          {/* <li className="nav-link flex flex-column ">
             <div className="d-flex flex-row w-100">
               {" "}
               <div className="audit-link row m-0 flex-shrink-1 flex-grow-1  ">
@@ -232,8 +208,8 @@ function AuditSidebar() {
                 </div>
               </div>
             </div>
-          </li>
-          <li className="nav-link flex flex-column ">
+          </li> */}
+          {/* <li className="nav-link flex flex-column ">
             <div className="d-flex flex-row w-100">
               {" "}
               <div className="audit-link row m-0 flex-shrink-1 flex-grow-1  ">
@@ -250,8 +226,8 @@ function AuditSidebar() {
                 </div>
               </div>
             </div>
-          </li>
-          <li className="nav-link flex flex-column ">
+          </li> */}
+          {/* <li className="nav-link flex flex-column ">
             <div className="d-flex flex-row w-100">
               {" "}
               <div className="audit-link row m-0 flex-shrink-1 flex-grow-1  ">
@@ -268,18 +244,15 @@ function AuditSidebar() {
                 </div>
               </div>
             </div>
-          </li>
-          <Link className="nav-link flex flex-column "  to={"/audits/process"}>
+          </li> */}
+          <Link className="nav-link flex flex-column " to={"/audits/process"}>
             <div className="d-flex flex-row w-100">
-              {" "}
               <div className="audit-link row m-0 flex-shrink-1 flex-grow-1  ">
                 <div className="col-1">
                   <FaSitemap size={size} />
                 </div>
                 <div className="col-8">
-                  <Link className="text-light">
-                    Procesos
-                  </Link>
+                  <Link className="text-light">Procesos</Link>
                 </div>
                 <div className="col-1">
                   <IoIosArrowForward />
