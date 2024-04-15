@@ -160,7 +160,7 @@ const validateStatus = async(req,res)=>{
     WHERE ap.id= ?;`
 
     const result = await db.query(sql,[id]);
-    console.log(result);
+  
     res.send(result)
   } catch (error) {
     console.log(error);

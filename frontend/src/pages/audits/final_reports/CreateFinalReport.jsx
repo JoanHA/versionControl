@@ -1,15 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaArrowCircleLeft } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 
 import {
+  CreateFinalReports,
+  getFinalReportFinding,
   getFinalReports,
   getOneFinalReport,
 } from "../../../api/AuditAPI/final_report";
+import SignaturePad from "react-signature-pad-wrapper";
 
 function CreateFinalReport() {
-  const { register, handleSubmit, reset } = useForm();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+  const signatureRef = useRef(null);
   const navigate = useNavigate();
   const [plan, setPlan] = useState({});
   const [reqs, setReqs] = useState([]);
@@ -18,7 +27,6 @@ function CreateFinalReport() {
   const getReport = async () => {
     try {
       const res = await getOneFinalReport(params.id);
-      console.log(res.data);
       const plan = res.data.auditPlan[0];
 
       const inspect = res.data.inspectors;
@@ -39,28 +47,34 @@ function CreateFinalReport() {
         if (r.iso_9001) {
           return {
             name: r.iso9001_name,
+            requisite_id: r.iso_9001,
             type: r.iso9001_type,
             article: r.iso9001_type,
             process_id: r.id,
             process_name: r.name,
+            plan_id: plan.id,
           };
         }
         if (r.iso_45001) {
           return {
+            requisite_id: r.iso_45001,
             name: r.iso4001_name,
             type: r.iso4001_type,
             article: r.iso_4001article,
             process_id: r.id,
             process_name: r.name,
+            plan_id: plan.id,
           };
         }
         if (r.decreto) {
           return {
+            requisite_id: r.decreto,
             name: r.decreto_name,
             type: r.decreto_type,
             article: r.decreto_article,
             process_id: r.id,
             process_name: r.name,
+            plan_id: plan.id,
           };
         }
       });
@@ -73,9 +87,11 @@ function CreateFinalReport() {
         acc[key].push(currentValue);
         return acc;
       }, {});
-      console.log(groupedByProcessId);
-      setReqs(Object.values(groupedByProcessId));
-      console.log();
+
+      const response = await getFinalReportFinding(
+        Object.values(groupedByProcessId)
+      );
+      setReqs(response.data);
     } catch (error) {
       swal.fire(error.response.data, "", "error");
     }
@@ -83,8 +99,50 @@ function CreateFinalReport() {
   useEffect(() => {
     getReport();
   }, []);
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    delete data.audit_group;
+    delete data.criteria;
+    delete data.scope;
+    delete data.objective;
+    delete data.date;
+    data.audit_plan = params.id;
+
+    const valores = [];
+    //Convertir los datos del values en un array
+    const datos = Object.entries(data);
+
+    //recorrer el array creado para encontrar los campos que van en la base de datos y guardarlos en un objeto para enviarlos a un array
+
+    var ids = [];
+
+    for (let j = 0; j < reqs.length; j++) {
+      const element = reqs[j];
+      for (let i = 0; i < element.length; i++) {
+   console.log(element[i])
+   ids.push(element[i].process_id)
+      }
+    }
+    ids = [...new Set(ids)]
+    console.log(ids )
+ 
+
+    return;
+    var formData = new FormData();
+    formData.append("audit_leader_sign");
+    formData.append("audit_plan");
+    formData.append("conclusions");
+    formData.append("filled_objective");
+    formData.append("negative_aspects");
+    formData.append("others");
+    formData.append("positive_aspects");
+    formData.append("presented_risk");
+    formData.append("audit_leader");
+    formData.append("represent");
+    formData.append("represent_sign");
+    formData.append("");
+
+    const res = await CreateFinalReports(formData);
+    console.log(res);
   };
   return (
     <div>
@@ -120,7 +178,7 @@ function CreateFinalReport() {
                 </div>
               </div>
             </div>
-            <div className="col-12 col-md-4">
+            <div className="col-12 col-md-4 py-2">
               <div>
                 <label htmlFor="date">
                   <strong>Fecha de auditoria:</strong>
@@ -194,25 +252,6 @@ function CreateFinalReport() {
 
           <div className="p-2 ">
             <div>
-              <div className="d-flex flex-column">
-                <div>
-                  <strong>
-                    <label htmlFor="date">
-                      Fecha limite del plan de acción
-                    </label>
-                  </strong>
-                </div>
-                <div>
-                  <input
-                    type="date"
-                    {...register("action_plan_closeDate", { required: true })}
-                    className="form-control"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div>
               <div className="w-100 d-flex justify-content-center">
                 <h4 className="titleHeader m-0 p-2 mb-2">Aspectos positivos</h4>
               </div>
@@ -223,6 +262,9 @@ function CreateFinalReport() {
                   style={{ maxHeight: "200px" }}
                   {...register("positive_aspects", { required: true })}
                 ></textarea>
+                {errors?.positive_aspects?.type === "required" && (
+                  <p className="errorMsg">Este campo es obligatorio</p>
+                )}
               </div>
             </div>
             <div>
@@ -238,6 +280,9 @@ function CreateFinalReport() {
                   placeholder="Aspéctos mejorar"
                   {...register("negative_aspects", { required: true })}
                 ></textarea>
+                {errors?.negative_aspects?.type === "required" && (
+                  <p className="errorMsg">Este campo es obligatorio</p>
+                )}
               </div>
             </div>
             <div>
@@ -260,16 +305,18 @@ function CreateFinalReport() {
                         <tr>
                           <td>
                             <ul>
-                              {r.map((d) => (
-                                <li>{`${d.article}. ${d.name}`}</li>
+                              {r.map((d, i) => (
+                                <li key={i}>{`${d.article}. ${d.name}`}</li>
                               ))}
                             </ul>
                           </td>
-                          <td >
+                          <td>
                             <textarea
                               type="text"
                               className="form-control mh-100"
                               placeholder="Descripción..."
+                              defaultValue={r[i].details}
+                              {...register(`process_id-${r[i].process_id}`)}
                             />
                           </td>
                           <td className="text-center">{r[i].process_name}</td>
@@ -301,25 +348,43 @@ function CreateFinalReport() {
 
                   <div className="d-flex gap-3 ">
                     <div className="d-flex  align-items-center gap-2">
-                      <label htmlFor=""> Si</label>
-
-                      <input
-                        type="radio"
-                        {...register("filled_objective", { required: true })}
+                      <label htmlFor=""> No</label>
+                      <div class="form-check form-switch">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          role="switch"
+                          {...register("filled_objective")}
+                          id="flexSwitchCheckDefault"
+                        />
+                        <label
+                          class="form-check-label"
+                          for="flexSwitchCheckDefault"
+                        >
+                          Si
+                        </label>
+                      </div>
+                      {/* <input
+                        type="checkbox"
                         className="form-check-input"
                         style={{ width: "30px", height: "25px" }}
-                      />
+                      /> */}
                     </div>
-                    <div className="d-flex  align-items-center gap-2">
+                    {/* <div className="d-flex  align-items-center gap-2">
                       <label htmlFor=""> No</label>
 
                       <input
-                        type="radio"
-                        {...register("filled_objective", { required: true })}
+                        type="checkbox"
+                        {...register("filled_objective_false", {
+                          required: true,
+                        })}
                         style={{ width: "30px", height: "25px" }}
                         className="form-check-input"
                       />
-                    </div>
+                      {errors?.filled_objective?.type === "required" && (
+                        <p className="errorMsg">Este campo es obligatorio</p>
+                      )} */}
+                    {/* </div> */}
                   </div>
                 </div>
                 <div>
@@ -334,6 +399,9 @@ function CreateFinalReport() {
                     placeholder="Escribe los riegos presentados..."
                     {...register("presented_risk", { required: true })}
                   ></textarea>
+                  {errors?.presented_risk?.type === "required" && (
+                    <p className="errorMsg">Este campo es obligatorio</p>
+                  )}
                 </div>
                 <div>
                   <strong>
@@ -361,13 +429,80 @@ function CreateFinalReport() {
                   placeholder="Escribe conclusión final..."
                   {...register("conclusions", { required: true })}
                 ></textarea>
+                {errors?.conclusions?.type === "required" && (
+                  <p className="errorMsg">Este campo es obligatorio</p>
+                )}
+              </div>
+            </div>
+            <div className="col-12 my-3">
+              <div className=" w-100 d-flex bg-secondary text-light rounded  p2 justify-content-center align- items-center my-2">
+                <div className=" fw-bold rounded px-4 py-1 text-center ">
+                  <h3 className="m-0"> Revision y aprobacion</h3>
+                </div>
+              </div>
+
+              <div className="w-100 d-flex justify-content-center">
+                <p>
+                  <strong>
+                    Se aceptan los planes de acción generados por los líderes de
+                    procesos, a los hallazgos presentados en la Auditoria
+                    Interna, excepto N.A
+                  </strong>
+                </p>
+              </div>
+
+              <div className="d-flex justify-content-center gap-5">
+                <div className="d-flex flex-column justify-content-center gap-1">
+                  <div>
+                    <label className="fw-bold">Ingresa la firma</label>
+                    <input
+                      type="file"
+                      className="form-control"
+                      id="floatingInput"
+                      {...register("audit_leader_sign")}
+                      placeholder="name@example.com"
+                    />
+                  </div>
+                  <div className="d-flex  gap-3">
+                    <label htmlFor="">Nombre:</label>
+
+                    <input
+                      type="text"
+                      className="form-control border-0 border-bottom"
+                      {...register("audit_leader")}
+                    />
+                  </div>
+                  <div className="w-100 d-flex justify-content-center">
+                    <p className="m-0">Auditor lider</p>
+                  </div>
+                </div>
+                <div className="d-flex flex-column justify-content-center gap-2">
+                  <div>
+                    <label className="fw-bold">Ingresa la firma</label>
+                    <input
+                      type="file"
+                      className="form-control"
+                      id="floatingInput"
+                      {...register("represent_sign")}
+                      placeholder="name@example.com"
+                    />
+                  </div>
+                  <div className="d-flex gap-3">
+                    <label htmlFor="">Nombre:</label>
+                    <input
+                      type="text"
+                      className="form-control border-0 border-bottom"
+                      {...register("represent")}
+                    />
+                  </div>
+                  <div className="w-100 d-flex justify-content-center">
+                    <p className="m-0">Representante por la dirección</p>
+                  </div>
+                </div>
               </div>
             </div>
             <div className="d-flex gap-3 my-1 px-2 ">
               <button className="btn btn-success">Guardar</button>
-              <button className="btn btn-danger" type="reset">
-                Borrar todo
-              </button>
             </div>
           </div>
         </div>

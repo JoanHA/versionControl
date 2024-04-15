@@ -9,7 +9,8 @@ const getOneFinal = async (req, res) => {
         ap.scope,
         ap.criteria,
         ap.leader,
-        ap.validity
+        ap.validity,
+        ap.id
         FROM audit_plans ap
         LEFT JOIN audit_plan_has_inspectors aphi ON aphi.audit_plan_id = ap.id
         WHERE ap.id = ?`;
@@ -60,31 +61,75 @@ const getOneFinal = async (req, res) => {
       inspectors,
       requisites,
     };
-    console.log(toSend);
-    res.send(toSend);
 
+    res.send(toSend);
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).send("Tuvimos un error, intenta mas tarde");
   }
 };
-const createFinal = async (req, res) => {};
-
-const getFinal = async(req,res)=>{
+const createFinal = async (req, res) => {
+  const data = req.body
 try {
-    const data = await db.query("SELECT * FROM final_reports INNER JOIN audit_plans ON audit_plans.id = final_reports.audit_plan");
-    res.send(data)
+  console.log(data)
+  console.log(req.file)
+  const sql = "INSERT INTO final_reports SET ?";
+  // const response = await db.query(sql,data)
+  res.send("Recibido")
 } catch (error) {
-    console.log(error)
-    res.status(500).send("Tuvimos un error, intenta mas tarde")
-    
-}
+  
 }
 
+};
+
+const getFinal = async (req, res) => {
+  try {
+    const data = await db.query(
+      "SELECT * FROM final_reports INNER JOIN audit_plans ON audit_plans.id = final_reports.audit_plan"
+    );
+    res.send(data);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Tuvimos un error, intenta mas tarde");
+  }
+};
+
+const getFindings = async (req, res) => {
+  const requisite = req.body;
+  const sql = `SELECT ff.details 
+  FROM findings f
+  LEFT JOIN finding_fields ff ON ff.findings_id = f.id
+  WHERE  f.audit_plan= ? AND ff.requisite =?`;
+  const toSend = [];
+  try {
+    for (let i = 0; i < requisite.length; i++) {
+      var requisites = [];
+      for (let j = 0; j < requisite[i].length; j++) {
+        const element = requisite[i][j];
+        const id = element.requisite_id;
+        const plan_id = element.plan_id;
+        const response = await db.query(sql, [plan_id, id]);
+        var text = " ";
+        for (let k = 0; k < response.length; k++) {
+          const { details } = response[k];
+          text += details;
+        }
+        element.details = text;
+        requisites.push(element);
+      }
+      toSend.push(requisites);
+    }
+    res.send(toSend);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Tuvimos un error, intenta mas tarde");
+  }
+};
 module.exports = {
   getFinal,
   getOneFinal,
   createFinal,
+  getFindings,
 };
 
 // SELECT  processes.name as process_name,

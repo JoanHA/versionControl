@@ -20,7 +20,7 @@ function CreateReport() {
     formState: { errors },
   } = useForm();
   const navigate = useNavigate();
-  const signatureRef = useRef(null);
+
   const getData = async () => {
     try {
       const res = await getRequisitesUnfilled(params.id);
@@ -327,7 +327,7 @@ function CreateReport() {
               <div className="row">
                 <div className="col-12 text-center my-2">
                   <h4>
-                    No hay requisitos de no conformidad o de oportunida de
+                    No hay requisitos de no conformidad o de oportunidad de
                     mejora
                   </h4>
                 </div>
@@ -336,11 +336,11 @@ function CreateReport() {
           </div>
           <div>
             <div>
-              <h5>Oportunidades de mejora</h5>
+              <h5>Observaciones</h5>
             </div>
             <div>
               <textarea
-                placeholder="Oportunidad de mejora..."
+                placeholder="Observaciones..."
                 className={"form-control"}
                 cols="20"
                 {...register("get_better")}

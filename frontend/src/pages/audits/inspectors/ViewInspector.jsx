@@ -20,7 +20,13 @@ const FilesView = ({ files }) => {
   ];
   useEffect(() => {
     setFile(files);
-    console.log(files)
+
+    files.map((f)=>{
+      f.created_at =f.created_at?.split("T")[0]
+    return f
+    })
+
+    
   }, [files]);
   return (
     <div className="" id="list-container">
