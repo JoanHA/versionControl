@@ -21,8 +21,8 @@ function CreateCheckLists() {
   const getReqs = async () => {
     try {
       const res = await getProcessReq(data.processes_id);
-      console.log(res.data);
       setReqs(res.data);
+      
     } catch (error) {
       swal.fire(error.response.data, "", "error");
     }
@@ -34,13 +34,14 @@ function CreateCheckLists() {
 
   const saveCheck = async (values) => {
     try {
+
       const res = await createChecklist(values);
-      swal.fire(res.data, "", "success");
+      swal.fire(res.data, "", "success").then(() => history.back());
     } catch (error) {
       swal.fire(error.response.data, "", "error");
     }
   };
-  //Guardarlo permanente
+  //Guardarlo permanete
   const onSubmit = async (values) => {
     Swal.fire({
       title: "Estas seguro?",
@@ -56,27 +57,35 @@ function CreateCheckLists() {
         //Convertir los datos del values en un array
         const datos = Object.entries(values);
         //recorrer el array creado para encontrar los campos que van en la base de datos y guardarlos en un objeto para enviarlos a un array
+      
         for (let j = 0; j < reqs.length; j++) {
           for (let i = 0; i < datos.length; i++) {
             if (datos[i][0] === `pregunta${j}`) {
-              valores.push({
-                question: datos[i][1],
-                iso_9001: datos[i + 1][1] ? parseInt(datos[i + 1][1]) : null,
-                iso_45001: datos[i + 2][1] ? parseInt(datos[i + 2][1]) : null,
-                filled: datos[i + 3][1] === "filled" ? 1 : 0,
-                not_filled: datos[i + 3][1] === "not_filled" ? 1 : 0,
-                get_better: datos[i + 3][1] === "get_better" ? 1 : 0,
-                observations: datos[i + 4][1],
-                status: 4,
-                audit_plan: parseInt(params.id),
-              });
-            }
+              const valor = {
+                 question: datos[i][1],
+                 iso_9001: datos[i + 1][1] ? parseInt(datos[i + 1][1]) : null,
+                 iso_45001: datos[i + 2][1] ? parseInt(datos[i + 2][1]) : null,
+                 filled: datos[i + 4][1] === "filled" ? true : false,
+                 not_filled: datos[i + 4][1] === "not_filled" ? true : false,
+                 get_better: datos[i + 4][1] === "get_better" ? true : false,
+                 observations: datos[i + 5][1],
+                 status: 4,
+                 audit_plan: parseInt(params.id),
+               };
+               for (let i = 0; i < datos.length; i++) {
+                 if (datos[i][0] === `decreto${j}`) {
+                   valor.decreto = datos[i][1] ? parseInt(datos[i][1]) : null
+                 }
+               }
+               valores.push(valor)
+             }
           }
         }
+      
         const send = {
           checkList: {
             audit_plan: params.id,
-            status: 4,
+            status: 5,
           },
           fields: valores,
         };
@@ -84,7 +93,7 @@ function CreateCheckLists() {
       }
     });
   };
-  //Guardarlo borradr
+  //Guardarlo borrador
   const archive = () => {
     Swal.fire({
       title: "Esta seguro?",
@@ -99,29 +108,37 @@ function CreateCheckLists() {
         const valores = [];
         //Convertir los datos del values en un array
         const datos = Object.entries(watch());
-
         //recorrer el array creado para encontrar los campos que van en la base de datos y guardarlos en un objeto para enviarlos a un array
+   
         for (let j = 0; j < reqs.length; j++) {
           for (let i = 0; i < datos.length; i++) {
             if (datos[i][0] === `pregunta${j}`) {
-              valores.push({
+             const valor = {
                 question: datos[i][1],
                 iso_9001: datos[i + 1][1] ? parseInt(datos[i + 1][1]) : null,
                 iso_45001: datos[i + 2][1] ? parseInt(datos[i + 2][1]) : null,
-                filled: datos[i + 3][1] === "filled" ? true : false,
-                not_filled: datos[i + 3][1] === "not_filled" ? true : false,
-                get_better: datos[i + 3][1] === "get_better" ? true : false,
-                observations: datos[i + 4][1],
-                status: 5,
+                filled: datos[i + 4][1] === "filled" ? true : false,
+                not_filled: datos[i + 4][1] === "not_filled" ? true : false,
+                get_better: datos[i + 4][1] === "get_better" ? true : false,
+                observations: datos[i + 5][1],
+                status: 4,
                 audit_plan: parseInt(params.id),
-              });
+              };
+              for (let i = 0; i < datos.length; i++) {
+                if (datos[i][0] === `decreto${j}`) {
+                  valor.decreto =  datos[i][1] ? parseInt(datos[i][1]) : null
+                }
+              }
+            
+              valores.push(valor)
             }
           }
         }
+        
         const send = {
           checkList: {
             audit_plan: params.id,
-            status: 5,
+            status: 4,
           },
           fields: valores,
         };
@@ -172,7 +189,7 @@ function CreateCheckLists() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="d-flex gap-2 my-2">
             <button className="btn btn-success btn-sm">
-              Guardado permanente
+              Archivar
             </button>
             <button
               className="btn btn-primary btn-sm"
@@ -226,6 +243,9 @@ function CreateCheckLists() {
                   <label htmlFor="">
                     <strong>ISO 45001</strong>
                   </label>
+                  <label htmlFor="">
+                    <strong>Decreto 1072</strong>
+                  </label>
                 </div>
               </div>
               <div className="col-1  text-center"></div>
@@ -246,27 +266,36 @@ function CreateCheckLists() {
                     </div>
                     <div className="col-2  text-center check-form">
                       <div className="d-flex gap-3 align-items-center justify-content-between ">
-                        <label htmlFor="">
+                        <label htmlFor="" className="">
                           <input
                             type="hidden"
                             {...register(`iso9001${index}`)}
-                            className="text-center "
+                            className="text-center border-e "
                             value={req.type === 801 ? req.id : null}
                           />
-                          {req.type === 801 ? req.article : "N/A"}
+                          {req.type === 801 ? req.article : ""}
                         </label>
                         <label htmlFor="" className="my-3 ">
                           <input
                             type="hidden"
                             className="text-center "
                             {...register(`iso45001${index}`)}
-                            value={req.type === 802 ? req.id : null}
+                            value={req.type === 802 ? req.id  : null}
                           />
                           {req.type === 802
                             ? req.article
-                            : req.type === 803
-                            ? `-Decreto 1072- (${req.article})`
-                            : "N/A"}
+                            : ""}
+                        </label>
+                        <label htmlFor="" className="my-3 ">
+                          <input
+                            type="hidden"
+                            className="text-center "
+                            {...register(`decreto${index}`)}
+                            defaultValue={req.type === 803 ? req.id  : null}
+                          />
+                          {req.type === 803
+                            ? `${req.article}`
+                            : ""}
                         </label>
                       </div>
                     </div>

@@ -11,6 +11,14 @@ function Dashboard() {
   const getProgramsbyDate = async (date) => {
     try {
       const res = await getBydate(date);
+      res.data.map((r) => {
+        r.init_time = `${r.init_time.split(":")[0]}:${
+          r.init_time.split(":")[1]
+        }`;
+        r.end_time = `${r.end_time.split(":")[0]}:${r.end_time.split(":")[1]}`;
+        return r;
+      });
+
       setPrograms(res.data);
     } catch (error) {
       swal.fire(error.response.data, "", "error");
@@ -36,16 +44,19 @@ function Dashboard() {
           </div>
           <div style={{ maxWidth: "519px" }}>
             {programs.length > 0 ? (
-              programs.map((e) => (
-                <div className="row">
-                  <p className="col-4">
+              programs.map((e,i) => (
+                <div className="row" key={i}>
+                  <p className="col-3">
                     <strong>Auditor:</strong> {e.leader ? e.leader : "Ninguno"}
                   </p>
-                  <p className="col-4">
-                    <strong>Lugar:</strong> {e.place}
+                  <p className="col-3">
+                    <strong>Lugar:</strong>  <br />{e.place}
                   </p>
-                  <p className="col-4">
+                  <p className="col-3">
                     <strong>Proceso:</strong> {e.process_name}
+                  </p>
+                  <p className="col-3">
+                    <strong>Hora:</strong> <br /> {e.init_time} -{e.end_time}
                   </p>
                 </div>
               ))
@@ -55,19 +66,17 @@ function Dashboard() {
           </div>
         </div>
       </div>
-     
-    
+
       <div className="little-links-container row px-5 ">
         <div className="col-xl-3 col-md-6 col-sm-12">
           <div
             className="card text-bg-secondary mb-3  little-cards "
-            style={{ maxWidth: "15rem",minHeight:"9rem" }}
+            style={{ maxWidth: "15rem", minHeight: "9rem" }}
           >
             <div className="card-header">Proximas auditorias</div>
             <div className="card-body">
               <p className="card-text">
-                Programa tus proximas auditorias y traza todo el
-                proceso
+                Programa tus proximas auditorias y traza todo el proceso
               </p>
             </div>
           </div>
@@ -75,13 +84,12 @@ function Dashboard() {
         <div className="col-xl-3 col-md-6 col-sm-12">
           <div
             className="card text-bg-light mb-3  little-cards"
-            style={{ maxWidth: "15rem",minHeight:"9rem" }}
+            style={{ maxWidth: "15rem", minHeight: "9rem" }}
           >
             <div className="card-header">Reporte de hallazgos</div>
             <div className="card-body">
               <p className="card-text">
-                Reportar  mejoras y no conformidades nunca habia
-                sido tan facil
+                Reportar mejoras y no conformidades nunca habia sido tan facil
               </p>
             </div>
           </div>
@@ -89,7 +97,7 @@ function Dashboard() {
         <div className="col-xl-3 col-md-6 col-sm-12">
           <div
             className="card text-bg-secondary mb-3  little-cards "
-            style={{ maxWidth: "15rem",minHeight:"9rem" }}
+            style={{ maxWidth: "15rem", minHeight: "9rem" }}
           >
             <div className="card-header">Archivos de Consulta</div>
             <div className="card-body">
@@ -102,11 +110,13 @@ function Dashboard() {
         <div className="col-xl-3 col-md-6 col-sm-12">
           <div
             className="card text-bg-light mb-3  little-cards flex-fill"
-            style={{ maxWidth: "15rem",minHeight:"9rem" }}
+            style={{ maxWidth: "15rem", minHeight: "9rem" }}
           >
             <div className="card-header">Evaluaciones</div>
             <div className="card-body">
-              <p className="card-text">Evaluar y calificar tus auditores de la mejor manera </p>
+              <p className="card-text">
+                Evaluar y calificar tus auditores de la mejor manera{" "}
+              </p>
             </div>
           </div>
         </div>

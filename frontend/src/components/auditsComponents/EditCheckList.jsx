@@ -14,8 +14,9 @@ function EditCheckList() {
     try {
       const res = await getOneList(params.id);
       setData(res.data.checklist[0]);
-console.log(res.data.fields)
       setReqs(res.data.fields);
+    
+   
     } catch (error) {
       swal.fire(error.response.data, "", "error");
     }
@@ -26,6 +27,7 @@ console.log(res.data.fields)
 
   const saveCheck = async (values) => {
     try {
+    
       const res = await editChecklist(params.id, values);
       swal.fire(res.data, "", "success").then(() => history.back());
     } catch (error) {
@@ -52,18 +54,24 @@ console.log(res.data.fields)
         for (let j = 0; j < reqs.length; j++) {
           for (let i = 0; i < datos.length; i++) {
             if (datos[i][0] === `pregunta${j}`) {
-              valores.push({
+              const valor ={
                 question: datos[i][1],
                 iso_9001: datos[i + 1][1] ? parseInt(datos[i + 1][1]) : null,
                 iso_45001: datos[i + 2][1] ? parseInt(datos[i + 2][1]) : null,
-                filled: datos[i + 3][1] === "filled" ? 1 : 0,
-                not_filled: datos[i + 3][1] === "not_filled" ? 1 : 0,
-                get_better: datos[i + 3][1] === "get_better" ? 1 : 0,
-                observations: datos[i + 4][1],
-                id: parseInt(datos[i + 5][1]),
+                filled: datos[i + 4][1] === "filled" ? 1 : 0,
+                not_filled: datos[i + 4][1] === "not_filled" ? 1 : 0,
+                get_better: datos[i + 4][1] === "get_better" ? 1 : 0,
+                observations: datos[i + 5][1],
+                id: parseInt(datos[i + 6][1]),
                 status: 5,
                 audit_plan: parseInt(params.id),
-              });
+              };
+              for (let i = 0; i < datos.length; i++) {
+                if (datos[i][0] === `decreto${j}`) {
+                  valor.decreto = datos[i][1] ? parseInt(datos[i][1]) : null
+                }
+              }
+              valores.push(valor)
             }
           }
         }
@@ -99,18 +107,24 @@ console.log(res.data.fields)
         for (let j = 0; j < reqs.length; j++) {
           for (let i = 0; i < datos.length; i++) {
             if (datos[i][0] === `pregunta${j}`) {
-              valores.push({
+              const valor ={
                 question: datos[i][1],
                 iso_9001: datos[i + 1][1] ? parseInt(datos[i + 1][1]) : null,
                 iso_45001: datos[i + 2][1] ? parseInt(datos[i + 2][1]) : null,
-                filled: datos[i + 3][1] === "filled" ? true : false,
-                not_filled: datos[i + 3][1] === "not_filled" ? true : false,
-                get_better: datos[i + 3][1] === "get_better" ? true : false,
-                observations: datos[i + 4][1],
-                id: parseInt(datos[i + 5][1]),
+                filled: datos[i + 4][1] === "filled" ? true : false,
+                not_filled: datos[i + 4][1] === "not_filled" ? true : false,
+                get_better: datos[i + 4][1] === "get_better" ? true : false,
+                observations: datos[i + 5][1],
+                id: parseInt(datos[i + 6][1]),
                 status: 4,
                 audit_plan: parseInt(params.id),
-              });
+              };
+              for (let i = 0; i < datos.length; i++) {
+                if (datos[i][0] === `decreto${j}`) {
+                  valor.decreto = datos[i][1] ? parseInt(datos[i][1]) : null
+                }
+              }
+              valores.push(valor)
             }
           }
         }
@@ -132,9 +146,7 @@ console.log(res.data.fields)
         {/* Campos  */}
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="d-flex gap-2 my-2">
-            <button className="btn btn-primary btn-sm">
-              Guardado permanente
-            </button>
+            <button className="btn btn-primary btn-sm">Archivar</button>
             <button
               className="btn btn-success btn-sm"
               type="button"
@@ -186,6 +198,9 @@ console.log(res.data.fields)
                   <label htmlFor="">
                     <strong>ISO 45001</strong>
                   </label>
+                  <label htmlFor="">
+                    <strong>Decreto 1072</strong>
+                  </label>
                 </div>
               </div>
             </div>
@@ -208,27 +223,34 @@ console.log(res.data.fields)
                             type="hidden"
                             {...register(`iso9001${index}`)}
                             className="text-center "
-                            value={req.iso9001_type === 801 ? req.iso_9001 : ""}
+                            value={req.iso9001_type === 801 ? req.iso_9001 : null}
                           />
-                          {req.iso9001_type === 801
-                            ? req.iso9001_article
-                            : "N/A"}
+                          {req.iso9001_type === 801 ? req.iso9001_article : ""}
                         </label>
-                        <label htmlFor="" className="my-3">
+                        <label htmlFor="" className="my-3 ">
                           <input
                             type="hidden"
                             className="text-center "
                             {...register(`iso45001${index}`)}
-                            value={
-                              req.iso45001_type === 802 ? req.iso_45001 : ""
-                            }
+                            value={req.iso45001_type === 802 ? req.iso_45001 : null}
                           />
-                          {req.iso45001_type === 802
-                            ? req.iso45001_article :req.decreto_type === 803 ?
-                            `-Decreto 1072- (${req.decreto_article})`
-                            : "N/A"}
-                            
+                         
+                          {req.iso45001_type == 802
+                            ? req.iso45001_article
+                            : ""}
                         </label>
+                        <label htmlFor="" className="my-3 ">
+                          <input
+                            type="hidden"
+                            className="text-center "
+                            {...register(`decreto${index}`)}
+                            value={req.decreto_type === 803 ? req.decreto : null}
+                          />
+                          {req.decreto_type === 803
+                            ? `${req.decreto_article}`
+                            : ""}
+                        </label>
+                     
                       </div>
                     </div>
                     <div className="col-1  text-center check-form">

@@ -119,13 +119,12 @@ const makeDocument = async (req, res) => {
   const data = req.body;
   const file = req.file;
   data.version ? data.version : (data.version = 1);
-  data.last_revision = new Date(data.last_revision).toISOString();
   data.status = 1;
   const sql = `INSERT INTO documents 
   SET 
     code = '${data.code}', 
     comments = '${data.comments}', 
-    last_revision = STR_TO_DATE('${data.last_revision}', '%Y-%m-%dT%H:%i:%s.%fZ'), 
+    last_revision = ${data.last_revision}, 
     process = ${data.process}, 
     typology = ${data.typology}, 
     name = '${data.name}', 
@@ -160,7 +159,7 @@ const createControl = async (req, res) => {
   const data = req.body;
   data.status = 1;
   data.external = 2;
-  console.log(data);
+
   const sql = `INSERT INTO storages SET ? `;
   try {
     const response = await db.query(sql, [data]);

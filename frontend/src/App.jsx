@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ProtectedRoute } from "./Auth/ProtectedRoute";
 import AuthProvider from "./context/AuthContext";
 import Spinner from "./components/Spinner";
+import ViewFinalReport from "./pages/audits/final_reports/ViewFinalReport";
 const Final_reports = React.lazy(() => import("./pages/audits/final_reports/Final_reports"));
 const CreateChange = React.lazy(() => import("./pages/changes/CreateChange"));
 const CreateControl = React.lazy(() => import("./pages/control/CreateControl"));
@@ -341,6 +342,14 @@ function App() {
                     element={
                       <AuditLayout>
                         <Final_reports/>
+                      </AuditLayout>
+                    }
+                  />
+                   <Route
+                    path="/audits/finalReports/:id"
+                    element={
+                      <AuditLayout>
+                        <ViewFinalReport/>
                       </AuditLayout>
                     }
                   />

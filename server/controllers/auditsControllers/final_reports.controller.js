@@ -69,23 +69,35 @@ const getOneFinal = async (req, res) => {
   }
 };
 const createFinal = async (req, res) => {
-  const data = req.body
-try {
-  console.log(data)
-  console.log(req.file)
-  const sql = "INSERT INTO final_reports SET ?";
-  // const response = await db.query(sql,data)
-  res.send("Recibido")
-} catch (error) {
-  
-}
-
+  const data = req.body;
+  const auditLeaderSign = req.files["audit_leader_sign"][0];
+  const representSign = req.files["represent_sign"][0];
+  const final_report_requisites = JSON.parse(data.final_report_requisites);
+  delete data.final_report_requisites;
+  data.status = 7;
+  data.audit_plan = parseInt(data.audit_plan);
+  data.filled_objective = JSON.parse(data.filled_objective);
+  data.audit_leader_sign = auditLeaderSign.filename;
+  data.represent_sign = representSign.filename;
+  try {
+    const sql = "INSERT INTO final_reports SET ?";
+    const response = await db.query(sql, data);
+    const final_report_id = response.insertId;
+    final_report_requisites.forEach(async (element) => {
+      element.final_report_id = final_report_id;
+      await db.query("INSERT INTO final_report_requisites SET ?", [element]);
+    });
+    res.send("Reporte creado exitosamente!");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Tuvimos un error, intenta mas tarde");
+  }
 };
 
 const getFinal = async (req, res) => {
   try {
     const data = await db.query(
-      "SELECT * FROM final_reports INNER JOIN audit_plans ON audit_plans.id = final_reports.audit_plan"
+      "SELECT *,final_reports.id AS final_id FROM final_reports INNER JOIN audit_plans ON audit_plans.id = final_reports.audit_plan"
     );
     res.send(data);
   } catch (error) {
@@ -125,11 +137,66 @@ const getFindings = async (req, res) => {
     res.status(500).send("Tuvimos un error, intenta mas tarde");
   }
 };
+
+const getOneFinalReport = async (req, res) => {
+  const { id } = req.params;
+  //Obtener el plan de auditoria
+  const sqlPlan = `
+        SELECT 
+        ap.objective,
+        ap.scope,
+        ap.criteria,
+        ap.leader,
+        ap.validity,
+        ap.id
+        FROM final_reports fr
+        LEFT JOIN audit_plans ap ON ap.id = fr.audit_plan
+        WHERE fr.id = ?`;
+
+  //obtener los auditores
+  const sqlAudit = `
+     SELECT i.job,
+     i.id,
+     i.full_name
+     FROM final_reports fr 
+     LEFT JOIN audit_plan_has_inspectors aphi ON aphi.audit_plan_id  = fr.audit_plan
+     LEFT JOIN inspectors i ON i.id = aphi.inspectors_id
+     WHERE fr.id= ?`;
+
+  //Obtener informacion del reporte final
+  const sqlReport = `SELECT  * FROM final_reports WHERE id = ?`;
+  //obtenes los procesos no conformes de lo fields
+  const sqlProcess = `
+  SELECT final_report_requisites.*,
+	processes.name FROM  final_report_requisites 
+  LEFT JOIN processes ON processes.id =  final_report_requisites.process_id
+  WHERE final_report_id = ?`;
+
+  try {
+    const auditPlan = await db.query(sqlPlan, [id]);
+    const inspectors = await db.query(sqlAudit, [id]);
+    const finalReport = await db.query(sqlReport, [id]);
+    const requisites = await db.query(sqlProcess, [id]);
+
+    const toSend = {
+      finalReport,
+      auditPlan,
+      inspectors,
+      requisites,
+    };
+
+    res.send(toSend);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Tuvimos un error, intenta mas tarde");
+  }
+};
 module.exports = {
   getFinal,
   getOneFinal,
   createFinal,
   getFindings,
+  getOneFinalReport,
 };
 
 // SELECT  processes.name as process_name,

@@ -21,19 +21,17 @@ const createChange = async (req, res) => {
   } = req.body);
   const isChanging = req.body.change;
   delete data.change;
-
   const last_revision = new Date().toISOString();
-  const formattedDate = FormatDate(last_revision)
-  data.created_at = FormatDate(new Date(data.created_at).toISOString())
-
+ 
   //sql para actualizar
   const sql = `UPDATE documents SET
   version =${data.new_version},
-  last_revision='${formattedDate}',
+  last_revision='${last_revision}',
   status=${req.body.status} WHERE code = '${data.code}' `;
+  
   //sql para actualizar sin cambio de version
   const sql2 = `UPDATE documents SET
-  last_revision='${formattedDate}',
+  last_revision='${last_revision}',
   status=${req.body.status} WHERE code = '${data.code}' `;
 
   try {

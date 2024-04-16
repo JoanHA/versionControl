@@ -35,15 +35,15 @@ function AuditPrograms() {
   return (
     <div className="px-2">
       <div className="titleHeader text-uppercase">Auditorias y autoinspecciones</div>
-      <div>
+      <div className="px-3">
         <Link
-          className="text-white btn btn-primary"
+          className="text-white btn btn-primary btn-sm "
           to={"/audits/programs/create"}
         >
           Crear programa 
         </Link>
 
-        <div className="px-3">
+        <div className="">
           <ProcessTable columns={columns} data={data}></ProcessTable>
         </div>
       </div>

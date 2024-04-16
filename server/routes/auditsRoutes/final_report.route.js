@@ -5,8 +5,9 @@ const {
   createFinal,
   getFinal,
   getOneFinal,
-  getFindings,
+  getFindings,getOneFinalReport
 } = require("../../controllers/auditsControllers/final_reports.controller");
+
 const router = express.Router();
 
 const storage = multer.diskStorage({
@@ -15,10 +16,18 @@ const storage = multer.diskStorage({
     cb(null, Date.now() + "-" + file.originalname);
   },
 });
-const upload = multer({ storage }).array("files", 5);
+const upload = multer({ storage });
 router.get("/", getFinal);
 router.get("/:id", getOneFinal);
-router.post("/", upload, createFinal);
+router.post(
+  "/",
+  upload.fields([
+    { name: "audit_leader_sign", maxCount: 1 },
+    { name: "represent_sign", maxCount: 1 },
+  ]),
+  createFinal
+);
+router.get("/view/:id",getOneFinalReport)
 router.post("/getFinding", getFindings);
 
 module.exports = router;

@@ -116,11 +116,6 @@ function AuditSidebar() {
                       <div className="text-dark">Listas de chequeo</div>
                     </Link>
                   </div>
-                  {/* <div className="px-3" id="audit-box">
-                    <div className="">
-                      <Link className="text-dark">Momentos de reunión</Link>
-                    </div>
-                  </div> */}
                 </>
               )}
             </li>
@@ -252,7 +247,7 @@ function AuditSidebar() {
                   <FaSitemap size={size} />
                 </div>
                 <div className="col-8">
-                  <Link className="text-light">Procesos</Link>
+                  <div className="text-light">Procesos</div>
                 </div>
                 <div className="col-1">
                   <IoIosArrowForward />

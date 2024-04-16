@@ -27,7 +27,7 @@ function  Table({
   download,
 }) {
   const [sorting, setSorting] = useState([]);
-  const [filtering, setFilteting] = useState("");
+  const [filtering, setFilteting] = useState(" ");
   const [pageSize, setPageSize] = useState(window.innerWidth);
   const [columnResizeDirection, setColumnResizeDirection] =
     React.useState("ltr");
@@ -127,7 +127,7 @@ function  Table({
             type="text"
             className="form-control form-control-sm rounded"
             placeholder="filtrar"
-            value={filtering}
+            defaultValue={filtering? filtering:""}
             onChange={(e) => {
               setFilteting(e.target.value);
               saveFilter(e);

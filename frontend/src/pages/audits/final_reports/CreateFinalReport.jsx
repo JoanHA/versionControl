@@ -118,31 +118,46 @@ function CreateFinalReport() {
     for (let j = 0; j < reqs.length; j++) {
       const element = reqs[j];
       for (let i = 0; i < element.length; i++) {
-   console.log(element[i])
-   ids.push(element[i].process_id)
+        ids.push(element[i].process_id);
       }
     }
-    ids = [...new Set(ids)]
-    console.log(ids )
- 
+    const final_report_requisites = [];
+    ids = [...new Set(ids)];
+    for (let i = 0; i < ids.length; i++) {
+      const id = ids[i];
+      for (let j = 0; j < datos.length; j++) {
+        const element = datos[j][0];
+        if (element == `process_id-${id}`) {
+          final_report_requisites.push({
+            description: datos[j][1],
+            process_id: id,
+            requisites: document.querySelector(`#requisites-${id}`).innerHTML,
+          });
+        }
+      }
+    }
 
-    return;
     var formData = new FormData();
-    formData.append("audit_leader_sign");
-    formData.append("audit_plan");
-    formData.append("conclusions");
-    formData.append("filled_objective");
-    formData.append("negative_aspects");
-    formData.append("others");
-    formData.append("positive_aspects");
-    formData.append("presented_risk");
-    formData.append("audit_leader");
-    formData.append("represent");
-    formData.append("represent_sign");
-    formData.append("");
+    formData.append("audit_leader_sign", data.audit_leader_sign[0]);
+    formData.append("audit_plan", data.audit_plan);
+    formData.append("conclusions", data.conclusions);
+    formData.append("filled_objective", data.filled_objective);
+    formData.append("negative_aspects", data.negative_aspects);
+    formData.append("others", data.others);
+    formData.append("positive_aspects", data.positive_aspects);
+    formData.append("presented_risk", data.presented_risk);
+    formData.append("audit_leader", data.audit_leader);
+    formData.append("represent", data.represent);
+    formData.append("represent_sign", data.represent_sign[0]);
+    formData.append(
+      "final_report_requisites",
+      JSON.stringify(final_report_requisites)
+    );
 
     const res = await CreateFinalReports(formData);
-    console.log(res);
+    swal.fire(res.data, "", "success").then(() => {
+      navigate("/audits/finalReports/");
+    });
   };
   return (
     <div>
@@ -304,10 +319,10 @@ function CreateFinalReport() {
                       reqs.map((r, i) => (
                         <tr>
                           <td>
-                            <ul>
-                              {r.map((d, i) => (
-                                <li key={i}>{`${d.article}. ${d.name}`}</li>
-                              ))}
+                            <ul id={`requisites-${r[i].process_id}`}>
+                              {r.map(
+                                (d, i) => ` ${`${d.article}. ${d.name}. `}`
+                              )}
                             </ul>
                           </td>
                           <td>
@@ -364,27 +379,9 @@ function CreateFinalReport() {
                           Si
                         </label>
                       </div>
-                      {/* <input
-                        type="checkbox"
-                        className="form-check-input"
-                        style={{ width: "30px", height: "25px" }}
-                      /> */}
+                   
                     </div>
-                    {/* <div className="d-flex  align-items-center gap-2">
-                      <label htmlFor=""> No</label>
-
-                      <input
-                        type="checkbox"
-                        {...register("filled_objective_false", {
-                          required: true,
-                        })}
-                        style={{ width: "30px", height: "25px" }}
-                        className="form-check-input"
-                      />
-                      {errors?.filled_objective?.type === "required" && (
-                        <p className="errorMsg">Este campo es obligatorio</p>
-                      )} */}
-                    {/* </div> */}
+                   
                   </div>
                 </div>
                 <div>

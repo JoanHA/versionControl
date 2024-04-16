@@ -241,6 +241,7 @@ function CreateAuditPlan() {
       const res = await createAuditPlan(dataToSend);
       swal.fire(res.data, "", "success").then(() => {
         cleanAll();
+        history.back()
       });
     } catch (error) {
       console.log(error);

@@ -8,11 +8,12 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import SignaturePad from "react-signature-pad-wrapper";
 import { useForm } from "react-hook-form";
 import { MdCleaningServices } from "react-icons/md";
-
+import "../../../assets/CSS/admin.css";
 function CreateReport() {
   const params = useParams();
   const [plan, setPlan] = useState({});
   const [requistes, setRequisites] = useState([]);
+  const signatureRef = useRef(null);
   const {
     register,
     handleSubmit,
@@ -353,31 +354,34 @@ function CreateReport() {
             <div>
               <h5 htmlFor="">Firma del auditor</h5>
             </div>
-            <div
-              className="d-flex align-items-center my-1  justify-content-between"
-              style={{ maxWidth: "348px" }}
-            >
-              <p className="p-0 m-0">Dibuja la firma</p>
-
-              <button
-                className="btn btn-warning btn-sm"
-                id="clear-btn"
-                data-bs-toggle="tooltip"
-                data-bs-placement="top"
-                data-bs-title="Tooltip on top"
-                type="button"
-                onClick={() => {
-                  signatureRef.current.clear();
-                }}
-              >
-                <MdCleaningServices size={20} />
-              </button>
-            </div>
             <div>
-              <div id="signature-pad">
-                <SignaturePad redrawOnResize ref={signatureRef} height={98} />
-              </div>
+             
+            </div>
+           
+              <><div
+                  className="d-flex align-items-center my-1  justify-content-between"
+                  style={{ maxWidth: "348px" }}
+                >
+                  <p className="p-0 m-0">Dibuja la firma</p>
 
+                  <button
+                    className="btn btn-warning btn-sm"
+                    id="clear-btn"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    data-bs-title="Tooltip on top"
+                    type="button"
+                    onClick={() => {
+                      signatureRef.current.clear();
+                    } }
+                  >
+                    <MdCleaningServices size={20} />
+                  </button>
+                </div><div id="signature-pad" className=" ">
+                    <SignaturePad redrawOnResize height={98} ref={signatureRef} />
+                  </div></>
+           
+            <div>
               <div className="my-2 d-flex ">
                 <button className="btn btn-success mb-1">Guardar </button>
               </div>

@@ -19,6 +19,7 @@ function GeneralTable({
   columns,
   options = true,
   editType,
+  justView = false,
   cb = null,
 }) {
   const [sorting, setSorting] = useState([]);
@@ -26,7 +27,7 @@ function GeneralTable({
   const [pageSize, setPageSize] = useState(window.innerWidth);
 
   const [columnResizeMode, setColumnResizeMode] = React.useState("onChange");
-  
+
   const table = useReactTable({
     data,
     columns,
@@ -55,7 +56,6 @@ function GeneralTable({
     console.log(data)
   }, []);
 
-
   return (
     <div>
       <div
@@ -73,7 +73,7 @@ function GeneralTable({
               saveFilter(e);
             }}
           />
-        </div> 
+        </div>
         <div className="d-flex justify-content-center align-items-center text-center">
           <select
             value={table.getState().pagination.pageSize}
@@ -199,7 +199,11 @@ function GeneralTable({
                     Opciones
                   </th>
                 )}
-            
+                {justView && (
+                  <th colSpan={1} style={{ width: "70px" }}>
+                    Ver plan
+                  </th>
+                )}
               </tr>
             ))}
           </thead>
@@ -217,7 +221,30 @@ function GeneralTable({
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
                 ))}
-              
+                {justView && (
+                  <>
+                    <td className="" colSpan={2}>
+                      <div className="d-flex flex-wrap gap-1 mb-1 ">
+                        <Link
+                          to={`/${editType ? editType : ""}/${
+                            row.original.audit_plan
+                          }`}
+                          className="btn btn-secondary btn-sm  flex-fill "
+                        >
+                          Ver Plan
+                        </Link>
+                      </div>
+                      <div className="d-flex flex-wrap gap-1 ">
+                        <Link
+                          to={`/audits/finalReports/${row.original.final_id}`}
+                          className="btn btn-primary btn-sm  flex-fill "
+                        >
+                          Ver informe
+                        </Link>
+                      </div>
+                    </td>
+                  </>
+                )}
                 {options && (
                   <>
                     <td className="" colSpan={2}>
@@ -225,7 +252,7 @@ function GeneralTable({
                         <Link
                           to={`/${editType ? editType : "view"}/${
                             row.original.id
-                          }`} 
+                          }`}
                           className="btn btn-primary btn-sm  flex-fill "
                         >
                           Ver
@@ -250,7 +277,6 @@ function GeneralTable({
                     </td>
                   </>
                 )}
-             
               </tr>
             ))}
           </tbody>

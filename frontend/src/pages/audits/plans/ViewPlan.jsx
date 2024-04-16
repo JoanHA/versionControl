@@ -19,16 +19,22 @@ function ViewPlan() {
     const errores = [];
     try {
       const res = await validate(params.id);
-   
       const datos = res.data;
       if (datos.length > 0) {
         datos.forEach((element) => {
           if (element.status !== 5) {
             state = true;
             errores.push(
-              `Debes terminar la lista de chequeo de la auditoria del dia ${element.date} que empieza a las ${element.init_time} y termina a las ${element.end_time} `
+              `Debes terminar la lista de chequeo de la auditoria del dia ${element.date} del proceso ${element.process_name} `
             );
           }
+          if(element.finding_count < 1){
+            state = true;
+            errores.push(
+              `Debes crear el reporte de hallazgos del proceso  ${element.process_name} `
+            );
+          }
+          
         });
       } else {
         state = true;
@@ -110,7 +116,7 @@ function ViewPlan() {
         <div className="row m-0 mb-1">
           <div className="col-12 row rows">
             <div className="col-2 first-column">
-              <strong>Objectivo:</strong>
+              <strong>Objetivo:</strong>
             </div>
             <div className="col-10">{data?.objective}</div>
           </div>

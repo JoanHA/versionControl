@@ -150,14 +150,16 @@ const validateStatus = async(req,res)=>{
   try {
     const {id} = req.params
     const sql = `SELECT cl.status, 
+    (SELECT name FROM processes WHERE processes.id = apf.processes_id) AS process_name,
     apf.date,
     apf.init_time,
     apf.id,
+    (SELECT count(*) FROM findings WHERE audit_plan = apf.id) AS finding_count,
     apf.end_time
     FROM audit_plans ap 
     LEFT JOIN audit_plan_fields apf ON apf.audit_plan_id = ap.id
     LEFT JOIN check_lists cl ON cl.id = apf.check_list_id
-    WHERE ap.id= ?;`
+    WHERE ap.id= ?`
 
     const result = await db.query(sql,[id]);
   

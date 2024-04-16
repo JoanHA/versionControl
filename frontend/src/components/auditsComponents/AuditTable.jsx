@@ -64,7 +64,7 @@ export default function AuditTable({
             type="text"
             className="form-control form-control-sm rounded"
             placeholder="filtrar"
-            value={filtering}
+            defaultValue={filtering? filtering:""}
             onChange={(e) => {
               setFilteting(e.target.value);
               saveFilter(e);
