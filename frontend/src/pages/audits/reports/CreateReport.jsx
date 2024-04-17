@@ -26,6 +26,7 @@ function CreateReport() {
     try {
       const res = await getRequisitesUnfilled(params.id);
       const data = res.data[0];
+      console.log(data)
 
       setPlan({
         date: data.date,
@@ -87,7 +88,7 @@ function CreateReport() {
     const requisitesIds = requistes.map((r) => r.id);
 
     const findings = [];
-    console.log(requisitesIds);
+
     for (let j = 0; j < requisitesIds.length; j++) {
       const id = requisitesIds[j];
 
@@ -114,7 +115,7 @@ function CreateReport() {
 
     try {
       const res = await createReports(data);
-      swal.fire(res.data, "", "success");
+      swal.fire(res.data, "", "success").then(()=>history.back());
     } catch (error) {
       swal.fire(error.response.data, "", "error");
     }
@@ -317,7 +318,7 @@ function CreateReport() {
                     <textarea
                       style={{ maxHeight: "120px" }}
                       {...register(`finding-${r.id}`, { required: true })}
-                      placeholder="Explica el hallazgo..."
+                      placeholder="Declaración del hallazgo + descripción del requisito evaluado + descripción de la evidencian..."
                       rows="3"
                       className="flex-fill form-control "
                     ></textarea>

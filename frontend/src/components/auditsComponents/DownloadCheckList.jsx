@@ -73,9 +73,9 @@ console.log(res.data)
               reqs.map((r) => (
                 <tr key={r.id}>
                   <td>{r.question}</td>
-                  <td>{r.iso9001_article}</td>
-                  <td>{r.iso45001_article}</td>
-                  <td>{r.decreto_article}</td>
+                  <td>{r.iso9001_article} {r.iso9001_name} </td>
+                  <td>{r.iso45001_article} {r.iso45001_name}</td>
+                  <td>{r.decreto_article}  {r.decreto_name}</td>
                   <td className="text-center">
                     {r.filled === 1 ? (
                       <div>

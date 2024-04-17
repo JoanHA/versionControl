@@ -6,7 +6,7 @@ const getNOAndOMRequisites = async (req, res) => {
   clf.iso_9001,
   clf.iso_45001,
   clf.decreto,
-  apf.audit_plan_id,
+  apf.id AS audit_plan_id,
   clf.filled,
   clf.not_filled,
   clf.get_better,
@@ -87,7 +87,7 @@ const viewOneReport = async (req, res) => {
     const dataToSend = {};
     const { id } = req.params;
     const findings = await db.query(
-      `SELECT findings.* ,
+    `SELECT findings.* ,
     audit_plan_fields.processes_id,
     processes.name ,
     audit_plan_fields.date,

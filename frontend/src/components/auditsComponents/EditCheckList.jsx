@@ -15,7 +15,6 @@ function EditCheckList() {
       const res = await getOneList(params.id);
       setData(res.data.checklist[0]);
       setReqs(res.data.fields);
-    
    
     } catch (error) {
       swal.fire(error.response.data, "", "error");
@@ -64,7 +63,7 @@ function EditCheckList() {
                 observations: datos[i + 5][1],
                 id: parseInt(datos[i + 6][1]),
                 status: 5,
-                audit_plan: parseInt(params.id),
+                audit_plan: data.audit_plan,
               };
               for (let i = 0; i < datos.length; i++) {
                 if (datos[i][0] === `decreto${j}`) {
@@ -117,7 +116,7 @@ function EditCheckList() {
                 observations: datos[i + 5][1],
                 id: parseInt(datos[i + 6][1]),
                 status: 4,
-                audit_plan: parseInt(params.id),
+                audit_plan:  data.audit_plan,
               };
               for (let i = 0; i < datos.length; i++) {
                 if (datos[i][0] === `decreto${j}`) {

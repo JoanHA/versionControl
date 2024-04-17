@@ -29,6 +29,8 @@ function CreateExternal() {
         values.external = 1;
         values.status = 1;
         values.external = 1;
+    
+       
         if (params.id) {
           return editControls(values)
         }

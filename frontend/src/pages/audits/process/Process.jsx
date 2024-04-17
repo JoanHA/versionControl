@@ -26,13 +26,7 @@ function Process() {
         <div className="">
           <div className="titleHeader">
             Procesos
-            <button
-              className="addbtn"
-              type="button"
-              onClick={() => {
-                // newParam("Proceso", 3);
-              }}
-            ></button>
+          
           </div>
           <div className="d-flex gap-2 flex-wrap px-4">
             <div>

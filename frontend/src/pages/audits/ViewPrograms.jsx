@@ -71,7 +71,7 @@ export default function ViewPrograms() {
                   "flex";
               }}
             >
-              Agregar proceso a auditar
+              Agregar auditoria 
             </button>
           </div>
         </div>

@@ -319,9 +319,9 @@ function CreateFinalReport() {
                       reqs.map((r, i) => (
                         <tr>
                           <td>
-                            <ul id={`requisites-${r[i].process_id}`}>
+                            <ul id={`requisites-${r[i]?.process_id}`}>
                               {r.map(
-                                (d, i) => ` ${`${d.article}. ${d.name}. `}`
+                                (d, i) => ` ${`${d?.article}. ${d?.name}. `}`
                               )}
                             </ul>
                           </td>
@@ -330,11 +330,11 @@ function CreateFinalReport() {
                               type="text"
                               className="form-control mh-100"
                               placeholder="Descripción..."
-                              defaultValue={r[i].details}
-                              {...register(`process_id-${r[i].process_id}`)}
+                              defaultValue={r[i]?.details}
+                              {...register(`process_id-${r[i]?.process_id}`)}
                             />
                           </td>
-                          <td className="text-center">{r[i].process_name}</td>
+                          <td className="text-center">{r[i]?.process_name}</td>
                         </tr>
                       ))
                     ) : (
@@ -362,9 +362,14 @@ function CreateFinalReport() {
                   </strong>
 
                   <div className="d-flex gap-3 ">
-                    <div className="d-flex  align-items-center gap-2">
-                      <label htmlFor=""> No</label>
-                      <div class="form-check form-switch">
+                    <div className="d-flex  flex-column  justify-content-center">
+                      <div class="form-check form">
+                        <label
+                          class="form-check-label"
+                          for="flexSwitchCheckDefault"
+                        >
+                          SI
+                        </label>
                         <input
                           class="form-check-input"
                           type="checkbox"
@@ -372,16 +377,24 @@ function CreateFinalReport() {
                           {...register("filled_objective")}
                           id="flexSwitchCheckDefault"
                         />
+                      </div>
+                  
+                      <div className=" form-check form ">
                         <label
                           class="form-check-label"
                           for="flexSwitchCheckDefault"
                         >
-                          Si
+                          NO
                         </label>
+                        <input
+                          class="form-check-input "
+                          type="checkbox"
+                          role="switch"
+                          {...register("filled_objectiveFalse")}
+                          id="flexSwitchCheckDefault"
+                        />
                       </div>
-                   
                     </div>
-                   
                   </div>
                 </div>
                 <div>
@@ -456,6 +469,7 @@ function CreateFinalReport() {
                       type="file"
                       className="form-control"
                       id="floatingInput"
+                      required
                       {...register("audit_leader_sign")}
                       placeholder="name@example.com"
                     />
@@ -465,6 +479,7 @@ function CreateFinalReport() {
 
                     <input
                       type="text"
+                      required
                       className="form-control border-0 border-bottom"
                       {...register("audit_leader")}
                     />
@@ -480,6 +495,7 @@ function CreateFinalReport() {
                       type="file"
                       className="form-control"
                       id="floatingInput"
+                      required
                       {...register("represent_sign")}
                       placeholder="name@example.com"
                     />
@@ -488,6 +504,7 @@ function CreateFinalReport() {
                     <label htmlFor="">Nombre:</label>
                     <input
                       type="text"
+                      required
                       className="form-control border-0 border-bottom"
                       {...register("represent")}
                     />

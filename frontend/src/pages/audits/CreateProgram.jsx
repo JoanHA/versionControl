@@ -157,6 +157,7 @@ console.log(values)
           setValidity("");
           setScope("");
           setObjective("");
+          history.back();
         } catch (error) {
           swal.fire(error.response.data, "", "error");
         }
@@ -218,7 +219,7 @@ console.log(values)
         <form onSubmit={handleSubmit(onSubmit)}>
           <h5 className="px-3">
             {" "}
-            <strong>Proceso a auditar</strong>
+            <strong>Auditoria a programar</strong>
           </h5>
           <div className="row m-0">
             {auditType?.value == 500 ? (

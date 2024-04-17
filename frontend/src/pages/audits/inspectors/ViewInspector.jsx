@@ -20,7 +20,6 @@ const FilesView = ({ files }) => {
   ];
   useEffect(() => {
     setFile(files);
-
     files.map((f)=>{
       f.created_at =f.created_at?.split("T")[0]
     return f

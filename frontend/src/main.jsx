@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
 import "./App.css"
+import "./assets/CSS/Welcome.css"
 import TimeAgo from 'javascript-time-ago'
 // import 'rsuite/dist/rsuite.min.css'
 import es from 'javascript-time-ago/locale/es-CO.json'

@@ -19,6 +19,7 @@ function CreateCheckLists() {
   const params = useParams();
 
   const getReqs = async () => {
+   
     try {
       const res = await getProcessReq(data.processes_id);
       setReqs(res.data);

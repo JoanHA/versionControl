@@ -31,6 +31,8 @@ const navigate = useNavigate()
   const [docType, setDoctype] = useState([]);
   const editControls = async (data) => {
     try {
+   
+
       const res = await editControl(params.id, data);
       swal.fire(res.data, "", "success").then(() => {
         navigate("/control")

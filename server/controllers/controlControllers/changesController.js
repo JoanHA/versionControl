@@ -118,7 +118,7 @@ const getArchived = async (req, res) => {
 };
 const getExternals = async (req, res) => {
   const sql =
-    "SELECT storages.*, (SELECT name FROM documents WHERE documents.code = storages.code) AS name, (SELECT name from params WHERE params.id = storages.last_move) AS last_move_name FROM storages WHERE storages.external = 1";
+    "SELECT storages.*,  (SELECT name from params WHERE params.id = storages.last_move) AS last_move_name FROM storages WHERE storages.external = 1";
   try {
     const response = await db.query(sql);
     res.json(response);

@@ -349,7 +349,7 @@ function  Table({
 
                 {
                   download && (
-                    <DownloadFile file ={download}/>
+                    <DownloadFile file ={download} index={row.id}/>
                   )
                 }
                 {btnDetails && (

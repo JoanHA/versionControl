@@ -18,7 +18,6 @@ function ViewDocument() {
   const params = useParams();
   const navigate = useNavigate();
   const columns = [
-    
     {
       header: "Solicitante",
       accessorKey: "claimant",
@@ -39,11 +38,11 @@ function ViewDocument() {
       header: "Detalles",
       accessorKey: "details",
     },
-    
   ];
   const getData = async () => {
     const res = await getOneDocument(params.id);
-   
+
+
     //Informacion del documento
 
     const changeResponse = await getChangesFromOne(res.data[0].code); // Cambios que tiene el equipo
@@ -57,7 +56,7 @@ function ViewDocument() {
             ? "OBSOLETO"
             : `0${e.new_version}`
           : e.new_version;
-          e.created_at =e.created_at.split("T")[0]
+      e.created_at = e.created_at.split("T")[0];
       return e;
     });
 
@@ -98,160 +97,169 @@ function ViewDocument() {
     getData();
   }, []);
   return (
-    <Header>    <div>
-    <div className="w-100 d-flex align-items-center gap-2 flex-wrap my-1">
-      <button
-        type="button"
-        onClick={() => {
-          navigate("/docs");
-        }}
-        className="btn btn-dark rounded btn-sm"
-      >
-        Volver
-      </button>
-
-      <>
-        {user?.rol === 1 && isAuthenticated ? (
-          <button className="btn btn-danger btn-sm" onClick={deleteDocument}>
-            Eliminar documento
-          </button>
-        ) : (
-          ""
-        )}
-
-        {isAuthenticated && data.status === 1 ? (
-          <Link
-            className="btn btn-sm btn-primary  "
-            to={"/createChange/" + data.code}
+    <Header>
+      {" "}
+      <div>
+        <div className="w-100 d-flex align-items-center gap-2 flex-wrap my-1">
+          <button
+            type="button"
+            onClick={() => {
+              navigate("/docs");
+            }}
+            className="btn btn-dark rounded btn-sm"
           >
-            Agregar cambio
-          </Link>
-          
-        ) : (
-          ""
-        )}
+            Volver
+          </button>
 
-        {isAuthenticated && data.status === 1 ? (
           <>
-            <Link to={"/edit/" + data.id} className="btn btn-sm btn-warning ">
-              Editar archivo
-            </Link>
+            {user?.rol === 1 && isAuthenticated ? (
+              <button
+                className="btn btn-danger btn-sm"
+                onClick={deleteDocument}
+              >
+                Eliminar documento
+              </button>
+            ) : (
+              ""
+            )}
 
-            {isRegister && data.status === 1 ? (
+            {isAuthenticated && data.status === 1 ? (
+              <Link
+                className="btn btn-sm btn-primary  "
+                to={"/createChange/" + data.code}
+              >
+                Agregar cambio
+              </Link>
+            ) : (
+              ""
+            )}
+
+            {isAuthenticated && data.status === 1 ? (
               <>
                 <Link
-                  to={"/createControl/" + data.code}
-                  className="btn btn-success mx-1  btn-sm "
+                  to={"/edit/" + data.id}
+                  className="btn btn-sm btn-warning "
                 >
-                  Agregar control de archivo
+                  Editar archivo
                 </Link>
+
+                {isRegister && data.status === 1 ? (
+                  <>
+                    <Link
+                      to={"/createControl/" + data.code}
+                      className="btn btn-success mx-1  btn-sm "
+                    >
+                      Agregar control de archivo
+                    </Link>
+                  </>
+                ) : (
+                  ""
+                )}
               </>
             ) : (
               ""
             )}
           </>
-        ) : (
-          ""
-        )}
-      </>
-      {isRegister && (
-        <div className="" style={{ marginBottom: "5px" }}>
-          <Archived doc={data.code ? data : null} />
+          {isRegister && (
+            <div className="" style={{ marginBottom: "5px" }}>
+              <Archived doc={data.code ? data : null} />
+            </div>
+          )}
         </div>
-      )}
-    </div>
-    <div className="titleHeader text-center py-1">
-      Información del documento {data.code}
-    </div>
+        <div className="titleHeader text-center py-1">
+          Información del documento {data.code}
+        </div>
 
-    <div className="container mx-auto row gap-2">
-      <div className="col-12 col-md-5">
-        <label className="titleLabel">Código:</label>
-        <label className="inputLabel">{data.code}</label>
-      </div>
-      <div className="col-12 col-md-5">
-        <label className="titleLabel">Proceso:</label>
-        <label className="inputLabel">{data.process_name}</label>
-      </div>
+        <div className="container mx-auto row gap-2">
+          <div className="col-12 col-md-5">
+            <label className="titleLabel">Código:</label>
+            <label className="inputLabel">{data.code}</label>
+          </div>
+          <div className="col-12 col-md-5">
+            <label className="titleLabel">Proceso:</label>
+            <label className="inputLabel">{data.process_name}</label>
+          </div>
 
-      <div className="col-12 col-md-5">
-        <label className="titleLabel">Nombre del documento:</label>
-        <label className="inputLabel px-0">{data.name}</label>
-      </div>
-      <div className="col-12 col-md-5 align-self-center">
-        <label className="titleLabel">
-          Fecha de emisión / Ultima revisión:
-        </label>
-        <label className="inputLabel">{data.last_revision?.substring(0,10)}</label>
-      </div>
-      <div className="col-12 col-md-5">
-        <label className="titleLabel">Tipologia:</label>
-        <label className="inputLabel">{data.typology_name}</label>
-      </div>
-      <div className="col-12 col-md-5">
-        <label className="titleLabel">Observaciones:</label>
-        <label className="inputLabel">{data.comments}</label>
-      </div>
-      <div className="col-12 col-md-5">
-        <label className="titleLabel">Versión:</label>
-        <label className="inputLabel">
-          {data.version >= 10
-            ? data.version
-            : data.version === 0
-            ? "OBSOLETO"
-            : `0${data.version}`}
-        </label>
-      </div>
-    
+          <div className="col-12 col-md-5">
+            <label className="titleLabel">Nombre del documento:</label>
+            <label className="inputLabel px-0">{data.name}</label>
+          </div>
+          <div className="col-12 col-md-5 align-self-center">
+            <label className="titleLabel">
+              Fecha de emisión / Ultima revisión:
+            </label>
+            <label className="inputLabel">
+              {data.last_revision?.substring(0, 10)}
+            </label>
+          </div>
+          <div className="col-12 col-md-5">
+            <label className="titleLabel">Tipologia:</label>
+            <label className="inputLabel">{data.typology_name}</label>
+          </div>
+          <div className="col-12 col-md-5">
+            <label className="titleLabel">Observaciones:</label>
+            <label className="inputLabel">{data.comments}</label>
+          </div>
+          <div className="col-12 col-md-5">
+            <label className="titleLabel">Versión:</label>
+            <label className="inputLabel">
+              {data.version >= 10
+                ? data.version
+                : data.version === 0
+                ? "OBSOLETO"
+                : `0${data.version}`}
+            </label>
+          </div>
 
-      <div className="col-12 col-md-4 ">
-        <label className="titleLabel">Ruta de sharePoint:</label>
+          <div className="col-12 col-md-4 ">
+            <label className="titleLabel">Ruta de sharePoint:</label>
 
-        <label className="inputLabel">
-      
-            {data.link ? (
-              <label className="doc-link">{data.link}</label>
-            ) : (
-              ""
-            )}
-      
-        </label>
-      </div>
-      <div className="col-12 col-md-5">
-        <label className="titleLabel">Estado: </label>
-        <label className="inputLabel"> {data.status_name}</label>
-      </div>
-      <div className="col-12 col-md-5">
-        <label className="titleLabel">Carga al sistema: </label>
-        <label className="inputLabel">
-          {data.created_at?.toString().split("T")[0]}
-        </label>
-      </div>
-      <div className="col-12 col-md-5">
-        <label className="titleLabel">Documento: </label>
-        <label className="inputLabel">
-          {
-            data.file_name ? (<>
-             <a href={`${FILES_URL}files/${data.file_name}` } target="_blank" style={{color:"blue",textDecoration:"underline"}}>{data.file_name  }</a>
-            </>):("NO HAY ARCHIVO AÚN")
-          }
-         
-        </label>
-      </div>
-    </div>
-    <div className="titleHeader text-center py-1 mt-3">
-      Historico de cambios del {data.code}
-    </div>
+            <label className="inputLabel">
+              {data.link ? <label className="doc-link">{data.link}</label> : ""}
+            </label>
+          </div>
+          <div className="col-12 col-md-5">
+            <label className="titleLabel">Estado: </label>
+            <label className="inputLabel"> {data.status_name}</label>
+          </div>
+          <div className="col-12 col-md-5">
+            <label className="titleLabel">Carga al sistema: </label>
+            <label className="inputLabel">
+              {data.created_at?.toString().split("T")[0]}
+            </label>
+          </div>
+          <div className="col-12 col-md-5">
+            <label className="titleLabel">Documento: </label>
+            <label className="inputLabel">
+              {data.file_name ? (
+                <>
+                  <a
+                    href={`${FILES_URL}files/${data.file_name}`}
+                    target="_blank"
+                    style={{ color: "blue", textDecoration: "underline" }}
+                  >
+                    {data.file_name}
+                  </a>
+                </>
+              ) : (
+                "NO HAY ARCHIVO AÚN"
+              )}
+            </label>
+          </div>
+        </div>
+        <div className="titleHeader text-center py-1 mt-3">
+          Historico de cambios del {data.code}
+        </div>
 
-    <div className="px-3">
-      <HistoricTable
-        columns={columns}
-        data={changes}
-        info={data}
-      ></HistoricTable>
-    </div>
-  </div></Header>
-
+        <div className="px-3">
+          <HistoricTable
+            columns={columns}
+            data={changes}
+            info={data}
+          ></HistoricTable>
+        </div>
+      </div>
+    </Header>
   );
 }
 

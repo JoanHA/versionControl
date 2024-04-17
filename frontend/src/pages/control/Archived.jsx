@@ -151,8 +151,8 @@ function Archived({ doc, text, external }) {
                   className="btn btn-warning"
                   to={
                     external
-                      ? `/createExternal/edit/${doc.id}`
-                      : `/createControl/edit/${doc.id}`
+                      ? `/createExternal/edit/${info.id}`
+                      : `/createControl/edit/${info.id}`
                   }
                 >
                   Editar

@@ -120,19 +120,21 @@ const makeDocument = async (req, res) => {
   const file = req.file;
   data.version ? data.version : (data.version = 1);
   data.status = 1;
+
   const sql = `INSERT INTO documents 
   SET 
     code = '${data.code}', 
     comments = '${data.comments}', 
-    last_revision = ${data.last_revision}, 
+    last_revision ='${data.last_revision}', 
     process = ${data.process}, 
     typology = ${data.typology}, 
     name = '${data.name}', 
-    link = '${data.link}', 
+    link = '${data.link}' , 
     version = ${data.version}, 
     status = ${data.status}`;
+  
   try {
-    const response = await db.query(sql, data);
+    const response = await db.query(sql);
     if (response.affectedRows > 0) {
       if (file) {
         const rows = await db.query(`INSERT INTO files SET 

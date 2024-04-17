@@ -28,6 +28,7 @@ function External() {
   const [data, setData] = useState([]);
   const getData = async () => {
     const res = await getExternal();
+
     setData(res.data);
   };
   useEffect(() => {

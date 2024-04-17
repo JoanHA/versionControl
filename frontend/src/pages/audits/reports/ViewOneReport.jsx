@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { FILES_URL } from "../../../config";
 import { FaArrowCircleLeft } from "react-icons/fa";
 import { FaFileDownload } from "react-icons/fa";
+import jsPDF from "jspdf";
 
 function ViewOneReport() {
   const [finding, setFinding] = useState({});
@@ -12,6 +13,7 @@ function ViewOneReport() {
   const bringData = async () => {
     try {
       const res = await getOneReport(params.id);
+      console.log(res.data)
       setFinding(res.data.findings[0]);
       setFields(res.data.fields);
     } catch (error) {
@@ -21,6 +23,78 @@ function ViewOneReport() {
   useEffect(() => {
     bringData();
   }, []);
+  const handlePdf = async () => {
+    try {
+      const doc = new jsPDF();
+
+      doc.setFontSize(10)
+      var x = 10;
+      var y = 80;
+      var body = [];
+
+      //Cabeceras de la tabla
+      const headers = ["Criterio o procedimiento Verificados", "Hallazgos"];
+
+      //Llenado de datos de los eventos
+      fields.forEach((e) => {
+        const field = [`${e.article} ${e.type_name} - ${e.name}`, e.details];
+        body.push(field);
+      });
+
+      // Imprimir info del equipo
+
+      doc.text(`Reporte de hallazgos de auditoria`, 65, 10);
+      doc.text(`Fecha: ${finding.date}`, 10, x + 20);
+      doc.text(`Proceso: ${finding.name}`, 120, x + 20);
+
+      const VALOROBJEC =`Objetivo: ${finding.objective}`;
+      const Options = { maxWidth: 180 };
+      doc.text(`Objetivo: ${finding.objective}`, 10, x + 30, { maxWidth: 180 });
+      const observacionHeight = doc.getTextDimensions(
+        VALOROBJEC,
+        Options
+      ).h;
+      const nextTextY = x + 30 + observacionHeight +5;
+      doc.text(`Fortaleza: ${finding.strength}`, 10,nextTextY );
+      doc.text(`Debilidades: ${finding.weakness}`, 10, nextTextY +10);
+      doc.text(`Nombre auditor: ${finding.leader}`, 10, nextTextY+20);
+
+      doc.text(`Observaciones Generales: ${finding.get_better}`, 10,nextTextY+30, { maxWidth: 180 });
+      const heightObser = doc.getTextDimensions(
+        `Observaciones Generales: ${finding.get_better}`,
+        Options
+      ).h;
+      const nextY = nextTextY+30 + heightObser;
+      doc.text(`Firma del auditor:`, 10,nextY+5);
+      doc.addImage(`${FILES_URL}signs/${finding.sign_url}`, "PNG",40, nextY+5, 30,10);
+   
+      doc.text("Tabla de hallazgos", 70, nextY+20);
+      //Imprimir tabla de eventos
+
+      doc.autoTable({
+        body: body,
+        startY: nextTextY+60,
+        head: [headers],
+        theme: "striped",
+        styles: { fontSize: 8, },
+        headStyles: {
+          fonSize: 10,
+          fillColor: [240, 248, 255],
+          textColor: [0, 0, 0],
+        },
+      });
+
+      //Guardar documento
+      doc.save(`Reporte de hallazgos del proceso ${finding.name}.pdf`);
+    } catch (error) {
+      swal.fire(
+        "No hemos podido realizar esa acción",
+        "Intenta mas tarde",
+        "error"
+      );
+      console.log(error);
+    }
+  };
   return (
     <div>
       <div className="titleHeader">Reporte de hallazgos de auditoria</div>
@@ -71,7 +145,7 @@ function ViewOneReport() {
             </div>
           </div>
           <div className="col-12 row border-top ">
-            <div className="col-3">
+            <div className="col-2">
               <strong>
                 <label htmlFor="objective">Objetivo de la auditoria:</label>
               </strong>
@@ -205,7 +279,10 @@ function ViewOneReport() {
             </div>
           </div>
           <div className="my-2">
-            <button className="btn btn-dark col-12 text-uppercase d-flex align-items-center gap-1 justify-content-center">
+            <button
+              className="btn btn-dark col-12 text-uppercase d-flex align-items-center gap-1 justify-content-center"
+              onClick={handlePdf}
+            >
               Descargar como PDF
               <FaFileDownload size={20} />
             </button>

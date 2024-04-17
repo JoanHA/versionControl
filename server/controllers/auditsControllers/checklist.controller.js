@@ -82,8 +82,11 @@ const getOneCheck = async (req, res) => {
     const fields = await db.query(
       `SELECT *,
     (SELECT article FROM requirements r WHERE r.id = ck.iso_9001) AS iso9001_article, 
+    (SELECT name FROM requirements r WHERE r.id = ck.iso_9001) AS iso9001_name, 
     (SELECT article FROM requirements r WHERE r.id = ck.iso_45001) AS iso45001_article, 
+    (SELECT name FROM requirements r WHERE r.id = ck.iso_45001) AS iso45001_name, 
     (SELECT article FROM requirements r WHERE r.id = ck.decreto) AS decreto_article,
+    (SELECT name FROM requirements r WHERE r.id = ck.decreto) AS decreto_name,
     (SELECT type FROM requirements r WHERE r.id = ck.iso_9001) AS iso9001_type, 
     (SELECT type FROM requirements r WHERE r.id = ck.iso_45001) AS iso45001_type, 
     (SELECT type FROM requirements r WHERE r.id = ck.decreto) AS decreto_type

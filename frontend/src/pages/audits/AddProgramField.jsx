@@ -112,14 +112,14 @@ export default function AddProgramField({ programId, callback }) {
     <div className="px-2" id="add-program-modal">
       <div id="add-program-container">
         <div className="titleHeader">
-          <span>Agregar procesos</span>
+          <span>Auditoria a programar</span>
         </div>
 
         <div className="px-2">
           <form onSubmit={handleSubmit(onSubmit)}>
             <h5 className="px-3">
               {" "}
-              <strong>Proceso a auditar</strong>
+            
             </h5>
             <div className="row m-0">
               <div className="col-12 col-md-6">
