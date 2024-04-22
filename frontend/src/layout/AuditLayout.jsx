@@ -1,5 +1,5 @@
 import React from "react";
-import AuditSidebar from "../components/auditsComponents/auditSidebar";
+import AuditSidebar from "../components/auditsComponents/AuditSidebar";
 import logo from "../assets/IMG/grupo-carval-Logo-Bioart.png";
 import { Link } from "react-router-dom";
 import "../assets/CSS/audits.css";

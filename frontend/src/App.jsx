@@ -70,7 +70,7 @@ const Reports = React.lazy(() => import("./pages/audits/reports/Reports"));
 const CreateFinalReport = React.lazy(() =>
   import("./pages/audits/final_reports/CreateFinalReport")
 );
-const Files = React.lazy(() => import("./pages/audits/files/files"));
+const Files = React.lazy(() => import("./pages/audits/files/Files"));
 const CreateFiles = React.lazy(() =>
   import("./pages/audits/files/CreateFiles")
 );
